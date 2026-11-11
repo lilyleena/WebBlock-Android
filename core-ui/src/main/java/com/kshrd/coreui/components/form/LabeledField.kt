@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -77,6 +78,7 @@ fun LabeledField(
     showPasswordLabel: String = stringResource(R.string.wb_show_password),
     hidePasswordLabel: String = stringResource(R.string.wb_hide_password),
     prefix: String? = null,
+    labelAction: (@Composable () -> Unit)? = null,
 ) {
     val wb = MaterialTheme.wb
     val multiline = minLines > 1
@@ -90,9 +92,14 @@ fun LabeledField(
             else -> wb.border
         }
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(Space.xs)) {
-        Row(horizontalArrangement = Arrangement.spacedBy(Space.xxs), verticalAlignment = Alignment.CenterVertically) {
+        Row(horizontalArrangement = Arrangement.spacedBy(Space.xxs), verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
             Text(title, style = MaterialTheme.typography.labelLarge, color = wb.text)
             if (isOptional) Text(stringResource(R.string.wb_optional), style = MaterialTheme.typography.labelMedium, color = wb.muted)
+            // Trailing action on the label row, e.g. "Forgot password?" beside "Password" (as on the web).
+            if (labelAction != null) {
+                Spacer(Modifier.weight(1f))
+                labelAction()
+            }
         }
         Row(
             verticalAlignment = if (multiline) Alignment.Top else Alignment.CenterVertically,
