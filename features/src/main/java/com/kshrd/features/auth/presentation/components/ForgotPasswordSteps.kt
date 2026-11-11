@@ -34,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -41,6 +42,9 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -89,13 +93,18 @@ private fun StepHeading(
     title: String,
     subtitle: androidx.compose.ui.text.AnnotatedString,
 ) {
+    // Left-aligned, as on the web reset pages.
     Column(
         modifier = Modifier.fillMaxWidth().padding(bottom = Space.s),
-        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(Space.xs),
     ) {
-        Text(title, style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.wb.text, textAlign = TextAlign.Center)
-        Text(subtitle, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.wb.muted, textAlign = TextAlign.Center)
+        Text(
+            title,
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.wb.text,
+            modifier = Modifier.semantics { heading() },
+        )
+        Text(subtitle, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.wb.muted)
     }
 }
 
@@ -140,6 +149,24 @@ fun EmailStep(
             onClick = { onEvent(ForgotPasswordEvent.PrimaryClicked) },
             loading = state.isLoading,
         )
+        // Web: "Remember your password? Sign in" (back to sign-in from the first step).
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(stringResource(R.string.auth_forgot_remember), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.wb.muted)
+            Text(
+                stringResource(R.string.auth_forgot_sign_in),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.wb.brand,
+                modifier =
+                    Modifier
+                        .clip(CircleShape)
+                        .clickable(role = Role.Button) { onEvent(ForgotPasswordEvent.BackClicked) }
+                        .padding(horizontal = Space.xs, vertical = Space.s),
+            )
+        }
     }
 }
 

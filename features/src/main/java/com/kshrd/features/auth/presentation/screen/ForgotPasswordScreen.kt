@@ -10,7 +10,6 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,7 +23,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -32,18 +30,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kshrd.core.presentation.OnEachEvent
-import com.kshrd.coreui.components.decor.AuthBackground
+import com.kshrd.coreui.components.decor.LiquidBackdrop
 import com.kshrd.coreui.components.nav.BackTopBar
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
-import com.kshrd.coreui.theme.BrandGradientColors
 import com.kshrd.coreui.theme.PillShape
 import com.kshrd.coreui.theme.Space
 import com.kshrd.coreui.theme.wb
@@ -80,7 +75,7 @@ fun ForgotPasswordContent(
     state: ForgotPasswordUiState,
     onEvent: (ForgotPasswordEvent) -> Unit,
 ) {
-    AuthBackground() {
+    LiquidBackdrop {
         Column(modifier = Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding().imePadding()) {
             // Same back bar as every pushed screen, with the step as its title.
             BackTopBar(
@@ -130,19 +125,19 @@ private fun StepProgress(
     ) {
         repeat(TOTAL_STEPS) { index ->
             val fill by animateFloatAsState(if (index + 1 <= current) 1f else 0f, spring(dampingRatio = 0.8f, stiffness = 130f), label = "step-fill")
+            // Web step bars: thin, flat brand fill on a soft brand track.
             Box(
                 Modifier
                     .weight(1f)
-                    .height(6.dp)
+                    .height(4.dp)
                     .clip(PillShape)
-                    .background(wb.brand.copy(alpha = 0.18f))
-                    .border(0.5.dp, Color.White.copy(alpha = 0.7f), CircleShape),
+                    .background(wb.brand.copy(alpha = 0.16f)),
             ) {
                 Box(
                     Modifier
                         .fillMaxHeight()
                         .fillMaxWidth(fill)
-                        .background(Brush.horizontalGradient(BrandGradientColors), PillShape),
+                        .background(wb.brand, PillShape),
                 )
             }
         }
