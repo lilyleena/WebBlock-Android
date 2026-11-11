@@ -18,8 +18,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -42,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kshrd.coreui.components.brand.WebBlocksSticker
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.FontScalePreviews
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
@@ -237,7 +236,7 @@ private fun WebsiteTotal(
                         drawRect(Brush.verticalGradient(listOf(Color.White.copy(alpha = 0.3f), Color.Transparent), endY = size.height * 0.6f))
                     }.border(BorderStroke(1.dp, Color.White.copy(alpha = 0.4f)), tileShape),
         ) {
-            Icon(Icons.Outlined.Public, contentDescription = null, tint = Color.White, modifier = Modifier.size(26.dp))
+            Icon(WebIcons.Globe, contentDescription = null, tint = Color.White, modifier = Modifier.size(26.dp))
         }
         Column(modifier = Modifier.widthIn(max = 64.dp)) {
             Text(

@@ -20,8 +20,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.OpenInNew
-import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.WifiOff
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -34,7 +32,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -51,6 +48,7 @@ import com.kshrd.coreui.components.card.Pill
 import com.kshrd.coreui.components.card.cardBorder
 import com.kshrd.coreui.components.card.cardShadow
 import com.kshrd.coreui.components.card.glass
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.CardShape
@@ -97,16 +95,7 @@ fun StatusCard(
                 .fillMaxWidth()
                 .cardShadow()
                 .glass(shape)
-                .drawBehind {
-                    // dot matrix top-left, pale circle bottom-right
-                    val spacing = 10.dp.toPx()
-                    for (r in 0 until 4) {
-                        for (c in 0 until 5) {
-                            drawCircle(brand.copy(alpha = 0.30f * 0.7f), 1.5.dp.toPx(), Offset(14.dp.toPx() + c * spacing, 10.dp.toPx() + r * spacing + 12.dp.toPx()))
-                        }
-                    }
-                    drawCircle(brand.copy(alpha = 0.08f), 60.dp.toPx(), Offset(size.width + 40.dp.toPx() - 60.dp.toPx(), size.height + 50.dp.toPx() - 60.dp.toPx()))
-                }.border(cardBorder(), shape)
+                .border(cardBorder(), shape)
                 .padding(Space.m),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.s)) {
@@ -119,7 +108,7 @@ fun StatusCard(
                 )
                 Box(Modifier.size(64.dp).background(wb.brandSoft, CircleShape), contentAlignment = Alignment.Center) {
                     Icon(
-                        if (online) Icons.Outlined.Language else Icons.Outlined.WifiOff,
+                        if (online) WebIcons.Globe else Icons.Outlined.WifiOff,
                         contentDescription = null,
                         tint = if (online) wb.brand else wb.red,
                         modifier = Modifier.size(28.dp),
@@ -162,7 +151,7 @@ fun StatusCard(
                 modifier = Modifier.clip(PillShape).clickable(role = Role.Button, onClick = onVisitSite).padding(horizontal = Space.xxs, vertical = Space.xs),
             ) {
                 Text(stringResource(R.string.bm_visit_site), style = MaterialTheme.typography.labelLarge, color = wb.brand)
-                Icon(Icons.AutoMirrored.Outlined.OpenInNew, contentDescription = null, tint = wb.brand, modifier = Modifier.size(Sizes.iconSmall))
+                Icon(WebIcons.ExternalLink, contentDescription = null, tint = wb.brand, modifier = Modifier.size(Sizes.iconSmall))
             }
         }
     }

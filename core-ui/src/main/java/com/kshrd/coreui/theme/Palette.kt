@@ -8,8 +8,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 /**
- * WebBlock colour tokens, copied 1:1 from the iOS app's `Theme.swift`
- * (light = Figma values, dark = the iOS dark adaptations).
+ * WebBlock colour tokens. Light = the web dashboard's Figma variables ("Local-WebBlock-UI":
+ * `--color-bg-brand`, `--color-text-primary`, `--color-border-subtle`, …); dark = adaptations of the same hues.
  * Tokens with no Material 3 slot are exposed through [WbColors] (`MaterialTheme.wb`).
  */
 @Immutable
@@ -33,36 +33,36 @@ class WbColors(
     val purpleSoft: Color,
     val isDark: Boolean,
 ) {
-    /** Plain page canvas used behind screens (white / dark navy). */
-    val canvas: Color get() = if (isDark) Color(0xFF0B1220) else Color.White
+    /** Page canvas behind screens (web `--color-bg-page` / dark navy); white cards sit on it. */
+    val canvas: Color get() = background
 
-    /** Solid button / selected-chip blue (`0x3F72D0` on iOS, both modes). */
-    val buttonBlue: Color get() = Color(0xFF3F72D0)
+    /** Solid button / selected-chip blue (web `--color-bg-brand`, both modes). */
+    val buttonBlue: Color get() = Color(0xFF2F6BC4)
 
     /** Diagonal brand blue behind white initials and icons (logo fallbacks, avatars, progress fills). Same in both modes. */
     val brandGradient: Brush get() = Brush.linearGradient(BrandGradientColors)
 }
 
 /** The two stops of [WbColors.brandGradient], for callers that need another direction. */
-val BrandGradientColors = listOf(Color(0xFF4F86DD), Color(0xFF3A6CCB))
+val BrandGradientColors = listOf(Color(0xFF3C78CF), Color(0xFF2A5FBD))
 
 internal val LightWbColors =
     WbColors(
-        brand = Color(0xFF4379D6),
-        brandDeep = Color(0xFF2F63C0),
-        background = Color(0xFFF6F8FD),
-        card = Color(0xFFFFFFFF),
-        text = Color(0xFF1A273D),
-        muted = Color(0xFF657899),
-        border = Color(0xFFE1E8F5),
-        brandSoft = Color(0xFFE6EEFB),
-        soft = Color(0xFFF0F4FB),
-        green = Color(0xFF1E9E64),
-        greenSoft = Color(0xFFE3F5EC),
-        amber = Color(0xFFE59A1A),
-        amberSoft = Color(0xFFFDF0D8),
-        red = Color(0xFFDC3F45),
-        redSoft = Color(0xFFFDE8E8),
+        brand = Color(0xFF2F6BC4), // --color-bg-brand / --color-text-brand
+        brandDeep = Color(0xFF2A5FBD), // --color-text-brand-strong
+        background = Color(0xFFF8F9FC), // --color-bg-page
+        card = Color(0xFFFFFFFF), // --color-bg-surface
+        text = Color(0xFF1B2B4B), // --color-text-primary
+        muted = Color(0xFF5A6B8C), // --color-text-muted
+        border = Color(0xFFE5E7EB), // --color-border-subtle
+        brandSoft = Color(0xFFE3EEFC), // --color-bg-brand-soft
+        soft = Color(0xFFEEF4FD), // --color-bg-subtle
+        green = Color(0xFF1E8A5A), // --color-text-success
+        greenSoft = Color(0xFFE6F5EC), // --color-bg-success-soft
+        amber = Color(0xFFB76E0B), // --color-text-warning
+        amberSoft = Color(0xFFFDF1DE), // --color-bg-warning-soft
+        red = Color(0xFFCC3D3D), // --color-text-danger
+        redSoft = Color(0xFFFCE8E8), // --color-bg-danger-soft
         purple = Color(0xFF7C4DCC),
         purpleSoft = Color(0xFFEFE7FB),
         isDark = false,

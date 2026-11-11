@@ -35,17 +35,14 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.kshrd.coreui.components.card.glassFill
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.PillShape
@@ -78,8 +75,10 @@ fun PrimaryButton(
     compact: Boolean = false,
 ) {
     val source = remember { MutableInteractionSource() }
+    val pressed by source.collectIsPressedAsState()
     val blue = MaterialTheme.wb.buttonBlue
-    val fill = Brush.verticalGradient(listOf(lerp(blue, Color.White, 0.14f), blue))
+    // Web dashboard primary: flat brand fill that deepens on press, with a faint blue lift.
+    val fill = if (pressed) MaterialTheme.wb.brandDeep else blue
     Box(
         contentAlignment = Alignment.Center,
         modifier =
@@ -88,6 +87,7 @@ fun PrimaryButton(
                 .heightIn(min = if (compact) 36.dp else Sizes.control)
                 .scale(pressScale(source))
                 .alpha(if (enabled) 1f else 0.45f)
+                .shadow(if (enabled) 6.dp else 0.dp, PillShape, ambientColor = blue.copy(alpha = 0.25f), spotColor = blue.copy(alpha = 0.35f))
                 .clip(PillShape)
                 .background(fill)
                 .clickable(interactionSource = source, indication = null, enabled = enabled && !loading, role = Role.Button, onClick = onClick)
@@ -112,9 +112,8 @@ fun PrimaryButton(
 }
 
 /**
- * White gradient-glass pill for secondary actions, with a soft shadow. [destructive] keeps the same white
- * glass but turns the label, the [icon] and a faint outline red, so Delete reads as dangerous without a
- * red fill competing with the primary button beside it.
+ * White pill with a hairline border for secondary actions. [destructive] makes it a solid danger-red
+ * pill with a white label and [icon] (Delete product, Delete website), darker red while pressed.
  */
 @Composable
 fun SecondaryButton(
@@ -127,9 +126,18 @@ fun SecondaryButton(
 ) {
     val source = remember { MutableInteractionSource() }
     val wb = MaterialTheme.wb
-    val content = if (destructive) wb.red else wb.text
-    val border = BorderStroke(1.dp, if (destructive) wb.red.copy(alpha = 0.3f) else wb.brand.copy(alpha = 0.12f))
-    val glass = Brush.verticalGradient(listOf(wb.card, lerp(wb.card, wb.brandSoft, 0.35f)))
+    val pressed by source.collectIsPressedAsState()
+    // Web dashboard secondary: white pill, hairline border, soft fill on press.
+    // Destructive: solid danger red (web `--color-bg-danger`, same in both themes so white text keeps 4.9:1 contrast).
+    val content = if (destructive) Color.White else wb.text
+    val border = BorderStroke(1.dp, if (destructive) Color.Transparent else wb.border)
+    val fill =
+        when {
+            destructive && pressed -> DangerPressed
+            destructive -> Danger
+            pressed -> wb.soft
+            else -> wb.card
+        }
     Box(
         contentAlignment = Alignment.Center,
         modifier =
@@ -138,9 +146,8 @@ fun SecondaryButton(
                 .heightIn(min = Sizes.control)
                 .scale(pressScale(source))
                 .alpha(if (enabled) 1f else 0.5f)
-                .shadow(4.dp, PillShape, ambientColor = Color.Black.copy(alpha = 0.06f), spotColor = Color.Black.copy(alpha = 0.08f))
                 .clip(PillShape)
-                .background(glass)
+                .background(fill)
                 .border(border, PillShape)
                 .clickable(interactionSource = source, indication = null, enabled = enabled, role = Role.Button, onClick = onClick)
                 .padding(horizontal = Space.s),
@@ -151,6 +158,9 @@ fun SecondaryButton(
         }
     }
 }
+
+private val Danger = Color(0xFFCC3D3D)
+private val DangerPressed = Color(0xFFB33434)
 
 /** White "Continue with Google" pill (same height as every button, 1.5dp border, soft brand shadow) with the four-colour G. */
 @Composable
@@ -163,7 +173,6 @@ fun GoogleButton(
     val source = remember { MutableInteractionSource() }
     val pressed by source.collectIsPressedAsState()
     val wb = MaterialTheme.wb
-    val glow = wb.brand.copy(alpha = if (pressed) 0.04f else 0.1f)
     Row(
         horizontalArrangement = Arrangement.spacedBy(Space.xs, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically,
@@ -173,13 +182,12 @@ fun GoogleButton(
                 .heightIn(min = Sizes.control)
                 .scale(pressScale(source))
                 .alpha(if (enabled) 1f else 0.5f)
-                .shadow(if (pressed) 2.dp else 8.dp, PillShape, ambientColor = glow, spotColor = glow)
                 .clip(PillShape)
-                .background(glassFill())
-                .border(1.5.dp, wb.border, PillShape)
+                .background(if (pressed) wb.soft else wb.card)
+                .border(1.dp, wb.border, PillShape)
                 .clickable(interactionSource = source, indication = null, enabled = enabled, role = Role.Button, onClick = onClick),
     ) {
-        GoogleGlyph(Modifier.size(22.dp))
+        GoogleGlyph(Modifier.size(20.dp))
         Text(text, style = MaterialTheme.typography.titleMedium, color = wb.text)
     }
 }

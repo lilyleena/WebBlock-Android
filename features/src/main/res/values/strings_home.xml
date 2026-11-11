@@ -6,6 +6,9 @@
     <string name="home_title_websites">Your websites</string>
     <string name="home_choose_website">Choose a website to manage its products, business information and monitor.</string>
     <string name="home_live_websites">Live websites</string>
+    <!-- Page title + subtitle, as on the web dashboard's My Websites page. -->
+    <string name="home_page_title">My Websites</string>
+    <string name="home_page_subtitle">Pick a website to manage its products, business info and status.</string>
     <!-- Welcome card at the top of the websites list. -->
     <string name="home_welcome_title">Welcome back, %1$s!</string>
     <string name="home_welcome_title_no_name">Welcome back!</string>

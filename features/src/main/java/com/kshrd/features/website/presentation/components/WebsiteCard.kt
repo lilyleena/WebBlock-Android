@@ -13,10 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.outlined.Link
-import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -26,16 +22,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.kshrd.coreui.components.card.BadgeTone
 import com.kshrd.coreui.components.card.LogoAvatar
-import com.kshrd.coreui.components.card.Pill
+import com.kshrd.coreui.components.card.StatusBadge
 import com.kshrd.coreui.components.card.WbCard
 import com.kshrd.coreui.components.nav.PortalIcons
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.motion.cardPress
 import com.kshrd.coreui.motion.rememberPressSource
 import com.kshrd.coreui.preview.FontScalePreviews
@@ -75,10 +74,10 @@ fun WebsiteCard(
     val active by animateFloatAsState(if (pressed) 1f else 0f, spring(dampingRatio = 0.68f, stiffness = 300f), label = "card-active")
     Box(modifier = modifier.fillMaxWidth().cardPress(source, pressed, scale = 0.98f, onClick = onClick).semantics { contentDescription = hint }) {
         WbCard(padding = Space.m) {
-            Column(verticalArrangement = Arrangement.spacedBy(Space.m)) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.s)) {
-                    WebsiteLogo(website, size = 56.dp)
-                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Space.xxs)) {
+            Column(verticalArrangement = Arrangement.spacedBy(Space.s)) {
+                Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(Space.s)) {
+                    WebsiteLogo(website, size = 48.dp)
+                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Space.xxxs)) {
                         Text(
                             text = website.name,
                             style = MaterialTheme.typography.titleMedium,
@@ -87,7 +86,7 @@ fun WebsiteCard(
                             overflow = TextOverflow.Ellipsis,
                         )
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.xxs)) {
-                            Icon(Icons.Outlined.Link, contentDescription = null, tint = wb.muted, modifier = Modifier.size(14.dp))
+                            Icon(WebIcons.Globe, contentDescription = null, tint = wb.muted, modifier = Modifier.size(14.dp))
                             Text(
                                 text = website.url ?: website.businessType,
                                 style = MaterialTheme.typography.bodySmall,
@@ -96,27 +95,47 @@ fun WebsiteCard(
                                 overflow = TextOverflow.MiddleEllipsis,
                             )
                         }
+                        if (website.url != null) {
+                            Text(
+                                text = website.businessType,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = wb.muted,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
                     }
-                    Spacer(Modifier.width(Space.xs))
-                    Pill(
+                    Spacer(Modifier.width(Space.xxs))
+                    StatusBadge(
                         text = stringResource(R.string.home_pill_live),
-                        icon = Icons.Outlined.Public,
-                        tint = wb.green,
-                        background = wb.greenSoft,
+                        tone = BadgeTone.Success,
+                        icon = WebIcons.Globe,
                     )
                 }
                 HorizontalDivider(color = wb.border)
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.xs)) {
-                    Pill(stringResource(R.string.home_chip_products), icon = PortalIcons.Products)
-                    Pill(stringResource(R.string.home_chip_business), icon = PortalIcons.Business)
-                    Pill(stringResource(R.string.home_chip_monitor), icon = PortalIcons.Monitor)
+                // What opens on tap: the three portal tabs, as quiet labels (the whole card is the button).
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.m)) {
+                    PortalHint(stringResource(R.string.home_chip_products), PortalIcons.Products)
+                    PortalHint(stringResource(R.string.home_chip_business), PortalIcons.Business)
+                    PortalHint(stringResource(R.string.home_chip_monitor), PortalIcons.Monitor)
                     Spacer(Modifier.weight(1f))
-                    Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = wb.muted, modifier = Modifier.size(Sizes.icon))
+                    Icon(WebIcons.ChevronRight, contentDescription = null, tint = wb.brand, modifier = Modifier.size(Sizes.icon))
                 }
             }
         }
         // Press feedback: a light brand wash over the card (plus the spring-down from cardPress).
         Box(Modifier.matchParentSize().clip(CardShape).background(wb.brand.copy(alpha = 0.07f * active)))
+    }
+}
+
+@Composable
+private fun PortalHint(
+    label: String,
+    icon: ImageVector,
+) {
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.xxs)) {
+        Icon(icon, contentDescription = null, tint = MaterialTheme.wb.brand, modifier = Modifier.size(Sizes.iconSmall))
+        Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.wb.text, maxLines = 1)
     }
 }
 

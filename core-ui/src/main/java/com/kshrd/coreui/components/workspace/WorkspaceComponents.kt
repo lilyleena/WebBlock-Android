@@ -12,7 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.UnfoldMore
-import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.kshrd.core.session.WorkspaceWebsite
 import com.kshrd.coreui.components.card.AppCard
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.Radius
@@ -143,7 +143,7 @@ fun WebsiteSwitcherSheet(
                                 overflow = TextOverflow.Ellipsis,
                             )
                         }
-                        if (selected) Icon(Icons.Filled.Check, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                        if (selected) Icon(WebIcons.Check, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                     }
                 }
             }
@@ -152,7 +152,7 @@ fun WebsiteSwitcherSheet(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth().padding(horizontal = Space.m, vertical = Space.s),
                 ) {
-                    Icon(Icons.Outlined.Language, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                    Icon(WebIcons.Globe, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                     Text(
                         allWebsitesLabel,
                         style = MaterialTheme.typography.titleMedium,

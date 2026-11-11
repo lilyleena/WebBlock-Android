@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(bash .claude/scripts/gradle.sh:*)",
+      "Bash(./gradlew:*)",
+      "Bash(adb:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)"
+    ],
+    "ask": [
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
+    ],
+    "deny": [
+      "Read(./build/**)",
+      "Read(./app/build/**)",
+      "Read(./core/build/**)",
+      "Read(./core-ui/build/**)",
+      "Read(./features/build/**)",
+      "Read(./.gradle/**)",
+      "Read(./.kotlin/**)",
+      "Read(./.idea/**)",
+      "Read(./**/*.jks)",
+      "Read(./**/*.keystore)",
+      "Read(./**/keystore.properties)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-conventions.mjs\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

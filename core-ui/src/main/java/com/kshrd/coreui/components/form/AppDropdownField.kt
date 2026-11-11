@@ -13,10 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.outlined.Sell
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -42,8 +38,10 @@ import androidx.compose.ui.unit.dp
 import com.kshrd.coreui.components.card.glassFill
 import com.kshrd.coreui.components.menu.WbGlassDropdownMenu
 import com.kshrd.coreui.components.menu.WbMenuOption
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
+import com.kshrd.coreui.theme.FieldShape
 import com.kshrd.coreui.theme.PillShape
 import com.kshrd.coreui.theme.Radius
 import com.kshrd.coreui.theme.Sizes
@@ -80,9 +78,9 @@ fun AppDropdownField(
         Box {
             Surface(
                 onClick = { expanded = true },
-                shape = PillShape,
+                shape = FieldShape,
                 color = glassFill(),
-                border = BorderStroke(if (expanded) 1.5.dp else 1.dp, if (error != null) wb.red else wb.brand.copy(alpha = if (expanded) 1f else 0.3f)),
+                border = BorderStroke(if (expanded) 1.5.dp else 1.dp, if (error != null) wb.red else if (expanded) wb.brand else wb.border),
                 modifier = Modifier.fillMaxWidth().heightIn(min = Sizes.control).onSizeChanged { fieldWidth = it.width },
             ) {
                 Row(
@@ -103,7 +101,7 @@ fun AppDropdownField(
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f),
                     )
-                    Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = wb.muted, modifier = Modifier.rotate(chevron))
+                    Icon(WebIcons.ChevronDown, contentDescription = null, tint = wb.muted, modifier = Modifier.rotate(chevron))
                 }
             }
             WbGlassDropdownMenu(
@@ -136,7 +134,7 @@ fun AppDropdownField(
                                     onExtraAction()
                                 }.padding(horizontal = Space.s, vertical = 10.dp),
                     ) {
-                        Icon(Icons.Filled.Add, contentDescription = null, tint = wb.brand, modifier = Modifier.size(Sizes.iconSmall))
+                        Icon(WebIcons.Plus, contentDescription = null, tint = wb.brand, modifier = Modifier.size(Sizes.iconSmall))
                         Text(extraActionLabel, style = MaterialTheme.typography.bodyMedium, color = wb.brand)
                     }
                 }
@@ -155,7 +153,7 @@ private fun AppDropdownFieldPreview() {
             value = "Bouquets",
             options = listOf("Flowers", "Bouquets"),
             onSelect = {},
-            leadingIcon = Icons.Outlined.Sell,
+            leadingIcon = WebIcons.Tag,
             iconTint = MaterialTheme.wb.purple,
             iconContainer = MaterialTheme.wb.purpleSoft,
         )

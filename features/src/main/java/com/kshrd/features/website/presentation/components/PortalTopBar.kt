@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.PlayCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -47,7 +46,7 @@ import com.kshrd.coreui.components.card.AvatarView
 import com.kshrd.coreui.components.menu.WbDropdownMenu
 import com.kshrd.coreui.components.menu.WbMenuItem
 import com.kshrd.coreui.components.nav.UnreadBadge
-import com.kshrd.coreui.icons.WbIcons
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.PillShape
@@ -182,7 +181,7 @@ private fun ActionCapsule(
                     .semantics { contentDescription = bellCd },
         ) {
             Icon(
-                Icons.Outlined.Notifications,
+                WebIcons.Bell,
                 contentDescription = null,
                 tint = if (onBrand) Color.White else wb.text,
                 modifier = Modifier.size(23.dp),
@@ -214,7 +213,7 @@ private fun ActionCapsule(
                     },
                 )
                 WbMenuItem(
-                    icon = WbIcons.LogOut,
+                    icon = WebIcons.LogOut,
                     label = stringResource(R.string.home_log_out),
                     destructive = true,
                     onClick = {

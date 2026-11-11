@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.PathParser
 import androidx.compose.ui.unit.dp
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.wb
@@ -55,7 +56,7 @@ private fun lineIcon(
 private fun WbIconsPreview() {
     PreviewSurface {
         Row {
-            Icon(WbIcons.LogOut, contentDescription = null, tint = MaterialTheme.wb.red, modifier = Modifier.size(24.dp))
+            Icon(WebIcons.LogOut, contentDescription = null, tint = MaterialTheme.wb.red, modifier = Modifier.size(24.dp))
         }
     }
 }

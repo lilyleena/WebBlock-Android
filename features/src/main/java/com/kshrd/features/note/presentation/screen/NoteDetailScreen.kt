@@ -3,8 +3,6 @@ package com.kshrd.features.note.presentation.screen
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,6 +20,7 @@ import com.kshrd.core.data.entity.DataState
 import com.kshrd.core.presentation.UiState
 import com.kshrd.coreui.components.feedback.EmptyStateView
 import com.kshrd.coreui.components.screen.DataStateScreenShell
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.Space
@@ -53,7 +52,7 @@ fun NoteDetailContent(
                 title = { Text(stringResource(R.string.note_detail_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.action_back))
+                        Icon(WebIcons.ChevronLeft, contentDescription = stringResource(R.string.action_back))
                     }
                 },
             )

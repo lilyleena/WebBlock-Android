@@ -24,10 +24,10 @@ import com.kshrd.coreui.theme.CardShape
 import com.kshrd.coreui.theme.Space
 import com.kshrd.coreui.theme.wb
 
-/** Card surface used everywhere on iOS (Liquid Glass): the card colour at ~92% so the page decor whispers through. */
+/** Card surface (web `--color-bg-surface`): solid, so text contrast never depends on what is behind it. */
 @Composable
 fun glassFill(tint: Color? = null): Color {
-    val base = MaterialTheme.wb.card.copy(alpha = 0.92f)
+    val base = MaterialTheme.wb.card
     return tint?.compositeOver(base) ?: base
 }
 
@@ -41,15 +41,17 @@ fun Modifier.glass(
     tint: Color? = null,
 ): Modifier = this.clip(shape).background(glassFill(tint), shape)
 
-/** The hairline every card carries: 1dp brand@12%. */
+/** The hairline every card carries (web `--color-border-subtle`). */
 @Composable
-fun cardBorder(): BorderStroke = BorderStroke(1.dp, MaterialTheme.wb.brand.copy(alpha = 0.12f))
+fun cardBorder(): BorderStroke = BorderStroke(1.dp, MaterialTheme.wb.border)
 
-/** The barely-there shadow under every card: no coloured glow. */
+/** Web `Shadow/Card`: a soft, low, blue-tinted lift (#3C78CF at 5–12%), never a grey smudge. */
 fun Modifier.cardShadow(shape: Shape = CardShape): Modifier =
-    shadow(3.dp, shape, clip = false, ambientColor = Color.Black.copy(alpha = 0.05f), spotColor = Color.Black.copy(alpha = 0.08f))
+    shadow(8.dp, shape, clip = false, ambientColor = CardShadowTint.copy(alpha = 0.06f), spotColor = CardShadowTint.copy(alpha = 0.14f))
 
-/** iOS `wbCard()`: radius 24 glass card, 1dp brand@12% border, very soft shadow, inner [padding]. */
+private val CardShadowTint = Color(0xFF3C78CF)
+
+/** Web dashboard card: radius 20, solid surface, 1dp hairline border, soft blue shadow, inner [padding]. */
 @Composable
 fun Modifier.wbCard(padding: Dp = Space.m): Modifier =
     this

@@ -1,47 +1,27 @@
 package com.kshrd.features.business.presentation.screen
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Language
-import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material.icons.outlined.Phone
-import androidx.compose.material.icons.outlined.Place
-import androidx.compose.material.icons.outlined.Storefront
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -52,11 +32,6 @@ import com.kshrd.core.session.WorkspaceState
 import com.kshrd.core.session.WorkspaceWebsite
 import com.kshrd.coreui.components.button.PrimaryButton
 import com.kshrd.coreui.components.button.SecondaryButton
-import com.kshrd.coreui.components.card.AvatarView
-import com.kshrd.coreui.components.card.GlassBlock
-import com.kshrd.coreui.components.card.IconTile
-import com.kshrd.coreui.components.card.Pill
-import com.kshrd.coreui.components.card.WbCard
 import com.kshrd.coreui.components.decor.LiquidBackdrop
 import com.kshrd.coreui.components.feedback.ErrorStateView
 import com.kshrd.coreui.components.feedback.LoadingView
@@ -65,29 +40,33 @@ import com.kshrd.coreui.components.feedback.WbToastHost
 import com.kshrd.coreui.components.form.LabeledField
 import com.kshrd.coreui.components.nav.dockContentPadding
 import com.kshrd.coreui.components.text.Section
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
-import com.kshrd.coreui.theme.Radius
-import com.kshrd.coreui.theme.Sizes
 import com.kshrd.coreui.theme.Space
-import com.kshrd.coreui.theme.paragraph
 import com.kshrd.coreui.theme.wb
 import com.kshrd.features.R
 import com.kshrd.features.business.domain.model.BusinessDraft
 import com.kshrd.features.business.domain.model.BusinessInfo
 import com.kshrd.features.business.domain.model.BusinessProfile
 import com.kshrd.features.business.domain.model.DayHours
-import com.kshrd.features.business.presentation.components.OpeningHoursDropdown
+import com.kshrd.features.business.presentation.components.BusinessDetailsCard
 import com.kshrd.features.business.presentation.components.OpeningHoursEditor
 import com.kshrd.features.business.presentation.components.PortalTitle
 import com.kshrd.features.business.presentation.components.PortalTopBar
+import com.kshrd.features.business.presentation.components.QuickAction
+import com.kshrd.features.business.presentation.components.QuickActionsRow
 import com.kshrd.features.business.presentation.components.SiteHeaderCard
+import com.kshrd.features.business.presentation.components.StorefrontCard
+import com.kshrd.features.business.presentation.components.WeeklyHoursCard
 import com.kshrd.features.business.presentation.components.initialsOf
+import com.kshrd.features.business.presentation.components.openStatus
 import com.kshrd.features.business.presentation.model.BusinessEffect
 import com.kshrd.features.business.presentation.model.BusinessEvent
 import com.kshrd.features.business.presentation.model.BusinessUiState
 import com.kshrd.features.business.presentation.viewmodel.BusinessViewModel
 import java.time.DayOfWeek
+import java.time.LocalDateTime
 
 /**
  * Business information tab. Editing happens in place (as on iOS), so [onEditInfo] and [onEditHours] are
@@ -181,103 +160,34 @@ private fun BusinessViewer(
     onEvent: (BusinessEvent) -> Unit,
 ) {
     val profile = info.profile
-    val wb = MaterialTheme.wb
     val uriHandler = LocalUriHandler.current
+    // Re-read when the hours change; "now" is refreshed each time the tab is composed.
+    val now = remember(info.hours) { LocalDateTime.now() }
+    val status = remember(info.hours, now) { openStatus(info.hours, now) }
+    val onOpenMaps = if (profile.mapsLink.isNotEmpty()) ({ onEvent(BusinessEvent.OpenMapsClicked) }) else null
     Column(verticalArrangement = Arrangement.spacedBy(Space.m)) {
-        WbCard {
-            Column(verticalArrangement = Arrangement.spacedBy(Space.m)) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.s)) {
-                    AvatarView(initials = website?.let { initialsOf(it.name) } ?: initialsOf(profile.name), size = 56.dp)
-                    Column(verticalArrangement = Arrangement.spacedBy(Space.xxs)) {
-                        Text(profile.name, style = MaterialTheme.typography.titleLarge, color = wb.text)
-                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.xxs)) {
-                            Icon(Icons.Outlined.Language, contentDescription = null, tint = wb.muted, modifier = Modifier.size(14.dp))
-                            Text(profile.url, style = MaterialTheme.typography.labelMedium, color = wb.muted, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                        }
-                        Pill(text = profile.type, icon = Icons.Outlined.Storefront)
-                    }
-                }
-                PrimaryButton(text = stringResource(R.string.bm_edit_details), onClick = { onEvent(BusinessEvent.EditInfoClicked) })
-            }
-        }
-
-        Section(stringResource(R.string.bm_details)) {
-            GlassBlock {
-                DetailHeader(Icons.Outlined.Info, stringResource(R.string.bm_about))
-                Text(profile.about, style = MaterialTheme.typography.paragraph, color = wb.text.copy(alpha = 0.9f))
-            }
-        }
-        GlassBlock {
-            DetailHeader(Icons.Outlined.Phone, stringResource(R.string.bm_contact))
-            Column {
-                InfoLine(Icons.Outlined.Phone, stringResource(R.string.bm_phone), profile.phone) {
+        StorefrontCard(
+            profile = profile,
+            initials = website?.let { initialsOf(it.name) } ?: initialsOf(profile.name),
+            status = status,
+            onEdit = { onEvent(BusinessEvent.EditInfoClicked) },
+        )
+        QuickActionsRow(
+            listOf(
+                QuickAction(WebIcons.Phone, stringResource(R.string.bm_action_call)) {
                     runCatching { uriHandler.openUri("tel:" + profile.phone.filter { it.isDigit() || it == '+' }) }
-                }
-                HorizontalDivider(color = wb.border, modifier = Modifier.padding(start = 52.dp))
-                InfoLine(Icons.Outlined.Email, stringResource(R.string.bm_email), profile.email) {
+                },
+                QuickAction(WebIcons.Mail, stringResource(R.string.bm_action_email)) {
                     runCatching { uriHandler.openUri("mailto:" + profile.email) }
-                }
-            }
-        }
-        GlassBlock {
-            DetailHeader(Icons.Outlined.Place, stringResource(R.string.bm_location))
-            Column {
-                InfoLine(Icons.Outlined.Place, stringResource(R.string.bm_address), profile.address)
-                if (profile.mapsLink.isNotEmpty()) {
-                    HorizontalDivider(color = wb.border, modifier = Modifier.padding(start = 52.dp))
-                    InfoLine(Icons.Outlined.Map, stringResource(R.string.bm_map), stringResource(R.string.bm_open_maps)) {
-                        onEvent(BusinessEvent.OpenMapsClicked)
-                    }
-                }
-            }
-        }
-
-        OpeningHoursDropdown(hours = info.hours)
-    }
-}
-
-/** Card heading: a small tinted icon tile and the section title. */
-@Composable
-private fun DetailHeader(
-    icon: ImageVector,
-    title: String,
-) {
-    val wb = MaterialTheme.wb
-    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.s)) {
-        IconTile(icon, size = 36.dp)
-        Text(title, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), color = wb.text)
-    }
-}
-
-/** One row: round icon tile, muted label over the value. Tappable rows turn blue and show an arrow. */
-@Composable
-private fun InfoLine(
-    icon: ImageVector,
-    label: String,
-    value: String,
-    onClick: (() -> Unit)? = null,
-) {
-    val wb = MaterialTheme.wb
-    val clickable = if (onClick != null) Modifier.clip(RoundedCornerShape(Radius.tile)).clickable(role = Role.Button, onClick = onClick) else Modifier
-    Row(
-        modifier = Modifier.fillMaxWidth().then(clickable).padding(vertical = Space.s),
-        horizontalArrangement = Arrangement.spacedBy(Space.s),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Box(Modifier.size(40.dp).clip(CircleShape).background(wb.brandSoft.copy(alpha = 0.8f)), contentAlignment = Alignment.Center) {
-            Icon(icon, contentDescription = null, tint = wb.brand, modifier = Modifier.size(Sizes.icon))
-        }
-        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Space.xxxs)) {
-            Text(label, style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Normal), color = wb.muted)
-            Text(
-                value,
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = if (onClick == null) FontWeight.Normal else FontWeight.SemiBold),
-                color = if (onClick == null) wb.text else wb.brand,
-            )
-        }
-        if (onClick != null) {
-            Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = wb.muted, modifier = Modifier.size(Sizes.icon))
-        }
+                },
+                QuickAction(WebIcons.Pin, stringResource(R.string.bm_action_directions), onOpenMaps),
+                QuickAction(WebIcons.Globe, stringResource(R.string.bm_action_website)) {
+                    runCatching { uriHandler.openUri("https://" + profile.url) }
+                },
+            ),
+        )
+        BusinessDetailsCard(profile, onOpenMaps = onOpenMaps)
+        WeeklyHoursCard(hours = info.hours, today = now.dayOfWeek, status = status)
     }
 }
 

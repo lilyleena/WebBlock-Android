@@ -23,13 +23,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Image
-import androidx.compose.material.icons.outlined.Inventory2
-import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Layers
-import androidx.compose.material.icons.outlined.Sync
-import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -58,6 +53,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.kshrd.coreui.components.card.WbCard
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.PillShape
@@ -83,14 +79,14 @@ fun SummaryCard(data: MonitorData) {
             SuccessRing(succeeded = data.succeededCount, failed = data.failedCount)
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Space.xs)) {
                 MetricBar(
-                    icon = Icons.Outlined.Language,
+                    icon = WebIcons.Globe,
                     tint = wb.green,
                     title = stringResource(R.string.bm_uptime),
                     value = data.uptimePercent?.let { stringResource(R.string.bm_percent_decimal, it) } ?: stringResource(R.string.bm_dash),
                     fraction = ((data.uptimePercent ?: 0.0) / PERCENT).toFloat(),
                 )
                 MetricBar(
-                    icon = Icons.Outlined.Inventory2,
+                    icon = WebIcons.Package,
                     tint = wb.brand,
                     title = stringResource(R.string.bm_products),
                     value = stringResource(R.string.bm_used_of, usageUsed(data, true), plan.maxProducts),
@@ -208,7 +204,7 @@ fun PlanUsageCard(data: MonitorData) {
     WbCard {
         Column(verticalArrangement = Arrangement.spacedBy(Space.m)) {
             Row(horizontalArrangement = Arrangement.spacedBy(Space.m)) {
-                UsageTile(Icons.Outlined.Sync, wb.purple, stringResource(R.string.bm_redeploys), data.redeploysUsed, plan.maxRedeploys, Modifier.weight(1f))
+                UsageTile(WebIcons.Refresh, wb.purple, stringResource(R.string.bm_redeploys), data.redeploysUsed, plan.maxRedeploys, Modifier.weight(1f))
                 UsageTile(Icons.Outlined.Layers, wb.brand, stringResource(R.string.bm_websites_label), data.websitesUsed, plan.maxWebsites, Modifier.weight(1f))
             }
             HorizontalDivider(color = wb.border)
@@ -292,7 +288,7 @@ fun HealthTiles(data: MonitorData) {
             modifier = Modifier.weight(1f),
         )
         HealthTile(
-            icon = Icons.Filled.Warning,
+            icon = WebIcons.Alert,
             tint = wb.red,
             soft = wb.redSoft,
             title = stringResource(R.string.bm_tile_failed),
@@ -301,7 +297,7 @@ fun HealthTiles(data: MonitorData) {
             modifier = Modifier.weight(1f),
         )
         HealthTile(
-            icon = Icons.Outlined.Timer,
+            icon = WebIcons.Clock,
             tint = wb.amber,
             soft = wb.amberSoft,
             title = stringResource(R.string.bm_tile_avg_time),

@@ -16,10 +16,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.outlined.DeleteOutline
-import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -43,6 +39,7 @@ import com.kshrd.coreui.components.card.wbCard
 import com.kshrd.coreui.components.menu.WbDropdownMenu
 import com.kshrd.coreui.components.menu.WbMenuItem
 import com.kshrd.coreui.format.formatPrice
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.Radius
@@ -100,7 +97,7 @@ private fun ProductMenu(
                     },
             ) {
                 Icon(
-                    Icons.Filled.MoreVert,
+                    WebIcons.MoreVertical,
                     contentDescription = stringResource(R.string.pv_more_actions, product.name),
                     tint = if (onPhoto) wb.text else wb.muted,
                     modifier = Modifier.size(Sizes.icon),
@@ -109,7 +106,7 @@ private fun ProductMenu(
         }
         WbDropdownMenu(expanded = open, onDismissRequest = { open = false }) {
             WbMenuItem(
-                icon = Icons.Outlined.Edit,
+                icon = WebIcons.Pencil,
                 label = stringResource(R.string.pv_menu_edit),
                 onClick = {
                     open = false
@@ -117,7 +114,7 @@ private fun ProductMenu(
                 },
             )
             WbMenuItem(
-                icon = Icons.Outlined.DeleteOutline,
+                icon = WebIcons.Trash,
                 label = stringResource(R.string.pv_menu_delete),
                 destructive = true,
                 onClick = {
@@ -173,9 +170,10 @@ fun ProductRow(
 }
 
 /**
- * Grid card: a square photo filling the top of the card with the "⋮" menu on it, then the name, the
- * price in brand blue and two lines of description. Description always takes two lines so cards in the
- * same row line up. The whole card opens the product.
+ * Grid card in the web dashboard's product-card style: the photo sits *inset* in the card (6dp frame,
+ * its own rounded corners) with the category chip on it; below, the name, two lines of description
+ * (always two, so cards in a row line up), then a footer with the price in the heading face and the
+ * "⋮" menu. The whole card opens the product.
  */
 @Composable
 fun ProductTile(
@@ -186,23 +184,27 @@ fun ProductTile(
     modifier: Modifier = Modifier,
 ) {
     val wb = MaterialTheme.wb
-    Column(modifier = modifier.cardPress(onClick).wbCard(padding = 0.dp)) {
+    Column(modifier = modifier.cardPress(onClick).wbCard(padding = PhotoInset)) {
         Box {
-            ProductPhoto(product.imageUrl, modifier = Modifier.fillMaxWidth().aspectRatio(1f), cornerRadius = Radius.card)
-            ProductMenu(product, onEdit, onDelete, onPhoto = true, modifier = Modifier.align(Alignment.TopEnd).padding(Space.xxs))
+            ProductPhoto(
+                product.imageUrl,
+                modifier = Modifier.fillMaxWidth().aspectRatio(PHOTO_RATIO),
+                // Concentric with the card: card radius minus the inset.
+                cornerRadius = Radius.card - PhotoInset,
+            )
+            CategoryChip(product.category, modifier = Modifier.align(Alignment.TopStart).padding(Space.xs))
         }
         Column(
             verticalArrangement = Arrangement.spacedBy(Space.xxs),
-            modifier = Modifier.padding(start = Space.s, end = Space.s, top = Space.s, bottom = Space.m),
+            modifier = Modifier.padding(start = Space.xs, end = Space.xs, top = Space.s),
         ) {
             Text(
                 product.name,
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleSmall,
                 color = wb.text,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
-            Text(formatPrice(product.price), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), color = wb.brand)
             Text(
                 product.description,
                 style = MaterialTheme.typography.bodySmall,
@@ -212,7 +214,48 @@ fun ProductTile(
                 overflow = TextOverflow.Ellipsis,
             )
         }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth().padding(start = Space.xs, top = Space.xxs),
+        ) {
+            Text(
+                formatPrice(product.price),
+                style = MaterialTheme.typography.titleLarge,
+                color = wb.text,
+                maxLines = 1,
+                modifier = Modifier.weight(1f),
+            )
+            ProductMenu(product, onEdit, onDelete)
+        }
     }
+}
+
+private val PhotoInset = 6.dp
+private const val PHOTO_RATIO = 4f / 3f
+
+/**
+ * Category label on top of a product photo: a near-opaque white pill so it stays readable over any
+ * image (light or dark photo, light or dark theme).
+ */
+@Composable
+private fun CategoryChip(
+    text: String,
+    modifier: Modifier = Modifier,
+) {
+    val wb = MaterialTheme.wb
+    Text(
+        text = text,
+        style = MaterialTheme.typography.labelMedium,
+        fontWeight = FontWeight.SemiBold,
+        color = wb.text,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        modifier =
+            modifier
+                .shadow(2.dp, CircleShape)
+                .background(wb.card.copy(alpha = 0.95f), CircleShape)
+                .padding(horizontal = 10.dp, vertical = Space.xxs),
+    )
 }
 
 internal val previewProduct =
