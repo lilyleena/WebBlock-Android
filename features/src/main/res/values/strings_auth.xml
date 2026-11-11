@@ -76,6 +76,12 @@
     <string name="auth_login_forgot">Forgot password?</string>
     <string name="auth_login_sign_in">Sign in</string>
     <string name="auth_login_footer">Use the account you created on the WebBlock website.</string>
+    <!-- Sign-in hero: the floating "blocks" show a sample shop (the same Petal & Stem site the web mockup uses). -->
+    <string name="auth_blocks_live">Live</string>
+    <string name="auth_blocks_open">Open now</string>
+    <string name="auth_blocks_product">Gift bouquet</string>
+    <string name="auth_blocks_price">$38.00</string>
+    <string name="auth_blocks_domain">petalandstem.webblock.com</string>
     <string name="auth_error_email_empty">Enter your email address.</string>
     <string name="auth_error_email_invalid">Enter a valid email address.</string>
     <string name="auth_error_password_empty">Enter your password.</string>
@@ -92,6 +98,8 @@
     <string name="auth_back">Back</string>
     <string name="auth_step_format">Step %1$d of 3</string>
     <string name="auth_forgot_title">Forgot your password?</string>
+    <string name="auth_forgot_remember">Remember your password?</string>
+    <string name="auth_forgot_sign_in">Sign in</string>
     <string name="auth_forgot_subtitle">Enter the email you signed up with and we’ll help you reset it.</string>
     <string name="auth_forgot_email">Email</string>
     <string name="auth_forgot_hint">We’ll send a 6-digit code to reset your password.</string>
