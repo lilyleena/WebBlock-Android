@@ -1,0 +1,56 @@
+build:
+  maxIssues: 9999
+
+config:
+  validation: true
+
+processors:
+  active: true
+
+console-reports:
+  active: true
+
+output-reports:
+  active: false
+
+style:
+  MaxLineLength:
+    active: true
+    maxLineLength: 140
+  MagicNumber:
+    active: true
+    ignoreNumbers: ['-1', '0', '1', '2']
+    # Preview sample data is not production logic.
+    ignoreAnnotated: ['Preview', 'ThemePreviews', 'FontScalePreviews']
+  UnusedPrivateMember:
+    active: true
+    # Preview functions are invoked by tooling, not code.
+    ignoreAnnotated: ['Preview', 'ThemePreviews', 'FontScalePreviews']
+  ReturnCount:
+    active: true
+    max: 4
+
+complexity:
+  LongParameterList:
+    active: true
+    functionThreshold: 8
+    # Compose APIs expose many optional parameters with defaults; count only required ones.
+    ignoreDefaultParameters: true
+  LongMethod:
+    active: true
+    threshold: 80
+  LargeClass:
+    active: true
+    threshold: 600
+
+naming:
+  FunctionNaming:
+    active: true
+    # @Composable functions are PascalCase by Compose convention.
+    ignoreAnnotated: ['Composable']
+
+potential-bugs:
+  active: true
+
+performance:
+  active: true

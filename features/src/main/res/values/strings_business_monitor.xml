@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Shared portal chrome -->
+    <string name="bm_websites">Websites</string>
+    <string name="bm_greeting">Hello 👋</string>
+    <string name="bm_live">Live</string>
+    <string name="bm_your_website">your website</string>
+    <string name="bm_dash">—</string>
+
+    <!-- Business information -->
+    <string name="bm_business_title">Business information</string>
+    <string name="bm_business_subtitle">This is what customers see on %1$s.</string>
+    <string name="bm_business_error">We couldn’t load your business information.</string>
+    <string name="bm_edit_details">Edit details</string>
+    <string name="bm_details">Details</string>
+    <string name="bm_about">About</string>
+    <string name="bm_contact">Contact</string>
+    <string name="bm_location">Location</string>
+    <string name="bm_phone">Phone</string>
+    <string name="bm_email">Email</string>
+    <string name="bm_address">Address</string>
+    <string name="bm_map">Map</string>
+    <string name="bm_open_maps">Open in Google Maps</string>
+    <string name="bm_business_name">Business name</string>
+    <string name="bm_business_type">Business type</string>
+    <string name="bm_website_address">Website address</string>
+    <string name="bm_description">Description</string>
+    <string name="bm_maps_link">Google Maps link</string>
+    <string name="bm_maps_hint">Adds a “Get directions” link</string>
+    <string name="bm_cancel">Cancel</string>
+    <string name="bm_save_changes">Save changes</string>
+
+    <!-- Opening hours -->
+    <string name="bm_opening_hours">Opening hours</string>
+    <string name="bm_hours_range">%1$s – %2$s</string>
+    <string name="bm_hours_today">Today %1$s – %2$s</string>
+    <string name="bm_closed">Closed</string>
+    <string name="bm_closed_today">Closed today</string>
+    <string name="bm_days_open">%1$d days open</string>
+    <string name="bm_opens">Opens</string>
+    <string name="bm_closes">Closes</string>
+
+    <!-- Business toasts -->
+    <string name="bm_toast_saved_title">Business information saved</string>
+    <string name="bm_toast_saved_message">Your website shows the new details after your next deploy.</string>
+    <string name="bm_toast_save_failed_title">Couldn’t save</string>
+    <string name="bm_toast_save_failed_message">Something went wrong. Please try again.</string>
+    <string name="bm_issue_about_title">Add a description</string>
+    <string name="bm_issue_about_message">Tell customers what your business does.</string>
+    <string name="bm_issue_phone_title">Add a phone number</string>
+    <string name="bm_issue_phone_message">Customers use it to reach you.</string>
+    <string name="bm_issue_email_title">Check your email</string>
+    <string name="bm_issue_email_message">Enter a valid email address.</string>
+
+    <!-- Monitor -->
+    <string name="bm_monitor_title">Monitor</string>
+    <string name="bm_monitor_subtitle">Here’s how %1$s is doing today.</string>
+    <string name="bm_monitor_error">We couldn’t load your monitor data.</string>
+    <string name="bm_tab_overview">Overview</string>
+    <string name="bm_tab_activity">Activity</string>
+    <string name="bm_status_online">Your website is online</string>
+    <string name="bm_status_offline">Your website is offline</string>
+    <string name="bm_last_deploy">Last deploy %1$s</string>
+    <string name="bm_live_badge">LIVE</string>
+    <string name="bm_offline_badge">OFFLINE</string>
+    <string name="bm_last_seven">Last 7 deploys</string>
+    <string name="bm_latest">Latest</string>
+    <string name="bm_changes_live">Your latest changes are live.</string>
+    <string name="bm_site_offline">Your website is currently offline.</string>
+    <string name="bm_visit_site">Visit site</string>
+
+    <string name="bm_summary">Summary</string>
+    <string name="bm_plan_usage">Plan usage</string>
+    <string name="bm_health_metrics">Health metrics</string>
+    <string name="bm_deploy_activity">Deploy activity</string>
+    <string name="bm_success">Success</string>
+    <string name="bm_percent_succeeded">%1$d percent of deploys succeeded</string>
+    <string name="bm_percent_decimal">%1$.2f%%</string>
+    <string name="bm_uptime">Uptime</string>
+    <string name="bm_products">Products</string>
+    <string name="bm_photos">Photos</string>
+    <string name="bm_used_of">%1$d / %2$d</string>
+    <string name="bm_redeploys">Redeploys</string>
+    <string name="bm_websites_label">Websites</string>
+    <string name="bm_slash_limit">/ %1$d</string>
+    <string name="bm_left">%1$d left</string>
+    <string name="bm_limit_reached">Limit reached</string>
+    <string name="bm_plan_resets">%1$s plan · resets on %2$s</string>
+    <string name="bm_tile_deploys">Deploys</string>
+    <string name="bm_tile_failed">Failed</string>
+    <string name="bm_tile_avg_time">Avg. time</string>
+    <string name="bm_in_total">in total</string>
+    <string name="bm_per_deploy">per deploy</string>
+    <string name="bm_deploys_count">%1$d deploys</string>
+    <string name="bm_succeeded">Succeeded</string>
+    <string name="bm_failed">Failed</string>
+    <!-- Deploy result badge ("Success" / "Failed"). -->
+    <string name="bm_result_success">Success</string>
+    <string name="bm_deploy_n">Deploy %1$d</string>
+
+    <!-- Activity tab -->
+    <string name="bm_recent_deploys">Recent deploys</string>
+    <string name="bm_tap_for_details">Tap for details</string>
+    <string name="bm_deploy_hash">Deploy #%1$d</string>
+    <string name="bm_show_all">Show all %1$d deploys</string>
+    <string name="bm_show_less">Show less</string>
+    <string name="bm_started_by">Started by</string>
+    <string name="bm_duration">Duration</string>
+    <string name="bm_live_for">Live for</string>
+    <string name="bm_recent_activity">Recent activity log</string>
+    <string name="bm_no_activity">No activity of this type yet.</string>
+    <string name="bm_type">Type</string>
+    <string name="bm_status">Status</string>
+    <string name="bm_when">When</string>
+    <string name="bm_completed">Completed</string>
+    <string name="bm_kind_deploy">Deploy</string>
+    <string name="bm_kind_product">Product</string>
+    <string name="bm_kind_business">Business info</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- All user-facing text lives here. No hardcoded literals in composables. -->
+    <string name="action_retry">Retry</string>
+    <string name="action_back">Back</string>
+
+    <string name="note_list_title">Notes</string>
+    <string name="note_detail_title">Note</string>
+    <string name="note_title_label">Title</string>
+    <string name="note_body_label">Body</string>
+    <string name="note_add">Add note</string>
+    <string name="note_saving">Saving…</string>
+    <string name="note_empty_title">No notes yet</string>
+    <string name="note_error_title">Could not load notes</string>
+</resources>

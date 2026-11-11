@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Products tab, product detail and the add/edit sheet. Copy matches the iOS WebBlock app. -->
+<resources>
+    <string name="pv_websites_back">Websites</string>
+    <string name="pv_notifications">Notifications</string>
+    <string name="pv_search_placeholder">Search products…</string>
+    <string name="pv_filters_show">Show filters</string>
+    <string name="pv_filters_hide">Hide filters</string>
+    <string name="pv_detail_category">Category</string>
+    <string name="pv_detail_shown_on">Shown on</string>
+    <string name="pv_photo_expand">View full photo</string>
+    <string name="pv_photo_close">Close photo</string>
+    <string name="pv_clear_search">Clear search</string>
+    <string name="pv_chip_all">All</string>
+    <string name="pv_summary_all">Showing %1$d of %2$d products</string>
+    <string name="pv_summary_one">Showing 1 product</string>
+    <string name="pv_summary_many">Showing %1$d products</string>
+    <string name="pv_layout_grid">Grid layout</string>
+    <string name="pv_layout_list">List layout</string>
+    <string name="pv_empty_title">No products yet</string>
+    <string name="pv_empty_message">Add your first product to show it on your website.</string>
+    <string name="pv_no_results_title">No results</string>
+    <string name="pv_no_results_message">Try a different name.</string>
+    <string name="pv_load_error">Couldn’t load products.</string>
+    <string name="pv_show_more">Show more</string>
+    <string name="pv_add_product">Add product</string>
+    <string name="pv_live">Live</string>
+    <string name="pv_switch_website">Website: %1$s. Switch website</string>
+    <string name="pv_menu_edit">Edit product</string>
+    <string name="pv_menu_delete">Delete product</string>
+    <string name="pv_more_actions">More actions for %1$s</string>
+    <string name="pv_delete_title">Delete “%1$s”?</string>
+    <string name="pv_delete_message">It will be removed from your website the next time you deploy. This can’t be undone.</string>
+    <string name="pv_delete_confirm">Delete product</string>
+    <string name="pv_cancel">Cancel</string>
+    <string name="pv_detail_back">Back</string>
+    <string name="pv_detail_removed">Product removed</string>
+
+    <string name="pv_editor_add_title">Add product</string>
+    <string name="pv_editor_edit_title">Edit product</string>
+    <string name="pv_editor_close">Close</string>
+    <string name="pv_name_label">Product name</string>
+    <string name="pv_name_placeholder">e.g. Sunflower bunch</string>
+    <string name="pv_category_label">Category</string>
+    <string name="pv_description_label">Description</string>
+    <string name="pv_description_placeholder">Tell customers what it is, what’s included and how to care for it.</string>
+    <string name="pv_price_label">Price</string>
+    <string name="pv_price_prefix" translatable="false">$</string>
+    <string name="pv_save">Save</string>
+    <string name="pv_category_placeholder">Choose a category</string>
+    <string name="pv_category_create">New category</string>
+    <string name="pv_price_placeholder">0.00</string>
+    <string name="pv_photo_add">Add a photo</string>
+    <string name="pv_photo_hint">PNG or JPG, up to 2 MB\nLandscape 4:3</string>
+    <string name="pv_photo_change">Change photo</string>
+    <string name="pv_photo_remove">Remove photo</string>
+    <string name="pv_new_category_title">New category</string>
+    <string name="pv_new_category_hint">Category name</string>
+    <string name="pv_new_category_add">Add</string>
+
+    <string name="pv_error_name">Enter a product name.</string>
+    <string name="pv_error_category">Choose a category.</string>
+    <string name="pv_error_price">Enter a price, for example 6.00.</string>
+
+    <string name="pv_toast_added_title">Product added</string>
+    <string name="pv_toast_added_message">It appears on your website after your next deploy.</string>
+    <string name="pv_toast_saved_title">Changes saved</string>
+    <string name="pv_toast_saved_message">Your website shows them after your next deploy.</string>
+    <string name="pv_toast_deleted_title">Product deleted</string>
+    <string name="pv_toast_deleted_message">“%1$s” is removed after your next deploy.</string>
+</resources>

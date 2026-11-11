@@ -1,0 +1,9 @@
+# Copy this file to local.properties and fill in your own values.
+# local.properties is git-ignored. Never commit it.
+
+# Android SDK path (Android Studio sets this automatically when you open the project)
+sdk.dir=/path/to/your/Android/Sdk
+
+# Base URL used by the Retrofit client in :core (must end with a slash).
+# The sample feature does not call the network, so the default is fine to start with.
+api.base.url=https://example.com/api/v1/

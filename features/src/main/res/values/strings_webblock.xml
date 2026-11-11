@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Shared actions -->
+    <string name="action_cancel">Cancel</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_save">Save</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_add_product">Add product</string>
+    <string name="cd_clear_search">Clear search</string>
+    <string name="cd_delete_product">Delete %1$s</string>
+    <string name="cd_edit_product">Edit %1$s</string>
+    <string name="cd_grid_view">Grid view</string>
+    <string name="cd_list_view">List view</string>
+    <string name="cd_notifications">Notifications</string>
+    <string name="cd_show_password">Show password</string>
+    <string name="cd_hide_password">Hide password</string>
+    <string name="cd_switch_website">Switch website</string>
+
+    <!-- Validation -->
+    <string name="error_field_empty">This field is required.</string>
+    <string name="error_email_invalid">Enter a valid email address.</string>
+    <string name="error_password_short">Use at least 8 characters.</string>
+    <string name="error_code_incomplete">Enter the 6-digit code.</string>
+    <string name="error_password_mismatch">Passwords don\'t match.</string>
+    <string name="error_name_required">Enter a product name.</string>
+    <string name="error_category_required">Choose a category.</string>
+    <string name="error_price_invalid">Enter a price greater than 0.</string>
+
+    <!-- Splash and sign in -->
+    <string name="splash_tagline">Manage your websites with ease.</string>
+    <string name="login_headline_plain">"Build. Launch. "</string>
+    <string name="login_headline_accent">Grow.</string>
+    <string name="login_subtitle">Manage your websites with ease.</string>
+    <string name="login_email_label">Email address</string>
+    <string name="login_email_placeholder">you@example.com</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_password_placeholder">Your password</string>
+    <string name="login_sign_in">Sign in</string>
+    <string name="login_forgot_password">Forgot password?</string>
+    <string name="login_owners_only">For existing owners. Create websites at webblock.com.</string>
+    <string name="login_demo_hint">Demo: owner@example.com / password123</string>
+
+    <!-- Forgot password -->
+    <string name="forgot_step_format">Step %1$d of 3</string>
+    <string name="forgot_title">Forgot your password?</string>
+    <string name="forgot_subtitle">Enter the email you signed up with and we\'ll help you reset it.</string>
+    <string name="forgot_email_label">Email</string>
+    <string name="forgot_helper">We\'ll send a 6-digit code to reset your password.</string>
+    <string name="forgot_send_code">Send code</string>
+    <string name="forgot_remember">Remember your password?</string>
+    <string name="forgot_sign_in">Sign in</string>
+    <string name="code_title">Check your email</string>
+    <string name="code_subtitle">We sent a 6-digit code to %1$s.</string>
+    <string name="code_label">Verification code</string>
+    <string name="code_placeholder">123456</string>
+    <string name="code_verify">Verify code</string>
+    <string name="code_resend">Resend code</string>
+    <string name="code_resent">A new code is on its way.</string>
+    <string name="code_demo_hint">Demo code: 123456</string>
+    <string name="new_title">Create a new password</string>
+    <string name="new_subtitle">Use at least 8 characters.</string>
+    <string name="new_password_label">New password</string>
+    <string name="new_confirm_label">Confirm password</string>
+    <string name="new_save">Reset password</string>
+    <string name="done_title">Password updated</string>
+    <string name="done_subtitle">You can now sign in with your new password.</string>
+    <string name="done_back">Back to sign in</string>
+
+    <!-- My Websites -->
+    <string name="websites_title">My Websites</string>
+    <string name="websites_subtitle">Pick a website to manage.</string>
+    <string name="websites_manage">Manage</string>
+    <string name="greeting_morning">Good morning,</string>
+    <string name="greeting_afternoon">Good afternoon,</string>
+    <string name="greeting_evening">Good evening,</string>
+    <string name="greeting_name">%1$s! 👋</string>
+    <string name="websites_hero_hint">Pick a website below to start managing it.</string>
+    <string name="websites_section">Your websites</string>
+    <plurals name="websites_live_count">
+        <item quantity="one">live website</item>
+        <item quantity="other">live websites</item>
+    </plurals>
+    <string name="websites_manage_description">Manage %1$s</string>
+    <string name="websites_updated">Updated %1$s</string>
+    <string name="websites_empty_title">No websites yet</string>
+    <string name="websites_empty_message">Only live websites can be managed here. Publish a website on webblock.com and it will show up.</string>
+    <string name="websites_error_title">Couldn\'t load your websites</string>
+    <string name="logout_title">Log out?</string>
+    <string name="logout_message">You\'ll need to sign in again to manage your websites.</string>
+    <string name="logout_confirm">Log out</string>
+    <string name="status_live">Live</string>
+    <string name="status_draft">Draft</string>
+    <string name="status_offline">Offline</string>
+    <string name="status_live_caps">LIVE</string>
+    <string name="status_draft_caps">DRAFT</string>
+    <string name="status_offline_caps">OFFLINE</string>
+
+    <!-- Website switcher -->
+    <string name="switcher_title">Switch website</string>
+    <string name="switcher_all_websites">All my websites</string>
+
+    <!-- Products -->
+    <string name="products_title">Products</string>
+    <string name="products_search_placeholder">Search products</string>
+    <string name="products_chip_all">All %1$d</string>
+    <string name="products_showing">Showing %1$d of %2$d products</string>
+    <string name="products_empty_title">No products yet</string>
+    <string name="products_empty_message">Add your first product to show it on your website.</string>
+    <string name="products_add_first">Add product</string>
+    <string name="products_error_title">Couldn\'t load products</string>
+    <string name="products_no_results_title">No matching products</string>
+    <string name="products_no_results_message">Try a different search or category.</string>
+    <string name="products_delete_title">Delete product?</string>
+    <string name="products_delete_message">\"%1$s\" will be removed from your website.</string>
+    <string name="products_added">Product added.</string>
+    <string name="products_saved">Changes saved.</string>
+    <string name="products_deleted">Product deleted.</string>
+    <string name="product_view">View</string>
+    <string name="detail_title">Product</string>
+    <string name="detail_edit">Edit</string>
+    <string name="detail_details">Details</string>
+    <string name="detail_category">Category</string>
+    <string name="detail_shown_on">Shown on</string>
+    <string name="detail_not_found">This product is no longer available.</string>
+    <string name="editor_add_title">Add product</string>
+    <string name="editor_edit_title">Edit product</string>
+    <string name="editor_replace_photo">Replace photo</string>
+    <string name="editor_add_photo">Add photo</string>
+    <string name="editor_preview_label">Product preview</string>
+    <string name="editor_name_placeholder">Name your product</string>
+    <string name="editor_new_category_short">New</string>
+    <string name="editor_save_product">Save product</string>
+    <string name="editor_save_changes">Save changes</string>
+    <string name="editor_details_title">Product details</string>
+    <string name="editor_photo_hint">4:3 photo · JPG or PNG</string>
+    <string name="editor_name_label">Product name</string>
+    <string name="editor_category_label">Category</string>
+    <string name="editor_category_placeholder">Choose a category</string>
+    <string name="editor_create_category">+ Create category</string>
+    <string name="editor_price_label">Price</string>
+    <string name="editor_price_placeholder">0.00</string>
+    <string name="editor_description_label">Description</string>
+    <string name="category_dialog_title">New category</string>
+    <string name="category_dialog_label">Category name</string>
+    <string name="category_dialog_create">Create</string>
+
+    <!-- Business -->
+    <string name="business_title">Business</string>
+    <string name="business_error_title">Couldn\'t load business info</string>
+    <string name="business_name_note">Name and type are set on the web</string>
+    <string name="business_section_contact">Contact &amp; location</string>
+    <string name="business_section_about">About</string>
+    <string name="business_section_hours">Opening hours</string>
+    <string name="business_open_maps">Open in Google Maps</string>
+    <string name="edit_business_title">Edit business info</string>
+    <string name="edit_business_locked_note">Your business name and type can only be changed on the web.</string>
+    <string name="edit_business_phone">Phone</string>
+    <string name="edit_business_email">Email</string>
+    <string name="edit_business_address">Address</string>
+    <string name="edit_business_maps">Google Maps link</string>
+    <string name="edit_business_about">About</string>
+    <string name="hours_title">Opening hours</string>
+    <string name="hours_subtitle">Customers see these hours on your website.</string>
+    <string name="hours_range">%1$s – %2$s</string>
+    <string name="hours_closed">Closed</string>
+    <string name="hours_closed_all_day">Closed all day</string>
+    <string name="hours_copy_monday">Copy Monday\'s hours to all weekdays</string>
+    <string name="hours_copied">Monday\'s hours copied to all weekdays.</string>
+
+    <!-- Monitor -->
+    <string name="monitor_title">Monitor</string>
+    <string name="monitor_error_title">Couldn\'t load monitor data</string>
+    <string name="monitor_tab_overview">Overview</string>
+    <string name="monitor_tab_logs">Logs</string>
+    <string name="monitor_tab_logs_locked">🔒 Logs</string>
+    <string name="monitor_online">Your website is online</string>
+    <string name="monitor_draft">Your website isn\'t published yet</string>
+    <string name="monitor_offline">Your website is offline</string>
+    <string name="monitor_last_deploy">Last deploy</string>
+    <string name="monitor_body_online">Your latest changes are live.</string>
+    <string name="monitor_body_draft">Publish it on webblock.com to go live.</string>
+    <string name="monitor_body_offline">We can\'t reach your website right now.</string>
+    <string name="monitor_last_deploy_ago">Last deploy %1$s</string>
+    <string name="monitor_no_deploys">No deploys yet</string>
+    <string name="monitor_deploy_when">Deploy %1$d · %2$s</string>
+    <string name="monitor_last_seven">Last 7 deploys</string>
+    <string name="monitor_latest">Latest</string>
+    <string name="stat_uptime">Uptime</string>
+    <string name="stat_uptime_value">%1$.2f%%</string>
+    <string name="stat_none">—</string>
+    <string name="stat_last_30_days">last 30 days</string>
+    <string name="stat_deploy_success">Deploy success</string>
+    <string name="stat_last_seven_deploys">last 7 deploys</string>
+    <string name="usage_section">Plan usage</string>
+    <string name="monitor_section_summary">Summary</string>
+    <string name="monitor_section_health">Health metrics</string>
+    <string name="monitor_section_activity">Deploy activity</string>
+    <string name="monitor_section_plan">Your plan</string>
+    <string name="summary_ring_label">Success</string>
+    <string name="tile_deploys">Deploys</string>
+    <string name="tile_failed">Failed</string>
+    <string name="tile_avg_time">Avg. time</string>
+    <string name="tile_per_deploy">per deploy</string>
+    <string name="tile_in_total">in total</string>
+    <string name="activity_total">%1$d deploys</string>
+    <string name="plan_logs_included">Activity logs are included.</string>
+    <string name="plan_logs_locked">Upgrade to see activity logs.</string>
+    <string name="usage_plan">%1$s plan</string>
+    <string name="usage_products">Products</string>
+    <string name="usage_photos">Photos</string>
+    <string name="usage_of">of %1$d</string>
+    <string name="usage_left">%1$d left</string>
+    <string name="usage_used_of">%1$d / %2$d</string>
+    <string name="deploy_results">Deploy results</string>
+    <string name="deploy_recent">Recent deploys</string>
+    <string name="deploy_succeeded">Succeeded</string>
+    <string name="deploy_failed">Failed</string>
+    <string name="deploy_percent">%1$d%%</string>
+    <string name="deploy_title">Deploy %1$d</string>
+    <string name="deploy_duration">%1$dm %2$02ds</string>
+    <string name="logs_recent">Recent activity log</string>
+    <string name="logs_empty">No activity here yet.</string>
+    <string name="logs_filter_all">All</string>
+    <string name="logs_filter_deploys">Deploys</string>
+    <string name="logs_filter_products">Products</string>
+    <string name="logs_filter_business">Business</string>
+    <string name="logs_filter_deploys_single">Deploy</string>
+    <string name="logs_filter_products_single">Product</string>
+    <string name="logs_locked_title">Logs are on Pro and Ultra</string>
+    <string name="logs_locked_message">See a plain-language history of deploys, product changes and business updates.</string>
+    <string name="logs_upgrade">Upgrade on webblock.com</string>
+
+    <!-- Notifications -->
+    <string name="notifications_title">Notifications</string>
+    <string name="notifications_mark_all">Mark all as read</string>
+    <string name="notifications_tab_all">All notifications</string>
+    <string name="notifications_tab_unread">Unread</string>
+    <string name="notifications_empty_title">All caught up</string>
+    <string name="notifications_empty_message">You have no unread notifications.</string>
+    <string name="cd_product_options">More options for %1$s</string>
+    <string name="notification_detail_title">Notification</string>
+    <string name="notification_detail_message">Message</string>
+    <string name="notification_detail_received">Received</string>
+    <string name="notification_detail_status">Status</string>
+    <string name="notification_detail_unread">New</string>
+    <string name="notification_detail_read">Read</string>
+    <string name="notification_detail_missing">This notification is no longer available.</string>
+    <string name="notification_kind_billing">Billing</string>
+    <string name="notification_kind_crashed">Website issue</string>
+    <string name="notification_kind_plan_limit">Plan usage</string>
+    <string name="notification_kind_changes_live">Published</string>
+    <string name="notification_kind_deploy_failed">Deploy failed</string>
+    <string name="notifications_error">Couldn\'t load notifications.</string>
+</resources>

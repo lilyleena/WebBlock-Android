@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="wb_optional">optional</string>
+    <string name="wb_show_password">Show password</string>
+    <string name="wb_hide_password">Hide password</string>
+    <string name="wb_loading">Loading…</string>
+    <string name="wb_error_title">Something went wrong</string>
+    <string name="wb_try_again">Try again</string>
+    <string name="wb_badge_overflow">9+</string>
+    <string name="wb_logo_description">WebBlocks</string>
+    <!-- Brand wordmark, drawn in two colours: "Web" + "Blocks". Never translated. -->
+    <string name="wb_logo_word_web" translatable="false">Web</string>
+    <string name="wb_logo_word_blocks" translatable="false">Blocks</string>
+</resources>

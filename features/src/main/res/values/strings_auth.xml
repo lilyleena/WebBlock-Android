@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding -->
+    <string name="auth_ob_skip">Skip</string>
+    <string name="auth_ob_next">Next</string>
+    <string name="auth_ob_get_started">Get started</string>
+    <string name="auth_ob_eyebrow_1">YOUR WEBSITE</string>
+    <string name="auth_ob_title_1">"A professional website\nfor your business, "</string>
+    <string name="auth_ob_accent_1">without the agency.</string>
+    <string name="auth_ob_message_1">See every live website you own and open its business portal in one tap.</string>
+    <string name="auth_ob_eyebrow_2">HOW IT WORKS</string>
+    <string name="auth_ob_title_2">"Three steps\nto a "</string>
+    <string name="auth_ob_accent_2">live site.</string>
+    <string name="auth_ob_message_2">Pick a template, add your details and publish to your free webblock.com address.</string>
+    <string name="auth_ob_eyebrow_3">MANAGE</string>
+    <string name="auth_ob_title_3">"Products and business info, "</string>
+    <string name="auth_ob_accent_3">anywhere.</string>
+    <string name="auth_ob_message_3">Add products with photos, update prices and edit your opening hours on the go.</string>
+    <string name="auth_ob_eyebrow_4">MONITOR</string>
+    <string name="auth_ob_title_4">"Stay on top\nof your "</string>
+    <string name="auth_ob_accent_4">site.</string>
+    <string name="auth_ob_message_4">Monitor your site’s health and get notified the moment something needs your attention.</string>
+
+    <!-- Onboarding illustrations -->
+    <string name="auth_ob_url">petalandstem.webblock.com</string>
+    <string name="auth_ob_hero_headline">"Fresh flowers\nfor every moment."</string>
+    <string name="auth_ob_shop_flowers">Shop flowers</string>
+    <string name="auth_ob_product_1">Blue lily stem</string>
+    <string name="auth_ob_product_2">Gift bouquet</string>
+    <string name="auth_ob_product_3">Stone vase</string>
+    <string name="auth_ob_price_1">$6.00</string>
+    <string name="auth_ob_price_2">$38.00</string>
+    <string name="auth_ob_price_3">$24.00</string>
+    <string name="auth_ob_live">Live</string>
+    <string name="auth_ob_step_1">Pick a template</string>
+    <string name="auth_ob_step_1_sub">Ready-made designs</string>
+    <string name="auth_ob_step_2">Add your details</string>
+    <string name="auth_ob_step_2_sub">Name, hours, contact</string>
+    <string name="auth_ob_step_3">Publish</string>
+    <string name="auth_ob_step_3_sub">Live on webblock.com</string>
+    <string name="auth_ob_step_3_url">yourshop.webblock.com</string>
+    <string name="auth_ob_look_1">"Baked fresh,\nevery morning."</string>
+    <string name="auth_ob_look_2">"Fresh flowers\nfor every moment."</string>
+    <string name="auth_ob_look_3">"Roasted this week,\nbrewed for you."</string>
+    <string name="auth_ob_look_4">"Sound you\ncan feel."</string>
+    <string name="auth_ob_open_today">Open today</string>
+    <string name="auth_ob_hours">9:00 AM – 6:00 PM</string>
+    <string name="auth_ob_in_stock">In stock</string>
+    <string name="auth_ob_site_health">Site health</string>
+    <string name="auth_ob_succeeded">SUCCEEDED</string>
+    <string name="auth_ob_uptime_value">99.9%</string>
+    <string name="auth_ob_uptime">uptime</string>
+    <string name="auth_ob_new_order">New order received</string>
+    <string name="auth_ob_just_now">just now</string>
+    <string name="auth_ob_phone_time">9:41</string>
+    <string name="auth_ob_phone_logo">✿ Petal &amp; Stem</string>
+    <string name="auth_ob_phone_contact">Contact</string>
+    <string name="auth_ob_phone_headline">Fresh flowers for every moment.</string>
+    <string name="auth_ob_phone_body">Hand-tied bouquets, single stems and event flowers, arranged in our studio and delivered across town.</string>
+    <string name="auth_ob_phone_visit">Visit the studio</string>
+    <string name="auth_ob_phone_popular">POPULAR THIS WEEK</string>
+    <string name="auth_ob_phone_picks">Fresh picks, hand-tied today</string>
+
+    <!-- Sign in -->
+    <string name="auth_logo_description">WebBlocks</string>
+    <string name="auth_login_headline_plain">"Pick up right\nwhere you "</string>
+    <string name="auth_login_headline_accent">left off.</string>
+    <string name="auth_login_welcome">Welcome back</string>
+    <string name="auth_login_subtitle">Sign in to manage your websites.</string>
+    <string name="auth_login_google">Continue with Google</string>
+    <string name="auth_login_or">or</string>
+    <string name="auth_login_email">Email</string>
+    <string name="auth_login_email_placeholder">you@example.com</string>
+    <string name="auth_login_password">Password</string>
+    <string name="auth_login_password_placeholder">Your password</string>
+    <string name="auth_login_forgot">Forgot password?</string>
+    <string name="auth_login_sign_in">Sign in</string>
+    <string name="auth_login_footer">Use the account you created on the WebBlock website.</string>
+    <string name="auth_error_email_empty">Enter your email address.</string>
+    <string name="auth_error_email_invalid">Enter a valid email address.</string>
+    <string name="auth_error_password_empty">Enter your password.</string>
+
+    <!-- Google account chooser -->
+    <string name="auth_google_title">Choose an account</string>
+    <string name="auth_google_cancel">Cancel</string>
+    <string name="auth_google_continue_to">to continue to WebBlock</string>
+    <string name="auth_google_name">Sovannarith Soeun</string>
+    <string name="auth_google_email">sovannarith@gmail.com</string>
+    <string name="auth_google_initials">SS</string>
+
+    <!-- Forgot password -->
+    <string name="auth_back">Back</string>
+    <string name="auth_step_format">Step %1$d of 3</string>
+    <string name="auth_forgot_title">Forgot your password?</string>
+    <string name="auth_forgot_subtitle">Enter the email you signed up with and we’ll help you reset it.</string>
+    <string name="auth_forgot_email">Email</string>
+    <string name="auth_forgot_hint">We’ll send a 6-digit code to reset your password.</string>
+    <string name="auth_forgot_send_code">Send code</string>
+    <string name="auth_code_title">Check your email</string>
+    <string name="auth_code_subtitle_before">"We sent a 6-digit code to "</string>
+    <string name="auth_code_subtitle_after">. Enter it below to reset your password.</string>
+    <string name="auth_code_expires_in">"Code expires in "</string>
+    <string name="auth_code_resend">Resend code</string>
+    <string name="auth_code_verify">Verify code</string>
+    <string name="auth_code_spam">Can’t find it? Check your spam folder or</string>
+    <string name="auth_code_change_email">change email</string>
+    <string name="auth_new_title">Set a new password</string>
+    <string name="auth_new_subtitle_before">"Code verified. Choose a new password for "</string>
+    <string name="auth_new_subtitle_after">.</string>
+    <string name="auth_new_password">New password</string>
+    <string name="auth_new_password_placeholder">New password</string>
+    <string name="auth_new_confirm">Confirm new password</string>
+    <string name="auth_new_confirm_placeholder">Confirm new password</string>
+    <string name="auth_new_strength">Password strength</string>
+    <string name="auth_strength_weak">Weak</string>
+    <string name="auth_strength_fair">Fair</string>
+    <string name="auth_strength_good">Good</string>
+    <string name="auth_strength_strong">Strong</string>
+    <string name="auth_rule_length">At least 8 characters</string>
+    <string name="auth_rule_upper_number">One uppercase letter and one number</string>
+    <string name="auth_rule_symbol">One symbol (optional)</string>
+    <string name="auth_new_update">Update password</string>
+    <string name="auth_new_footer">Next, you’ll sign in with your new password.</string>
+    <string name="auth_error_code_expired">This code has expired. Tap “Resend code” to get a new one.</string>
+    <string name="auth_error_code_incomplete">Enter the 6-digit code we emailed you.</string>
+    <string name="auth_error_password_rules">Use at least 8 characters, with one uppercase letter and one number.</string>
+    <string name="auth_error_confirm_empty">Confirm your new password.</string>
+    <string name="auth_error_mismatch">Passwords don’t match.</string>
+</resources>

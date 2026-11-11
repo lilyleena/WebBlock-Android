@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Websites list (iOS HomeView) -->
+    <string name="home_loading">Loading your website…</string>
+    <string name="home_title_error">WebBlock</string>
+    <string name="home_title_websites">Your websites</string>
+    <string name="home_choose_website">Choose a website to manage its products, business information and monitor.</string>
+    <string name="home_live_websites">Live websites</string>
+    <!-- Welcome card at the top of the websites list. -->
+    <string name="home_welcome_title">Welcome back, %1$s!</string>
+    <string name="home_welcome_title_no_name">Welcome back!</string>
+    <string name="home_welcome_eyebrow">Your workspace</string>
+    <plurals name="home_total_websites_count">
+        <item quantity="one">Website</item>
+        <item quantity="other">Total websites</item>
+    </plurals>
+    <string name="home_open_portal_hint">Opens the business portal for %1$s</string>
+    <string name="home_pill_live">Live</string>
+    <string name="home_chip_products">Products</string>
+    <string name="home_chip_business">Business info</string>
+    <string name="home_chip_monitor">Monitor</string>
+    <string name="home_no_live_title">No live website yet</string>
+    <string name="home_no_live_message">Your products, business information and monitor appear here once a website is live. Publish one from the WebBlock website, then pull to refresh.</string>
+    <string name="home_refresh">Refresh</string>
+    <string name="home_account_menu">Account: %1$s</string>
+    <string name="home_header_tagline">Business portal</string>
+    <string name="home_replay_intro">Replay intro</string>
+    <string name="home_log_out">Log out</string>
+    <string name="home_notifications_cd">Notifications, %1$d unread</string>
+    <string name="home_logout_title">Log out of WebBlock?</string>
+    <string name="home_logout_message">Signed in as %1$s.\nYou’ll need to sign in again to manage and publish your websites.</string>
+    <string name="home_cancel">Cancel</string>
+
+    <!-- Notifications (iOS NotificationsSheet / NotificationDetailView) -->
+    <string name="notif_title">Notifications</string>
+    <string name="notif_close_cd">Close notifications</string>
+    <string name="notif_mark_all">Mark all as read</string>
+    <string name="notif_tab_all">All</string>
+    <string name="notif_tab_unread">Unread %1$d</string>
+    <string name="notif_empty_title">You’re all caught up</string>
+    <string name="notif_empty_message">New notifications will appear here.</string>
+    <string name="notif_error">Couldn\'t load notifications.</string>
+    <string name="notif_missing">This notification is no longer available.</string>
+    <string name="notif_unread">Unread</string>
+    <string name="notif_detail_activity">Activity</string>
+    <string name="notif_detail_event_received">Notification received</string>
+    <string name="notif_detail_event_read">Marked as read</string>
+    <string name="notif_detail_event_read_now">When you opened it</string>
+    <string name="notif_section_new">New</string>
+    <string name="notif_section_earlier">Earlier</string>
+</resources>

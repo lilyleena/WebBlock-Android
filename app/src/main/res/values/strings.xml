@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WebBlocks Owner</string>
+    <string name="tab_products">Products</string>
+    <string name="tab_business">Business</string>
+    <string name="tab_monitor">Monitor</string>
+</resources>
