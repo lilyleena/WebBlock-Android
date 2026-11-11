@@ -17,12 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.Tune
-import androidx.compose.material.icons.outlined.ViewList
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -41,6 +36,7 @@ import com.kshrd.coreui.components.card.FilterChip
 import com.kshrd.coreui.components.card.cardBorder
 import com.kshrd.coreui.components.card.cardShadow
 import com.kshrd.coreui.components.card.glass
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.PillShape
@@ -76,7 +72,7 @@ fun ProductSearchField(
                 .border(cardBorder(), PillShape)
                 .padding(start = Space.m, end = Space.xxs),
     ) {
-        Icon(Icons.Outlined.Search, contentDescription = null, tint = wb.brand, modifier = Modifier.size(Sizes.iconLarge))
+        Icon(WebIcons.Search, contentDescription = null, tint = wb.brand, modifier = Modifier.size(Sizes.iconLarge))
         Box(modifier = Modifier.weight(1f)) {
             if (query.isEmpty()) {
                 Text(stringResource(R.string.pv_search_placeholder), style = MaterialTheme.typography.bodyLarge, color = wb.muted.copy(alpha = 0.7f), maxLines = 1)
@@ -96,7 +92,7 @@ fun ProductSearchField(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.size(Sizes.compact).clip(CircleShape).clickable(role = Role.Button) { onQueryChange("") },
             ) {
-                Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.pv_clear_search), tint = wb.muted, modifier = Modifier.size(Sizes.icon))
+                Icon(WebIcons.X, contentDescription = stringResource(R.string.pv_clear_search), tint = wb.muted, modifier = Modifier.size(Sizes.icon))
             }
         }
         Box(
@@ -115,7 +111,7 @@ fun ProductSearchField(
                     .background(wb.card, CircleShape),
             )
             Icon(
-                Icons.Outlined.Tune,
+                WebIcons.Filter,
                 contentDescription = stringResource(if (filtersShown) R.string.pv_filters_hide else R.string.pv_filters_show),
                 tint = if (filtersShown) wb.brandDeep else wb.muted,
                 modifier = Modifier.size(Sizes.icon),
@@ -183,7 +179,7 @@ private fun LayoutSwitch(
                         ).clickable(role = Role.Tab) { onChange(target) },
             ) {
                 Icon(
-                    imageVector = if (target == ProductLayout.Grid) Icons.Outlined.GridView else Icons.Outlined.ViewList,
+                    imageVector = if (target == ProductLayout.Grid) WebIcons.Grid else WebIcons.List,
                     contentDescription = stringResource(label),
                     tint = if (selected) wb.text else wb.muted,
                     modifier = Modifier.size(18.dp),

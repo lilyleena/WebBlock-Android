@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -43,6 +41,7 @@ import com.kshrd.coreui.components.card.FormCardShape
 import com.kshrd.coreui.components.menu.WbGlassDropdownMenu
 import com.kshrd.coreui.components.menu.WbMenuOption
 import com.kshrd.coreui.components.nav.BackTopBar
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.PillShape
@@ -188,7 +187,7 @@ private fun TimeDropdown(
             horizontalArrangement = Arrangement.Center,
         ) {
             Text(formatMinutes(minutes), style = MaterialTheme.typography.labelMedium, maxLines = 1)
-            Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, modifier = Modifier.size(14.dp))
+            Icon(WebIcons.ChevronDown, contentDescription = null, modifier = Modifier.size(14.dp))
         }
         WbGlassDropdownMenu(
             expanded = expanded,

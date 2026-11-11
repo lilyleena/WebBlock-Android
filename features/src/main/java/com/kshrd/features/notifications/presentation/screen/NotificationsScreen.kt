@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.NotificationsOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,6 +39,7 @@ import com.kshrd.coreui.components.feedback.ErrorStateView
 import com.kshrd.coreui.components.feedback.LoadingView
 import com.kshrd.coreui.components.screen.DataStateScreenShell
 import com.kshrd.coreui.components.text.SectionTitle
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.layout.navigationBarBottom
 import com.kshrd.coreui.motion.appearAnimated
 import com.kshrd.coreui.preview.PreviewSurface
@@ -89,7 +89,7 @@ fun NotificationsContent(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 IconButton(onClick = { onEvent(NotificationsEvent.BackClicked) }) {
-                    Icon(Icons.Outlined.Close, contentDescription = stringResource(R.string.notif_close_cd), tint = wb.text)
+                    Icon(WebIcons.X, contentDescription = stringResource(R.string.notif_close_cd), tint = wb.text)
                 }
                 TextButton(onClick = { onEvent(NotificationsEvent.MarkAllReadClicked) }) {
                     Text(
@@ -103,7 +103,7 @@ fun NotificationsContent(
             Text(
                 text = stringResource(R.string.notif_title),
                 style = MaterialTheme.typography.displaySmall,
-                color = wb.text,
+                color = wb.brand,
                 modifier = Modifier.padding(horizontal = Space.screen).semantics { heading() },
             )
             SegmentedTabs(

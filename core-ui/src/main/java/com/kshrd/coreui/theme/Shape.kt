@@ -28,3 +28,6 @@ val CardShape = RoundedCornerShape(Radius.card)
 
 /** Bottom sheets: rounded top corners only. */
 val SheetShape = RoundedCornerShape(topStart = Radius.sheet, topEnd = Radius.sheet)
+
+/** Text fields and dropdowns (web dashboard inputs: rounded rectangle, not a capsule). */
+val FieldShape = RoundedCornerShape(Radius.control)

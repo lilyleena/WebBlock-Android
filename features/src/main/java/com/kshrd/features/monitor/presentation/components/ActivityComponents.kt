@@ -17,15 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Inventory2
-import androidx.compose.material.icons.outlined.Language
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -52,6 +44,7 @@ import com.kshrd.coreui.components.card.ResultPill
 import com.kshrd.coreui.components.card.WbCard
 import com.kshrd.coreui.components.card.wbCard
 import com.kshrd.coreui.components.text.Section
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.Radius
@@ -104,7 +97,7 @@ fun RecentDeploysCard(data: MonitorData) {
                         style = MaterialTheme.typography.labelLarge,
                         color = wb.brand,
                     )
-                    Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = wb.brand, modifier = Modifier.padding(start = Space.xxs).size(Sizes.icon).rotate(chevron))
+                    Icon(WebIcons.ChevronDown, contentDescription = null, tint = wb.brand, modifier = Modifier.padding(start = Space.xxs).size(Sizes.icon).rotate(chevron))
                 }
             }
         }
@@ -154,13 +147,13 @@ private fun DeployRow(
             horizontalArrangement = Arrangement.spacedBy(Space.s),
             modifier = Modifier.fillMaxWidth().clickable(role = Role.Button, onClick = onToggle).padding(Space.s),
         ) {
-            StatusDisc(icon = if (ok) Icons.Filled.Check else Icons.Filled.Close, tint = if (ok) wb.green else wb.red, soft = if (ok) wb.greenSoft else wb.redSoft)
+            StatusDisc(icon = if (ok) WebIcons.Check else WebIcons.X, tint = if (ok) wb.green else wb.red, soft = if (ok) wb.greenSoft else wb.redSoft)
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Space.xxxs)) {
                 Text(stringResource(R.string.bm_deploy_hash, deploy.number), style = MaterialTheme.typography.labelLarge, color = wb.text)
                 Text(formatDeployDate(deploy.atMillis), style = MaterialTheme.typography.labelMedium, color = wb.muted)
             }
             ResultPill(ok, stringResource(R.string.bm_result_success), stringResource(R.string.bm_failed))
-            Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = wb.muted, modifier = Modifier.size(20.dp).rotate(chevron))
+            Icon(WebIcons.ChevronDown, contentDescription = null, tint = wb.muted, modifier = Modifier.size(20.dp).rotate(chevron))
         }
         AnimatedVisibility(visible = isExpanded) {
             Column(
@@ -168,9 +161,9 @@ private fun DeployRow(
                 modifier = Modifier.padding(horizontal = Space.s).padding(bottom = Space.s),
             ) {
                 HorizontalDivider(color = wb.border)
-                DeployDetail(Icons.Outlined.Person, stringResource(R.string.bm_started_by), deploy.startedBy)
-                DeployDetail(Icons.Outlined.Schedule, stringResource(R.string.bm_duration), formatDeployDuration(deploy.durationSeconds))
-                deploy.liveFor?.let { DeployDetail(Icons.Outlined.Language, stringResource(R.string.bm_live_for), it) }
+                DeployDetail(WebIcons.User, stringResource(R.string.bm_started_by), deploy.startedBy)
+                DeployDetail(WebIcons.Clock, stringResource(R.string.bm_duration), formatDeployDuration(deploy.durationSeconds))
+                deploy.liveFor?.let { DeployDetail(WebIcons.Globe, stringResource(R.string.bm_live_for), it) }
             }
         }
     }
@@ -253,7 +246,7 @@ private fun ActivityRow(
                 Text(item.title, style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Medium), color = wb.text)
                 Text(formatActivityDate(item.atMillis), style = MaterialTheme.typography.labelMedium, color = wb.muted)
             }
-            Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = wb.muted, modifier = Modifier.size(20.dp).rotate(chevron))
+            Icon(WebIcons.ChevronDown, contentDescription = null, tint = wb.muted, modifier = Modifier.size(20.dp).rotate(chevron))
         }
         AnimatedVisibility(visible = open) {
             Column(
@@ -297,12 +290,12 @@ private fun DetailLine(
 
 private fun iconFor(item: LogEntry): ImageVector =
     if (item.outcome == LogOutcome.Failed) {
-        Icons.Filled.Close
+        WebIcons.X
     } else {
         when (item.category) {
-            LogCategory.Deploys -> Icons.Filled.Check
-            LogCategory.Products -> Icons.Outlined.Inventory2
-            LogCategory.Business -> Icons.Outlined.Edit
+            LogCategory.Deploys -> WebIcons.Check
+            LogCategory.Products -> WebIcons.Package
+            LogCategory.Business -> WebIcons.Pencil
         }
     }
 

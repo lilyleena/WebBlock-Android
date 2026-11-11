@@ -12,10 +12,7 @@ import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material.icons.outlined.SearchOff
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,11 +40,11 @@ import com.kshrd.coreui.components.feedback.LoadingView
 import com.kshrd.coreui.components.feedback.ToastData
 import com.kshrd.coreui.components.feedback.WbToastHost
 import com.kshrd.coreui.components.nav.dockFloatingOffset
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.Sizes
 import com.kshrd.coreui.theme.Space
-import com.kshrd.coreui.theme.wb
 import com.kshrd.features.R
 import com.kshrd.features.business.presentation.components.PortalTitle
 import com.kshrd.features.business.presentation.components.PortalTopBar
@@ -214,7 +211,7 @@ private fun LazyGridScope.productItems(
             EmptyStateView(
                 title = stringResource(if (noQuery) R.string.pv_empty_title else R.string.pv_no_results_title),
                 message = stringResource(if (noQuery) R.string.pv_empty_message else R.string.pv_no_results_message),
-                icon = if (noQuery) Icons.Outlined.Inventory2 else Icons.Outlined.SearchOff,
+                icon = if (noQuery) WebIcons.Package else Icons.Outlined.SearchOff,
                 modifier = Modifier.padding(vertical = Space.l),
             )
         }

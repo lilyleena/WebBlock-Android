@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material.icons.outlined.WifiOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,6 +28,7 @@ import com.kshrd.coreui.components.feedback.LoadingView
 import com.kshrd.coreui.components.feedback.ToastData
 import com.kshrd.coreui.components.feedback.WbToastHost
 import com.kshrd.coreui.components.nav.dockContentPadding
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.Space
@@ -86,7 +86,7 @@ fun ProductDetailContent(
                 is DataState.Success -> {
                     val product = state.product
                     if (product == null) {
-                        EmptyStateView(title = stringResource(R.string.pv_detail_removed), icon = Icons.Outlined.Inventory2)
+                        EmptyStateView(title = stringResource(R.string.pv_detail_removed), icon = WebIcons.Package)
                     } else {
                         ProductDetailBody(
                             product = product,

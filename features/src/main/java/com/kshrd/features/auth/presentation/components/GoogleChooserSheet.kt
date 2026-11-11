@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kshrd.coreui.components.card.AvatarView
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.PillShape
@@ -128,7 +127,7 @@ private fun AccountRow(
             if (isLoading) {
                 CircularProgressIndicator(modifier = Modifier.size(Sizes.icon), strokeWidth = 2.dp, color = wb.brand)
             } else {
-                Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = wb.brand, modifier = Modifier.size(Sizes.icon))
+                Icon(WebIcons.ChevronRight, contentDescription = null, tint = wb.brand, modifier = Modifier.size(Sizes.icon))
             }
         }
     }

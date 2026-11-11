@@ -20,7 +20,7 @@ import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.Space
 import com.kshrd.coreui.theme.wb
 
-enum class BadgeTone { Success, Danger, Info, Neutral }
+enum class BadgeTone { Success, Warning, Danger, Info, Neutral }
 
 /** Small status pill ("Live", "Draft", "SUCCEEDED"). Colours come from the theme, never raw. */
 @Composable
@@ -34,6 +34,7 @@ fun StatusBadge(
     val (container: Color, content: Color) =
         when (tone) {
             BadgeTone.Success -> wb.greenSoft to wb.green
+            BadgeTone.Warning -> wb.amberSoft to wb.amber
             BadgeTone.Danger -> wb.redSoft to wb.red
             BadgeTone.Info -> wb.brandSoft to wb.brand
             BadgeTone.Neutral -> wb.soft to wb.muted

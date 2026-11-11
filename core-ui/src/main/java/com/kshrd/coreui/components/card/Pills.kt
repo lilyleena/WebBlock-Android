@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -17,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.PillShape
@@ -70,7 +69,7 @@ fun ResultPill(
 private fun PillsPreview() {
     PreviewSurface {
         Row(horizontalArrangement = Arrangement.spacedBy(Space.xs)) {
-            Pill("Live", icon = Icons.Filled.CheckCircle)
+            Pill("Live", icon = WebIcons.CircleCheck)
             ResultPill(succeeded = true, succeededLabel = "Success", failedLabel = "Failed")
             ResultPill(succeeded = false, succeededLabel = "Success", failedLabel = "Failed")
         }

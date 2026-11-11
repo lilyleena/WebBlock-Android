@@ -14,9 +14,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
@@ -40,6 +38,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.PillShape
@@ -152,7 +151,7 @@ fun WbMenuOption(
             modifier = Modifier.weight(1f),
         )
         if (selected) {
-            Icon(Icons.Filled.Check, contentDescription = null, tint = Color.White, modifier = Modifier.size(16.dp))
+            Icon(WebIcons.Check, contentDescription = null, tint = Color.White, modifier = Modifier.size(16.dp))
         }
     }
 }
@@ -197,8 +196,8 @@ private fun WbMenuItemPreview() {
     PreviewSurface {
         Box {
             androidx.compose.foundation.layout.Column {
-                WbMenuItem(Icons.Outlined.Edit, "Edit product", onClick = {})
-                WbMenuItem(Icons.Outlined.DeleteOutline, "Delete product", onClick = {}, destructive = true)
+                WbMenuItem(WebIcons.Pencil, "Edit product", onClick = {})
+                WbMenuItem(WebIcons.Trash, "Delete product", onClick = {}, destructive = true)
             }
         }
     }

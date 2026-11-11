@@ -37,13 +37,13 @@ object Space {
  * - [hero] the sign-in card
  */
 object Radius {
-    val small = 8.dp
-    val tile = 12.dp
-    val control = 14.dp
-    val panel = 20.dp
-    val card = 24.dp
-    val sheet = 28.dp
-    val hero = 32.dp
+    val small = 6.dp
+    val tile = 10.dp // web --r-sm
+    val control = 14.dp // web --r-md
+    val panel = 14.dp
+    val card = 20.dp // web --r-lg
+    val sheet = 28.dp // Material bottom sheet
+    val hero = 20.dp
 }
 
 /** Fixed component sizes shared across screens. */

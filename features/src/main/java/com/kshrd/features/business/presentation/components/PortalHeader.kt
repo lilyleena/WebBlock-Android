@@ -20,12 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBackIos
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.outlined.Language
-import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -53,9 +48,9 @@ import com.kshrd.coreui.components.card.Pill
 import com.kshrd.coreui.components.card.cardShadow
 import com.kshrd.coreui.components.card.glass
 import com.kshrd.coreui.components.nav.UnreadBadge
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
-import com.kshrd.coreui.theme.CardShape
 import com.kshrd.coreui.theme.PillShape
 import com.kshrd.coreui.theme.Radius
 import com.kshrd.coreui.theme.Sizes
@@ -88,11 +83,11 @@ fun PortalTopBar(
                     .clickable(onClick = onBack)
                     .padding(end = Space.xs, top = Space.xs, bottom = Space.xs),
         ) {
-            Icon(Icons.AutoMirrored.Outlined.ArrowBackIos, contentDescription = null, tint = wb.brand, modifier = Modifier.size(Sizes.iconSmall))
+            Icon(WebIcons.ChevronLeft, contentDescription = null, tint = wb.text, modifier = Modifier.size(Sizes.iconSmall))
             Text(
                 stringResource(R.string.bm_websites),
                 style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
-                color = wb.brand,
+                color = wb.text,
                 modifier = Modifier.padding(start = Space.xxxs),
             )
         }
@@ -105,7 +100,7 @@ fun PortalTopBar(
                     .clip(CircleShape)
                     .clickable(role = Role.Button, onClick = onBell),
         ) {
-            Icon(Icons.Outlined.Notifications, contentDescription = stringResource(R.string.cd_notifications), tint = wb.brand, modifier = Modifier.size(Sizes.iconLarge))
+            Icon(WebIcons.Bell, contentDescription = stringResource(R.string.cd_notifications), tint = wb.brand, modifier = Modifier.size(Sizes.iconLarge))
             if (unreadCount > 0) UnreadBadge(count = unreadCount, ring = wb.card, modifier = Modifier.align(Alignment.TopEnd))
         }
         Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(start = Space.xs).size(Sizes.compact)) {
@@ -114,7 +109,7 @@ fun PortalTopBar(
     }
 }
 
-/** iOS large navigation title ("Business information", "Monitor"). */
+/** Page title ("Business information", "Monitor"): brand blue, as on the web dashboard. */
 @Composable
 fun PortalTitle(
     text: String,
@@ -124,7 +119,7 @@ fun PortalTitle(
     Text(
         text = text,
         style = MaterialTheme.typography.displaySmall,
-        color = MaterialTheme.wb.text,
+        color = MaterialTheme.wb.brand,
         modifier = modifier.fillMaxWidth().padding(horizontal = horizontalPadding).padding(top = Space.xxs, bottom = Space.xs).semantics { heading() },
     )
 }
@@ -203,12 +198,12 @@ fun SiteHeaderCard(
             }
             Pill(
                 text = stringResource(R.string.bm_live),
-                icon = Icons.Outlined.Language,
+                icon = WebIcons.Globe,
                 tint = wb.green,
                 background = wb.greenSoft,
             )
             if (multiple) {
-                Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = wb.muted, modifier = Modifier.size(Sizes.icon).rotate(chevron))
+                Icon(WebIcons.ChevronDown, contentDescription = null, tint = wb.muted, modifier = Modifier.size(Sizes.icon).rotate(chevron))
             }
         }
         AnimatedVisibility(visible = expanded && multiple) {
@@ -257,7 +252,7 @@ private fun SiteOptionRow(
             )
             Text(option.domain, style = MaterialTheme.typography.labelMedium, color = wb.muted)
         }
-        if (current) Icon(Icons.Filled.Check, contentDescription = null, tint = wb.brand, modifier = Modifier.size(Sizes.icon))
+        if (current) Icon(WebIcons.Check, contentDescription = null, tint = wb.brand, modifier = Modifier.size(Sizes.icon))
     }
 }
 

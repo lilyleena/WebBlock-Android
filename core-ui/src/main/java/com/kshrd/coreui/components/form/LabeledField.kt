@@ -12,13 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -43,18 +39,19 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.kshrd.coreui.R
 import com.kshrd.coreui.components.card.glassFill
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
-import com.kshrd.coreui.theme.PillShape
+import com.kshrd.coreui.theme.FieldShape
 import com.kshrd.coreui.theme.Radius
 import com.kshrd.coreui.theme.Sizes
 import com.kshrd.coreui.theme.Space
 import com.kshrd.coreui.theme.wb
 
-private val MultilineShape = RoundedCornerShape(Radius.panel)
+private val MultilineShape = FieldShape
 
 /**
- * iOS `LabeledField`: semibold title (+ "optional"), 50dp capsule field with a brand@30% outline that turns
+ * Web dashboard input: semibold title (+ "optional"), rounded-rect field with a hairline grey outline that turns
  * brand 1.5dp on focus and red with an error row on error. [minLines] > 1 gives the rounded-rect multi-line
  * variant (`Radius.panel`). [prefix] puts fixed text before the value, such as a currency sign. [readOnly] uses the soft fill and a fainter outline. [hint] shows under the field.
  */
@@ -83,14 +80,14 @@ fun LabeledField(
 ) {
     val wb = MaterialTheme.wb
     val multiline = minLines > 1
-    val shape = if (multiline) MultilineShape else PillShape
+    val shape = if (multiline) MultilineShape else FieldShape
     var focused by remember { mutableStateOf(false) }
     var revealed by rememberSaveable { mutableStateOf(false) }
     val outline =
         when {
             error != null -> wb.red
             focused -> wb.brand
-            else -> wb.brand.copy(alpha = if (readOnly) 0.15f else 0.3f)
+            else -> wb.border
         }
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(Space.xs)) {
         Row(horizontalArrangement = Arrangement.spacedBy(Space.xxs), verticalAlignment = Alignment.CenterVertically) {
@@ -142,7 +139,7 @@ fun LabeledField(
             )
             if (isSecure && revealable) {
                 Icon(
-                    imageVector = if (revealed) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
+                    imageVector = if (revealed) WebIcons.EyeOff else WebIcons.Eye,
                     contentDescription = if (revealed) hidePasswordLabel else showPasswordLabel,
                     tint = wb.muted,
                     modifier =

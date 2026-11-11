@@ -148,11 +148,13 @@ fun WebBlocksLogoInline(
             WebBlocksMark(width = height * (GridW / MarkH))
         }
         Spacer(Modifier.width(height * 0.28f))
+        // Light wordmark on a blue header *or* in dark theme; the white tile above is only for the blue header.
+        val lightWord = onDark || MaterialTheme.wb.isDark
         Text(
             text =
                 buildAnnotatedString {
-                    withStyle(SpanStyle(color = if (onDark) Color.White else WordInk)) { append(stringResource(R.string.wb_logo_word_web)) }
-                    withStyle(SpanStyle(color = if (onDark) WordVioletOnDark else WordViolet)) { append(stringResource(R.string.wb_logo_word_blocks)) }
+                    withStyle(SpanStyle(color = if (lightWord) Color.White else WordInk)) { append(stringResource(R.string.wb_logo_word_web)) }
+                    withStyle(SpanStyle(color = if (lightWord) WordVioletOnDark else WordViolet)) { append(stringResource(R.string.wb_logo_word_blocks)) }
                 },
             fontSize = wordSize,
             lineHeight = 1.15.em,

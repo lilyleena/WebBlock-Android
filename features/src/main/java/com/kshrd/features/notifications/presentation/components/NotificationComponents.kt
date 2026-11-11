@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -34,6 +32,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.kshrd.coreui.components.card.GlassBlock
 import com.kshrd.coreui.components.card.LogoAvatar
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.FontScalePreviews
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
@@ -56,7 +55,7 @@ fun NotificationAvatar(
             logoRes = item.logoRes,
             initials = item.initials,
             size = size,
-            fallbackIcon = if (item.isFromWebBlock) Icons.Filled.Notifications else null,
+            fallbackIcon = if (item.isFromWebBlock) WebIcons.Bell else null,
         )
         Box(
             Modifier

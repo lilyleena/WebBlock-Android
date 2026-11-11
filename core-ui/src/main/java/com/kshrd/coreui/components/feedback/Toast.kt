@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
@@ -36,6 +34,7 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.kshrd.coreui.components.card.glass
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.Radius
@@ -98,9 +97,9 @@ fun ToastBanner(
         }
     val icon =
         when (toast.kind) {
-            ToastKind.Success -> Icons.Filled.CheckCircle
-            ToastKind.Warning -> Icons.Filled.Warning
-            ToastKind.Error -> Icons.Filled.Error
+            ToastKind.Success -> WebIcons.CircleCheck
+            ToastKind.Warning -> WebIcons.Alert
+            ToastKind.Error -> WebIcons.Alert
         }
     val shape = RoundedCornerShape(Radius.card)
     Row(
