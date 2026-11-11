@@ -18,9 +18,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBackIos
-import androidx.compose.material.icons.outlined.Sell
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -44,6 +41,7 @@ import com.kshrd.coreui.components.decor.LiquidBackdrop
 import com.kshrd.coreui.components.feedback.WbAlertDialog
 import com.kshrd.coreui.components.form.AppDropdownField
 import com.kshrd.coreui.components.form.LabeledField
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.SheetShape
@@ -181,7 +179,7 @@ private fun EditorFields(
         onSelect = { onEvent(ProductEditorEvent.CategoryChanged(it)) },
         placeholder = stringResource(R.string.pv_category_placeholder),
         error = if (ProductFormError.CategoryEmpty in state.errors) stringResource(R.string.pv_error_category) else null,
-        leadingIcon = Icons.Outlined.Sell,
+        leadingIcon = WebIcons.Tag,
         iconTint = wb.purple,
         iconContainer = wb.purpleSoft,
         extraActionLabel = stringResource(R.string.pv_category_create),
@@ -208,7 +206,7 @@ private fun EditorTopBar(
             modifier = Modifier.size(Sizes.compact).clip(CircleShape).clickable(role = Role.Button, onClick = onBack),
         ) {
             Icon(
-                Icons.AutoMirrored.Outlined.ArrowBackIos,
+                WebIcons.ChevronLeft,
                 contentDescription = stringResource(R.string.pv_editor_close),
                 tint = wb.text,
                 modifier = Modifier.padding(start = Space.xxs).size(Sizes.icon),

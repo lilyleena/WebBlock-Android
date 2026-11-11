@@ -1,5 +1,3 @@
-@file:Suppress("MagicNumber") // Fixed-size illustration: every number is a measurement from the iOS drawing.
-
 package com.kshrd.features.auth.presentation.components
 
 import androidx.compose.animation.core.LinearEasing
@@ -24,8 +22,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -54,6 +50,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.kshrd.coreui.components.decor.rememberReduceMotion
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.wb
@@ -149,7 +146,7 @@ private fun StepList(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
                         ) {
-                            Icon(Icons.Filled.CheckCircle, null, tint = wb.green, modifier = Modifier.size(12.dp))
+                            Icon(WebIcons.CircleCheck, null, tint = wb.green, modifier = Modifier.size(12.dp))
                             Text(
                                 stringResource(R.string.auth_ob_step_3_url),
                                 style = MaterialTheme.typography.labelSmall,

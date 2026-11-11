@@ -18,14 +18,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBackIos
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.OpenInFull
-import androidx.compose.material.icons.outlined.Sell
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -53,6 +47,7 @@ import com.kshrd.coreui.components.card.wbCard
 import com.kshrd.coreui.components.menu.WbDropdownMenu
 import com.kshrd.coreui.components.menu.WbMenuItem
 import com.kshrd.coreui.format.formatPrice
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.Radius
@@ -79,17 +74,17 @@ fun ProductDetailTopBar(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier.fillMaxWidth().padding(horizontal = Space.screen, vertical = Space.xs),
     ) {
-        CircleAction(Icons.AutoMirrored.Outlined.ArrowBackIos, stringResource(R.string.pv_detail_back), onBack, iconOffsetStart = true)
+        CircleAction(WebIcons.ChevronLeft, stringResource(R.string.pv_detail_back), onBack, iconOffsetStart = true)
         Box(Modifier.weight(1f))
         if (productName != null) {
             Box {
-                CircleAction(Icons.Filled.MoreVert, stringResource(R.string.pv_more_actions, productName), { menuOpen = true })
+                CircleAction(WebIcons.MoreVertical, stringResource(R.string.pv_more_actions, productName), { menuOpen = true })
                 WbDropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
-                    WbMenuItem(Icons.Outlined.Edit, stringResource(R.string.pv_menu_edit), onClick = {
+                    WbMenuItem(WebIcons.Pencil, stringResource(R.string.pv_menu_edit), onClick = {
                         menuOpen = false
                         onEdit()
                     })
-                    WbMenuItem(Icons.Outlined.DeleteOutline, stringResource(R.string.pv_menu_delete), destructive = true, onClick = {
+                    WbMenuItem(WebIcons.Trash, stringResource(R.string.pv_menu_delete), destructive = true, onClick = {
                         menuOpen = false
                         onDelete()
                     })
@@ -172,10 +167,10 @@ fun ProductDetailBody(
                 text = stringResource(R.string.pv_menu_delete),
                 onClick = onDelete,
                 destructive = true,
-                icon = Icons.Outlined.DeleteOutline,
+                icon = WebIcons.Trash,
                 modifier = Modifier.weight(1f),
             )
-            PrimaryButton(text = stringResource(R.string.pv_menu_edit), onClick = onEdit, icon = Icons.Outlined.Edit, modifier = Modifier.weight(1f))
+            PrimaryButton(text = stringResource(R.string.pv_menu_edit), onClick = onEdit, icon = WebIcons.Pencil, modifier = Modifier.weight(1f))
         }
     }
     if (viewerOpen) PhotoViewer(product.imageUrl, onClose = { viewerOpen = false })
@@ -189,9 +184,9 @@ private fun FactsRow(
 ) {
     val wb = MaterialTheme.wb
     Row(modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(Space.s)) {
-        Fact(Icons.Outlined.Sell, wb.purple, wb.purpleSoft, stringResource(R.string.pv_detail_category), category, Modifier.weight(1f))
+        Fact(WebIcons.Tag, wb.purple, wb.purpleSoft, stringResource(R.string.pv_detail_category), category, Modifier.weight(1f))
         if (websiteName != null) {
-            Fact(Icons.Outlined.Language, wb.green, wb.greenSoft, stringResource(R.string.pv_detail_shown_on), websiteName, Modifier.weight(1f))
+            Fact(WebIcons.Globe, wb.green, wb.greenSoft, stringResource(R.string.pv_detail_shown_on), websiteName, Modifier.weight(1f))
         }
     }
 }
@@ -242,7 +237,7 @@ private fun PhotoViewer(
                         .background(Color.White.copy(alpha = 0.16f))
                         .clickable(role = Role.Button, onClick = onClose),
             ) {
-                Icon(Icons.Filled.Close, stringResource(R.string.pv_photo_close), tint = Color.White, modifier = Modifier.size(Sizes.icon))
+                Icon(WebIcons.X, stringResource(R.string.pv_photo_close), tint = Color.White, modifier = Modifier.size(Sizes.icon))
             }
         }
     }

@@ -14,9 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PhotoCamera
-import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -41,6 +38,7 @@ import com.kshrd.coreui.components.card.glassFill
 import com.kshrd.coreui.components.form.FieldErrorText
 import com.kshrd.coreui.components.menu.WbDropdownMenu
 import com.kshrd.coreui.components.menu.WbMenuItem
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.Radius
@@ -85,7 +83,7 @@ fun ProductPhotoField(
                     ProductPhoto(imageUrl, modifier = Modifier.fillMaxSize(), cornerRadius = Radius.panel)
                     WbDropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
                         WbMenuItem(
-                            icon = Icons.Outlined.DeleteOutline,
+                            icon = WebIcons.Trash,
                             label = stringResource(R.string.pv_photo_remove),
                             destructive = true,
                             onClick = {
@@ -138,7 +136,7 @@ private fun DropZone(
             if (isUploading) {
                 CircularProgressIndicator(color = wb.brand, strokeWidth = 2.5.dp, modifier = Modifier.size(24.dp))
             } else {
-                Icon(Icons.Filled.PhotoCamera, contentDescription = null, tint = wb.brand, modifier = Modifier.size(28.dp))
+                Icon(WebIcons.Camera, contentDescription = null, tint = wb.brand, modifier = Modifier.size(28.dp))
             }
         }
         Text(label, style = MaterialTheme.typography.labelLarge, color = wb.brand, textAlign = TextAlign.Center)

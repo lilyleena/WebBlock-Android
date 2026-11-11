@@ -3,11 +3,9 @@ package com.kshrd.coreui.components.card
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +16,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -26,6 +25,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,9 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -46,13 +44,13 @@ import androidx.compose.ui.unit.dp
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.PillShape
-import com.kshrd.coreui.theme.Sizes
 import com.kshrd.coreui.theme.Space
 import com.kshrd.coreui.theme.wb
 
 /**
- * iOS `FilterChip`: outlined pill; the selected one is filled `0x3F72D0` with white text and scaled 1.04.
- * Unselected = card@92% with a brand@30% outline. Min height `Sizes.compact`, horizontal padding `Space.m`. [count] is dimmed.
+ * Web dashboard filter tab ("All 4 · Live 1 · Draft 2"): it sits in a [ChipRow] track. Selected = white pill
+ * with a faint lift, brand text and a filled brand count bubble; unselected = bare muted text with a soft
+ * count bubble. 40dp tall inside the track's 4dp inset, so each tab's touch target is 48dp.
  */
 @Composable
 fun FilterChip(
@@ -63,20 +61,17 @@ fun FilterChip(
     count: Int? = null,
 ) {
     val wb = MaterialTheme.wb
-    val textColor by animateColorAsState(if (selected) androidx.compose.ui.graphics.Color.White else wb.text, tween(200), label = "chip-text")
-    val fill by animateColorAsState(if (selected) wb.buttonBlue else wb.card.copy(alpha = 0.92f), tween(200), label = "chip-fill")
-    val outline by animateColorAsState(wb.brand.copy(alpha = if (selected) 0.9f else 0.3f), tween(200), label = "chip-outline")
-    val scale by animateFloatAsState(if (selected) 1.04f else 1f, spring(dampingRatio = 0.65f, stiffness = 400f), label = "chip-scale")
+    val textColor by animateColorAsState(if (selected) wb.brand else wb.muted, tween(200), label = "chip-text")
+    val fill by animateColorAsState(if (selected) wb.card else wb.card.copy(alpha = 0f), tween(200), label = "chip-fill")
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(Space.xxs),
+        horizontalArrangement = Arrangement.spacedBy(Space.xs),
         modifier =
             modifier
-                .scale(scale)
-                .heightIn(min = Sizes.compact)
+                .heightIn(min = 40.dp)
+                .shadow(if (selected) 2.dp else 0.dp, PillShape, ambientColor = wb.brand.copy(alpha = 0.12f), spotColor = wb.brand.copy(alpha = 0.18f))
                 .clip(PillShape)
                 .background(fill)
-                .border(1.dp, outline, PillShape)
                 .selectable(
                     selected = selected,
                     onClick = onClick,
@@ -86,21 +81,47 @@ fun FilterChip(
                 )
                 .padding(horizontal = Space.m),
     ) {
-        Text(title, style = MaterialTheme.typography.labelLarge, color = textColor)
-        if (count != null) Text("$count", style = MaterialTheme.typography.labelLarge, color = textColor, modifier = Modifier.alpha(0.6f))
+        Text(title, style = MaterialTheme.typography.labelLarge, color = textColor, maxLines = 1)
+        if (count != null) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier =
+                    Modifier
+                        .defaultMinSize(minWidth = 20.dp, minHeight = 20.dp)
+                        .background(if (selected) wb.brand else wb.card, CircleShape)
+                        .padding(horizontal = 6.dp),
+            ) {
+                Text(
+                    "$count",
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    color = if (selected) Color.White else wb.muted,
+                    maxLines = 1,
+                )
+            }
+        }
     }
 }
 
-/** Horizontally scrolling row of separate [FilterChip]s that stays inside the cards' left and right edges. */
+/**
+ * The web dashboard's filter track: a soft blue pill holding [FilterChip]s side by side. Scrolls
+ * horizontally when the tabs are wider than the screen.
+ */
 @Composable
 fun ChipRow(
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit,
 ) {
     Row(
-        horizontalArrangement = Arrangement.spacedBy(Space.xs),
+        horizontalArrangement = Arrangement.spacedBy(Space.xxs),
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(vertical = Space.xxs, horizontal = Space.xxxs),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clip(PillShape)
+                .background(MaterialTheme.wb.soft)
+                .horizontalScroll(rememberScrollState())
+                .padding(Space.xxs),
         content = content,
     )
 }
@@ -142,25 +163,13 @@ fun SegmentedTabs(
 ) {
     val wb = MaterialTheme.wb
     val inset = Space.xxs
-    val trackBrush =
-        Brush.verticalGradient(
-            if (wb.isDark) listOf(Color(0xFF1B2540), Color(0xFF141C31)) else listOf(Color(0xFFEFF3FB), Color(0xFFFAFBFE)),
-        )
-    val thumbBrush =
-        Brush.verticalGradient(
-            if (wb.isDark) listOf(Color(0xFF3A4668), Color(0xFF28324D)) else listOf(Color(0xFFFFFFFF), Color(0xFFF3F6FC)),
-        )
-    val thumbRim =
-        Brush.verticalGradient(
-            if (wb.isDark) listOf(Color.White.copy(alpha = 0.25f), Color.White.copy(alpha = 0.05f)) else listOf(Color.White, Color(0xFFDCE5F5)),
-        )
+    // Same track and thumb as the web dashboard's segmented control (and [ChipRow]): soft blue track, white thumb.
     BoxWithConstraints(
         modifier =
             modifier
                 .fillMaxWidth()
                 .clip(PillShape)
-                .background(trackBrush)
-                .border(1.dp, wb.border.copy(alpha = 0.7f), PillShape)
+                .background(wb.soft)
                 .padding(inset),
     ) {
         val segmentWidth = maxWidth / labels.size
@@ -174,15 +183,14 @@ fun SegmentedTabs(
                 .offset(x = offset)
                 .width(segmentWidth)
                 .height(40.dp)
-                .shadow(3.dp, PillShape, ambientColor = wb.brand.copy(alpha = 0.18f), spotColor = wb.brand.copy(alpha = 0.18f))
+                .shadow(2.dp, PillShape, ambientColor = wb.brand.copy(alpha = 0.12f), spotColor = wb.brand.copy(alpha = 0.18f))
                 .clip(PillShape)
-                .background(thumbBrush)
-                .border(1.dp, thumbRim, PillShape),
+                .background(wb.card),
         )
         Row {
             labels.forEachIndexed { index, label ->
                 val textColor by animateColorAsState(
-                    targetValue = if (index == selectedIndex) wb.text else wb.muted,
+                    targetValue = if (index == selectedIndex) wb.brand else wb.muted,
                     animationSpec = tween(durationMillis = 200),
                     label = "segment-text",
                 )

@@ -14,10 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.compositeOver
-import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.Dp
@@ -47,9 +47,10 @@ fun AuthBackground(
 }
 
 /**
- * iOS `liquidBackdrop()` behind every portal screen: a soft lavender wash at the top that fades into the
- * page colour, with two large faint circles on the top-right (a light one at the corner, a brand-tinted
- * one lower down), so white cards and the search bar stand off the page. Static: nothing animates.
+ * The page behind every portal screen: the web sign-in panel's "blueprint" header. A soft brand wash at
+ * the top (web `bg/hero-top`) with a faint square grid and a few lightly filled cells clustered top-right,
+ * all fading into the flat page colour by [HeaderFade], so cards and lists below sit on a clean page.
+ * Static: nothing animates. It scrolls with nothing; it is the page itself.
  */
 @Composable
 fun LiquidBackdrop(
@@ -57,23 +58,56 @@ fun LiquidBackdrop(
     content: @Composable BoxScope.() -> Unit = {},
 ) {
     val wb = MaterialTheme.wb
-    val wash = if (wb.isDark) wb.brandSoft.copy(alpha = 0.35f).compositeOver(wb.canvas) else lerp(wb.brandSoft, wb.purpleSoft, 0.5f)
-    val page = if (wb.isDark) wb.canvas else wb.background
-    val light = if (wb.isDark) Color.White.copy(alpha = 0.03f) else Color.White.copy(alpha = 0.6f)
-    val tinted = wb.brand.copy(alpha = if (wb.isDark) 0.10f else 0.07f)
+    val wash = if (wb.isDark) wb.brandSoft.copy(alpha = 0.55f) else wb.brandSoft
+    val line = wb.brand.copy(alpha = if (wb.isDark) 0.06f else 0.05f)
+    val cell = wb.brand.copy(alpha = if (wb.isDark) 0.08f else 0.05f)
     Box(
         modifier =
             modifier
                 .fillMaxSize()
-                .drawBehind {
-                    val w = size.width
-                    drawRect(page)
-                    drawRect(Brush.verticalGradient(0f to wash, 1f to page, endY = w * 1.3f))
-                    drawCircle(light, radius = w * 0.34f, center = Offset(w * 0.9f, -w * 0.1f))
-                    drawCircle(tinted, radius = w * 0.36f, center = Offset(w * 1.06f, w * 0.58f))
-                },
+                .background(wb.canvas)
+                .drawBehind { drawBlueprintHeader(wash, line, cell, page = wb.canvas) },
         content = content,
     )
+}
+
+private val HeaderFade = 360.dp
+private val GridCell = 40.dp
+
+// Filled cells as (column from the right, row from the top): a loose cluster like the web panel.
+private val FilledCells = listOf(1 to 1, 2 to 1, 1 to 2, 3 to 2, 2 to 3, 4 to 0, 0 to 3, 3 to 4)
+
+private fun DrawScope.drawBlueprintHeader(
+    wash: Color,
+    line: Color,
+    cell: Color,
+    page: Color,
+) {
+    val fade = HeaderFade.toPx()
+    val step = GridCell.toPx()
+    val w = size.width
+    // 1. Wash: brand tint at the top, gone by `fade`.
+    drawRect(Brush.verticalGradient(0f to wash, 1f to page, endY = fade), size = Size(w, fade))
+    // 2. Filled cells, anchored to the right edge so the cluster sits behind the bell / avatar side.
+    val right = w - (w % step)
+    FilledCells.forEach { (col, row) ->
+        val x = right - (col + 1) * step
+        val y = row * step
+        val strength = (1f - y / fade).coerceIn(0f, 1f)
+        drawRect(cell.copy(alpha = cell.alpha * strength), topLeft = Offset(x, y), size = Size(step, step))
+    }
+    // 3. Grid lines, each fading with depth so the grid dissolves into the page.
+    val stroke = 1.dp.toPx()
+    var x = right
+    while (x > 0f) {
+        drawLine(Brush.verticalGradient(0f to line, 1f to Color.Transparent, endY = fade), Offset(x, 0f), Offset(x, fade), stroke)
+        x -= step
+    }
+    var y = 0f
+    while (y < fade) {
+        drawLine(line.copy(alpha = line.alpha * (1f - y / fade)), Offset(0f, y), Offset(w, y), stroke)
+        y += step
+    }
 }
 
 /** The WebBlock mark: a blue rounded square with four dots, as in the Figma header. */

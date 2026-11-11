@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -36,6 +37,7 @@ fun ProductPhoto(
     imageUrl: String,
     modifier: Modifier = Modifier,
     cornerRadius: Dp = Radius.tile,
+    shape: Shape = RoundedCornerShape(cornerRadius),
 ) {
     val context = LocalContext.current
     val resId =
@@ -48,7 +50,7 @@ fun ProductPhoto(
         }
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier.clip(RoundedCornerShape(cornerRadius)).background(MaterialTheme.wb.brandSoft),
+        modifier = modifier.clip(shape).background(MaterialTheme.wb.brandSoft),
     ) {
         when {
             resId != 0 -> Image(painterResource(resId), contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())

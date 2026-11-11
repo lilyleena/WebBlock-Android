@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +30,7 @@ import com.kshrd.coreui.components.card.FormCard
 import com.kshrd.coreui.components.card.IconTile
 import com.kshrd.coreui.components.form.LineTextField
 import com.kshrd.coreui.components.nav.BackTopBar
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.Sizes
@@ -90,7 +90,7 @@ fun EditBusinessContent(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(Space.s),
                 ) {
-                    IconTile(Icons.Outlined.Lock, size = 44.dp)
+                    IconTile(WebIcons.Lock, size = 44.dp)
                     Text(
                         stringResource(R.string.edit_business_locked_note),
                         style = MaterialTheme.typography.bodyMedium,

@@ -22,9 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.outlined.Circle
-import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -54,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import com.kshrd.coreui.components.button.PrimaryButton
 import com.kshrd.coreui.components.card.glassFill
 import com.kshrd.coreui.components.form.LabeledField
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.Radius
@@ -157,7 +156,7 @@ fun CodeStep(
         )
         CodeBoxes(code = state.code, onCodeChange = { onEvent(ForgotPasswordEvent.CodeChanged(it)) })
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Outlined.Schedule, contentDescription = null, tint = wb.muted, modifier = Modifier.size(Sizes.iconSmall))
+            Icon(WebIcons.Clock, contentDescription = null, tint = wb.muted, modifier = Modifier.size(Sizes.iconSmall))
             Text(
                 text =
                     buildAnnotatedString {
@@ -346,7 +345,7 @@ private fun Rule(
     val wb = MaterialTheme.wb
     val tint = if (ok) wb.green else wb.muted
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.xs)) {
-        Icon(if (ok) Icons.Filled.CheckCircle else Icons.Outlined.Circle, contentDescription = null, tint = tint, modifier = Modifier.size(18.dp))
+        Icon(if (ok) WebIcons.CircleCheck else Icons.Outlined.Circle, contentDescription = null, tint = tint, modifier = Modifier.size(18.dp))
         Text(text, style = MaterialTheme.typography.bodyMedium, color = tint)
     }
 }

@@ -17,11 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -46,6 +42,7 @@ import com.kshrd.coreui.components.decor.LiquidBackdrop
 import com.kshrd.coreui.components.feedback.EmptyStateView
 import com.kshrd.coreui.components.feedback.LoadingView
 import com.kshrd.coreui.components.nav.BackTopBar
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.layout.navigationBarBottom
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
@@ -131,7 +128,7 @@ private fun DetailBody(item: AppNotification) {
             )
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.s)) {
                 StatusChip(unread = item.unread)
-                Icon(Icons.Outlined.Schedule, contentDescription = null, tint = wb.muted, modifier = Modifier.size(Sizes.iconSmall))
+                Icon(WebIcons.Clock, contentDescription = null, tint = wb.muted, modifier = Modifier.size(Sizes.iconSmall))
                 Text(item.timeText, style = MaterialTheme.typography.bodyMedium, color = wb.muted)
             }
         }
@@ -150,7 +147,7 @@ private fun DetailBody(item: AppNotification) {
         GlassBlock(spacing = Space.xs) {
             BlockLabel(stringResource(R.string.notif_detail_activity))
             ActivityRow(
-                icon = Icons.Filled.Notifications,
+                icon = WebIcons.Bell,
                 tint = wb.brand,
                 container = wb.brandSoft,
                 title = stringResource(R.string.notif_detail_event_received),
@@ -159,7 +156,7 @@ private fun DetailBody(item: AppNotification) {
             )
             if (!item.unread) {
                 ActivityRow(
-                    icon = Icons.Filled.Check,
+                    icon = WebIcons.Check,
                     tint = wb.green,
                     container = wb.greenSoft,
                     title = stringResource(R.string.notif_detail_event_read),
@@ -187,7 +184,7 @@ private fun StatusChip(unread: Boolean) {
     // The shared status pill, tinted like "Live" elsewhere.
     Pill(
         text = stringResource(if (unread) R.string.notification_detail_unread else R.string.notification_detail_read),
-        icon = if (unread) Icons.Filled.Notifications else Icons.Filled.CheckCircle,
+        icon = if (unread) WebIcons.Bell else WebIcons.CircleCheck,
         tint = if (unread) wb.brand else wb.green,
         background = if (unread) wb.brandSoft else wb.greenSoft,
     )

@@ -18,9 +18,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -46,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import com.kshrd.coreui.components.card.IconTile
 import com.kshrd.coreui.components.menu.WbGlassDropdownMenu
 import com.kshrd.coreui.components.menu.WbMenuOption
+import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.CardShape
@@ -135,12 +133,12 @@ fun OpeningHoursDropdown(
                     .clickable(role = Role.Button) { expanded = !expanded }
                     .padding(Space.m),
         ) {
-            IconTile(Icons.Outlined.Schedule)
+            IconTile(WebIcons.Clock)
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Space.xxxs)) {
                 Text(stringResource(R.string.bm_opening_hours), style = MaterialTheme.typography.titleMedium, color = wb.text)
                 Text(todaysHoursPreview(hours), style = MaterialTheme.typography.bodyMedium, color = wb.muted)
             }
-            Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = wb.muted, modifier = Modifier.size(Sizes.icon).rotate(chevron))
+            Icon(WebIcons.ChevronDown, contentDescription = null, tint = wb.muted, modifier = Modifier.size(Sizes.icon).rotate(chevron))
         }
         AnimatedVisibility(visible = expanded) {
             Column(modifier = Modifier.padding(horizontal = Space.m).padding(bottom = Space.xs)) {
@@ -284,7 +282,7 @@ private fun TimeField(
                         .clickable(role = Role.Button) { expanded = true }
                         .padding(horizontal = Space.s),
             ) {
-                Icon(Icons.Outlined.Schedule, contentDescription = null, tint = wb.brand, modifier = Modifier.size(Sizes.iconSmall))
+                Icon(WebIcons.Clock, contentDescription = null, tint = wb.brand, modifier = Modifier.size(Sizes.iconSmall))
                 Text(
                     text = formatMinutes(minutes),
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
@@ -293,7 +291,7 @@ private fun TimeField(
                     modifier = Modifier.weight(1f),
                 )
                 Icon(
-                    Icons.Filled.KeyboardArrowDown,
+                    WebIcons.ChevronDown,
                     contentDescription = null,
                     tint = wb.muted,
                     modifier = Modifier.size(Sizes.icon).rotate(if (expanded) 180f else 0f),
