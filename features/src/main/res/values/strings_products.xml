@@ -8,6 +8,9 @@
     <string name="pv_filters_hide">Hide filters</string>
     <string name="pv_detail_category">Category</string>
     <string name="pv_detail_shown_on">Shown on</string>
+    <string name="pv_detail_about">About this product</string>
+    <string name="pv_detail_live">Live on website</string>
+    <string name="pv_detail_delete">Delete</string>
     <string name="pv_photo_expand">View full photo</string>
     <string name="pv_photo_close">Close photo</string>
     <string name="pv_clear_search">Clear search</string>

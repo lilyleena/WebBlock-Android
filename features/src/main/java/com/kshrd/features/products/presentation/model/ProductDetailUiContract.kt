@@ -24,6 +24,9 @@ sealed interface ProductDetailEvent {
 
     data object DeleteClicked : ProductDetailEvent
 
+    /** The "Shown on" card: open the live website. */
+    data object WebsiteClicked : ProductDetailEvent
+
     data object DeleteConfirmed : ProductDetailEvent
 
     data object DeleteDismissed : ProductDetailEvent
@@ -35,4 +38,6 @@ sealed interface ProductDetailEffect {
     data object Back : ProductDetailEffect
 
     data class ShowToast(val toast: ToastRequest) : ProductDetailEffect
+
+    data class OpenUrl(val url: String) : ProductDetailEffect
 }

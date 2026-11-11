@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -28,12 +29,12 @@ import com.kshrd.coreui.components.feedback.EmptyStateView
 import com.kshrd.coreui.components.feedback.LoadingView
 import com.kshrd.coreui.components.feedback.ToastData
 import com.kshrd.coreui.components.feedback.WbToastHost
-import com.kshrd.coreui.components.nav.dockContentPadding
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
 import com.kshrd.coreui.theme.Space
 import com.kshrd.features.R
 import com.kshrd.features.products.domain.model.ProductCatalog
+import com.kshrd.features.products.presentation.components.ProductDetailActions
 import com.kshrd.features.products.presentation.components.ProductDetailBody
 import com.kshrd.features.products.presentation.components.ProductDetailTopBar
 import com.kshrd.features.products.presentation.components.ProductEditorSheet
@@ -51,9 +52,11 @@ fun ProductDetailScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     var toast by remember { mutableStateOf<ToastData?>(null) }
     val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
     OnEachEvent(viewModel.effects) { effect ->
         when (effect) {
             ProductDetailEffect.Back -> onBack()
+            is ProductDetailEffect.OpenUrl -> runCatching { uriHandler.openUri(effect.url) }
             is ProductDetailEffect.ShowToast -> {
                 val request = effect.toast
                 val message = request.arg?.let { context.getString(request.messageRes, it) } ?: context.getString(request.messageRes)
@@ -88,18 +91,23 @@ fun ProductDetailContent(
                     if (product == null) {
                         EmptyStateView(title = stringResource(R.string.pv_detail_removed), icon = Icons.Outlined.Inventory2)
                     } else {
-                        ProductDetailBody(
-                            product = product,
-                            websiteName = state.website?.name,
-                            onEdit = { onEvent(ProductDetailEvent.EditClicked) },
-                            onDelete = { onEvent(ProductDetailEvent.DeleteClicked) },
-                            modifier =
-                                Modifier
-                                    .fillMaxSize()
-                                    .verticalScroll(rememberScrollState())
-                                    .padding(horizontal = Space.screen)
-                                    .padding(top = Space.xs, bottom = dockContentPadding()),
-                        )
+                        Column(modifier = Modifier.fillMaxSize()) {
+                            ProductDetailBody(
+                                product = product,
+                                websiteName = state.website?.name,
+                                onOpenWebsite = { onEvent(ProductDetailEvent.WebsiteClicked) },
+                                modifier =
+                                    Modifier
+                                        .weight(1f)
+                                        .verticalScroll(rememberScrollState())
+                                        .padding(horizontal = Space.screen)
+                                        .padding(top = Space.xs, bottom = Space.l),
+                            )
+                            ProductDetailActions(
+                                onEdit = { onEvent(ProductDetailEvent.EditClicked) },
+                                onDelete = { onEvent(ProductDetailEvent.DeleteClicked) },
+                            )
+                        }
                     }
                 }
             }

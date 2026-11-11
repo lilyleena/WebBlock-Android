@@ -53,8 +53,8 @@ private const val PREFILL_EMAIL_KEY = "prefillEmail"
 fun MainGraph(navController: NavHostController) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentTab = PortalTab.entries.firstOrNull { backStackEntry.isOn(it) }
-    // The bottom bar also stays visible on a product's detail screen, as in the design.
-    val barTab = currentTab ?: PortalTab.Products.takeIf { backStackEntry.isOn<ProductDetail>() }
+    // The bottom bar shows on the three tabs only; a product's page has its own Edit / Delete bar instead.
+    val barTab = currentTab
     val isAuth = backStackEntry.isOn<Onboarding>() || backStackEntry.isOn<Login>() || backStackEntry.isOn<ForgotPassword>()
 
     Scaffold(
@@ -74,7 +74,7 @@ fun MainGraph(navController: NavHostController) {
         NavHost(
             navController = navController,
             startDestination = Login,
-            // Wherever the floating glass bar shows (the three tabs and a product page) the content runs underneath it; their
+            // On the three portal tabs the content runs underneath the floating glass bar; their
             // lists leave room at the bottom so the last item can scroll clear of it.
             modifier = (if (barTab != null) Modifier.padding(top = padding.calculateTopPadding()) else Modifier.padding(padding)).then(insets),
             enterTransition = { AppMotion.forwardEnter() },

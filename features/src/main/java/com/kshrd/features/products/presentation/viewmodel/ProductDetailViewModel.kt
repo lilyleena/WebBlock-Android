@@ -79,6 +79,7 @@ class ProductDetailViewModel
                     editor.openEdit(product, (current.catalog as? DataState.Success)?.data?.categories.orEmpty())
                 }
                 ProductDetailEvent.DeleteClicked -> _state.update { it.copy(confirmDelete = true) }
+                ProductDetailEvent.WebsiteClicked -> _state.value.website?.let { _effects.tryEmit(ProductDetailEffect.OpenUrl("https://" + it.domain)) }
                 ProductDetailEvent.DeleteDismissed -> _state.update { it.copy(confirmDelete = false) }
                 ProductDetailEvent.DeleteConfirmed -> confirmDelete()
                 is ProductDetailEvent.Editor -> editor.onEvent(event.event)
