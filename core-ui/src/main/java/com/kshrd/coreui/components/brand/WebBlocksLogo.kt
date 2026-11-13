@@ -167,6 +167,35 @@ fun WebBlocksLogoInline(
 }
 
 /**
+ * Just the "WebBlocks" wordmark, [height] tall (sized from dp so it keeps its proportions when the
+ * user enlarges system text). Colours flip to their on-dark versions in dark mode.
+ */
+@Composable
+fun WebBlocksWordmark(
+    modifier: Modifier = Modifier,
+    height: Dp = 40.dp,
+) {
+    val description = stringResource(R.string.wb_logo_description)
+    // 1.2em line height: font size = height / 1.2.
+    val wordSize = with(LocalDensity.current) { (height / 1.2f).toSp() }
+    val onDark = MaterialTheme.wb.isDark
+    Text(
+        text =
+            buildAnnotatedString {
+                withStyle(SpanStyle(color = if (onDark) Color.White else WordInk)) { append(stringResource(R.string.wb_logo_word_web)) }
+                withStyle(SpanStyle(color = if (onDark) WordVioletOnDark else WordViolet)) { append(stringResource(R.string.wb_logo_word_blocks)) }
+            },
+        fontSize = wordSize,
+        lineHeight = 1.2.em,
+        fontWeight = FontWeight.Bold,
+        letterSpacing = (-0.01).em,
+        maxLines = 1,
+        softWrap = false,
+        modifier = modifier.clearAndSetSemantics { contentDescription = description },
+    )
+}
+
+/**
  * Just the block mark (no wordmark), [width] wide, e.g. as a sticker on a card. Decorative: it has
  * no content description, so pair it with real text.
  */
@@ -351,4 +380,10 @@ private fun DrawScope.drawMark(u: Float) {
 @Composable
 private fun WebBlocksLogoPreview() {
     PreviewSurface { WebBlocksLogo(height = 56.dp) }
+}
+
+@ThemePreviews
+@Composable
+private fun WebBlocksWordmarkPreview() {
+    PreviewSurface { WebBlocksWordmark() }
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark mode: navy splash and window, matching the Compose splash, so there is no white flash. -->
+    <style name="Theme.Starter" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowSplashScreenBackground">#0B1220</item>
+        <!-- No system icon: the Compose splash draws the logo, then the name, as one sequence. -->
+        <item name="android:windowSplashScreenAnimatedIcon">@android:color/transparent</item>
+        <item name="android:windowBackground">#0B1220</item>
+    </style>
+</resources>

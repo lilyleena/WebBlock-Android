@@ -29,7 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -68,11 +68,11 @@ fun OpeningHoursScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
-    val context = LocalContext.current
+    val resources = LocalResources.current
     OnEachEvent(viewModel.effects) { effect ->
         when (effect) {
             OpeningHoursEffect.Back -> onBack()
-            is OpeningHoursEffect.ShowMessage -> snackbar.showSnackbar(context.getString(effect.messageRes))
+            is OpeningHoursEffect.ShowMessage -> snackbar.showSnackbar(resources.getString(effect.messageRes))
         }
     }
     OpeningHoursContent(state = state, snackbarHostState = snackbar, onEvent = viewModel::onEvent)

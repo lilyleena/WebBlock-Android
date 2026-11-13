@@ -221,7 +221,7 @@ fun ProductTile(
             Text(
                 formatPrice(product.price),
                 style = MaterialTheme.typography.titleLarge,
-                color = wb.text,
+                color = wb.brand,
                 maxLines = 1,
                 modifier = Modifier.weight(1f),
             )

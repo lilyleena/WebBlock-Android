@@ -43,7 +43,7 @@ import com.kshrd.features.website.presentation.screen.MyWebsitesScreen
  * Maps every typed destination in `:core` to the screen that renders it.
  * Feature screens receive navigation as callbacks; only this file knows the graph.
  *
- * Flow: Login -> Onboarding (first login only) -> My Websites -> (select a website) -> portal tabs
+ * Flow: (splash) -> Onboarding -> Login -> My Websites -> (select a website) -> portal tabs
  * (Products, Business, Monitor) with a shared bottom bar.
  */
 /** Result key the forgot-password flow leaves on the sign-in entry after a successful reset. */
@@ -73,7 +73,7 @@ fun MainGraph(navController: NavHostController) {
         Box(Modifier.fillMaxSize()) {
         NavHost(
             navController = navController,
-            startDestination = Login,
+            startDestination = Onboarding,
             // On the three portal tabs the content runs underneath the floating glass bar; their
             // lists leave room at the bottom so the last item can scroll clear of it.
             modifier = (if (barTab != null) Modifier.padding(top = padding.calculateTopPadding()) else Modifier.padding(padding)).then(insets),
@@ -93,11 +93,11 @@ private fun androidx.navigation.NavGraphBuilder.authDestinations(navController: 
     composable<Onboarding> {
         OnboardingScreen(
             onFinished = {
-                // Replayed from My Websites: just go back. First login: continue to My Websites.
+                // Replayed from My Websites: just go back. On app launch: continue to sign-in.
                 if (navController.previousBackStackEntry != null) {
                     navController.popBackStack()
                 } else {
-                    navController.navigateTo(MyWebsites) { popUpTo<Onboarding> { inclusive = true } }
+                    navController.navigateTo(Login) { popUpTo<Onboarding> { inclusive = true } }
                 }
             },
         )
@@ -106,14 +106,8 @@ private fun androidx.navigation.NavGraphBuilder.authDestinations(navController: 
         val handle = entry.savedStateHandle
         val prefill by handle.getStateFlow<String?>(PREFILL_EMAIL_KEY, null).collectAsStateWithLifecycle()
         LoginScreen(
-            onSignedIn = { showIntro ->
-                // The intro shows once, right after an account's first login.
-                if (showIntro) {
-                    navController.navigateTo(Onboarding) { popUpTo<Login> { inclusive = true } }
-                } else {
-                    navController.navigateTo(MyWebsites) { popUpTo<Login> { inclusive = true } }
-                }
-            },
+            // The intro already played before sign-in (app launch), so go straight to My Websites.
+            onSignedIn = { _ -> navController.navigateTo(MyWebsites) { popUpTo<Login> { inclusive = true } } },
             onForgotPassword = { email -> navController.navigateTo(ForgotPassword(email)) },
             prefillEmail = prefill,
             onPrefillConsumed = { handle[PREFILL_EMAIL_KEY] = null },

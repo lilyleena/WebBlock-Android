@@ -14,7 +14,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -50,14 +51,16 @@ fun ProductDetailScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     var toast by remember { mutableStateOf<ToastData?>(null) }
-    val context = LocalContext.current
+    val resources = LocalResources.current
+    val uriHandler = LocalUriHandler.current
     OnEachEvent(viewModel.effects) { effect ->
         when (effect) {
             ProductDetailEffect.Back -> onBack()
+            is ProductDetailEffect.OpenUrl -> runCatching { uriHandler.openUri(effect.url) }
             is ProductDetailEffect.ShowToast -> {
                 val request = effect.toast
-                val message = request.arg?.let { context.getString(request.messageRes, it) } ?: context.getString(request.messageRes)
-                toast = ToastData(request.kind, context.getString(request.titleRes), message)
+                val message = request.arg?.let { resources.getString(request.messageRes, it) } ?: resources.getString(request.messageRes)
+                toast = ToastData(request.kind, resources.getString(request.titleRes), message)
             }
         }
     }

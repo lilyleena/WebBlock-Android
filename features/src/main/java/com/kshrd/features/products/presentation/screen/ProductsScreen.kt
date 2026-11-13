@@ -21,7 +21,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -74,13 +74,13 @@ fun ProductsScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     var toast by remember { mutableStateOf<ToastData?>(null) }
-    val context = LocalContext.current
+    val resources = LocalResources.current
     OnEachEvent(viewModel.effects) { effect ->
         when (effect) {
             is ProductsEffect.ShowToast -> {
                 val request = effect.toast
-                val message = request.arg?.let { context.getString(request.messageRes, it) } ?: context.getString(request.messageRes)
-                toast = ToastData(request.kind, context.getString(request.titleRes), message)
+                val message = request.arg?.let { resources.getString(request.messageRes, it) } ?: resources.getString(request.messageRes)
+                toast = ToastData(request.kind, resources.getString(request.titleRes), message)
             }
             is ProductsEffect.OpenProduct -> onOpenProduct(effect.productId)
             ProductsEffect.OpenNotifications -> onOpenNotifications()

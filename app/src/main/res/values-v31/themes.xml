@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Android 12+ system splash: same canvas colour as the Compose splash that follows it (wb background). -->
+    <style name="Theme.Starter" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowSplashScreenBackground">#F8F9FC</item>
+        <!-- No system icon: the Compose splash draws the logo, then the name, as one sequence. -->
+        <item name="android:windowSplashScreenAnimatedIcon">@android:color/transparent</item>
+    </style>
+</resources>
