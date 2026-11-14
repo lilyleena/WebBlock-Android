@@ -35,6 +35,8 @@ data class UsageMeter(
     val limit: Int,
     /** Payment's title for the meter; `null` keeps the app's own. */
     val label: String? = null,
+    /** Payment could not count it (`used: null`): the screen shows "—" or no bar instead of 0. */
+    val isUsedUnknown: Boolean = false,
 ) {
     val left: Int get() = (limit - used).coerceAtLeast(0)
     val fraction: Float get() = if (limit == 0) 0f else (used.toFloat() / limit).coerceIn(0f, 1f)

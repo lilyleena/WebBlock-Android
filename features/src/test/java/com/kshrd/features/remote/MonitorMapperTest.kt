@@ -75,6 +75,19 @@ class MonitorMapperTest {
         assertEquals(12, photos.used)
         assertEquals(30, photos.limit)
         assertEquals("Photos", photos.label)
+        assertEquals(false, photos.isUsedUnknown)
+    }
+
+    @Test
+    fun `photos not counted yet are unknown, not zero`() {
+        val metric = UsageMetricDto("photos", "Photos per website", cardLabel = "Photos", used = null, limit = 30)
+        val usage = PlanUsageDto(metrics = listOf(metric))
+
+        val photos = MonitorParts(PlanTier.Plus, usage = usage).toMonitorData(now, format).usage.single { it.kind == UsageKind.Photos }
+
+        assertEquals(true, photos.isUsedUnknown)
+        assertEquals(30, photos.limit)
+        assertEquals("Photos per website", photos.label)
     }
 
     @Test

@@ -97,8 +97,16 @@ private fun usageMeters(
     plan: PlanTier,
 ): List<UsageMeter> =
     listOfNotNull(
-        UsageMeter(UsageKind.Products, used = products?.used ?: 0, limit = products?.limit ?: plan.products, label = products?.label),
-        photos?.let { UsageMeter(UsageKind.Photos, used = it.used ?: 0, limit = it.limit ?: 0, label = it.label) },
+        UsageMeter(
+            UsageKind.Products,
+            used = products?.used ?: 0,
+            limit = products?.limit ?: plan.products,
+            label = products?.label,
+            isUsedUnknown = products != null && products.used == null,
+        ),
+        photos?.let {
+            UsageMeter(UsageKind.Photos, used = it.used ?: 0, limit = it.limit ?: 0, label = it.label, isUsedUnknown = it.used == null)
+        },
     )
 
 private fun ReleaseDto.toDeploy(liveFor: String?): Deploy =

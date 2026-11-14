@@ -42,9 +42,13 @@ data class ReleaseDto(
 
 @Serializable
 data class UsageMetricDto(
-    /** `websites`, `deploys`, `redeploys`, `generations`, `products`, and `photos` once Payment sends it. */
+    /** `websites`, `deploys`, `redeploys`, `generations`, `products`, `photos` (contracts dev 42bb1cd). */
     val key: String,
+    /** The full title ("Photos per website"); the meters show this, as on iOS. */
     val label: String? = null,
+    /** The short title for a small card ("Photos"). */
+    val cardLabel: String? = null,
+    /** `null` when the owning service could not be asked (photos: until Project's count is live). */
     val used: Int? = null,
     /** `null` = unlimited. */
     val limit: Int? = null,
