@@ -98,6 +98,18 @@ class ApiExceptionTest {
     }
 
     @Test
+    fun `a validation failure is reported with its field codes, not the values`() {
+        val lines = mutableListOf<String>()
+        ApiLog.sink = { lines += it }
+        val body = """{"type":"urn:webblock:problem:validation-failed","status":400,"errors":[{"field":"description","code":"FIELD_LENGTH_INVALID"}]}"""
+
+        ApiException.from(retrofit2.HttpException(retrofit2.Response.error<Any>(400, body.toResponseBody())))
+
+        ApiLog.sink = {}
+        assertEquals(true, lines.single().endsWith("400 validation-failed requestId=- fields=description:FIELD_LENGTH_INVALID"))
+    }
+
+    @Test
     fun `no answer is a connection error`() {
         val state = UnknownHostException("wb-api.roa-dev.digital").toErrorState()
 
