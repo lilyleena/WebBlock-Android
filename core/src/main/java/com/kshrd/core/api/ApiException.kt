@@ -56,7 +56,12 @@ class ApiException(
                 )
             val request = response?.raw()?.request
             val requestId = problem.requestId ?: "-"
-            ApiLog.sink("${request?.method} ${request?.url?.encodedPath} -> ${problem.status} ${problem.code} requestId=$requestId")
+            // Field names and the server's codes only (Project's codes, User's messages), never the values sent.
+            val fields = problem.fieldErrors.entries.joinToString(prefix = " fields=", separator = ",") { (k, v) -> "$k:${v.joinToString("|")}" }
+            ApiLog.sink(
+                "${request?.method} ${request?.url?.encodedPath} -> ${problem.status} ${problem.code} requestId=$requestId" +
+                    if (problem.fieldErrors.isEmpty()) "" else fields,
+            )
             return problem
         }
 
