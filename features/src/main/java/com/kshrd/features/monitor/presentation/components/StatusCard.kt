@@ -222,6 +222,7 @@ private fun smoothPath(pts: List<Offset>): Path {
     return path
 }
 
+@Suppress("MagicNumber") // Preview sample data.
 internal val previewMonitor =
     MonitorData(
         health = SiteHealth.Online,
