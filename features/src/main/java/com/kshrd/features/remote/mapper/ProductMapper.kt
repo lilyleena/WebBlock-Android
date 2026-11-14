@@ -46,6 +46,8 @@ fun priceText(amount: Double): String = BigDecimal.valueOf(amount).setScale(PRIC
 /**
  * The body of `POST /products` and `PUT /products/{id}`. [price] `null` keeps (or makes) the price hidden.
  * [version] is sent on an update so the server can answer 409 when the product changed elsewhere.
+ * A blank description is left out: Project refuses `""` (400 FIELD_LENGTH_INVALID, AWS run 14 Nov 2026), and the
+ * contract doesn't require the field.
  */
 fun productBody(
     name: String,
@@ -57,7 +59,7 @@ fun productBody(
 ): JsonObject =
     buildJsonObject {
         put("name", name)
-        put("description", description)
+        if (description.isNotBlank()) put("description", description)
         put("category", category)
         put("price", price?.let(::priceText))
         when (photo) {

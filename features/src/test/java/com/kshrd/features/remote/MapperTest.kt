@@ -74,13 +74,20 @@ class MapperTest {
 
     @Test
     fun `the product body says what happens to the photo`() {
-        val keep = productBody("Tulips", "", "Flowers", null, PhotoChange.Keep, version = 3)
-        val remove = productBody("Tulips", "", "Flowers", 6.0, PhotoChange.Remove, version = null)
-        val set = productBody("Tulips", "", "Flowers", 6.0, PhotoChange.Set("https://cdn/p.jpg"), version = null)
+        val keep = productBody("Tulips", "Spring", "Flowers", null, PhotoChange.Keep, version = 3)
+        val remove = productBody("Tulips", "Spring", "Flowers", 6.0, PhotoChange.Remove, version = null)
+        val set = productBody("Tulips", "Spring", "Flowers", 6.0, PhotoChange.Set("https://cdn/p.jpg"), version = null)
 
-        assertEquals("""{"name":"Tulips","description":"","category":"Flowers","price":null,"version":3}""", keep.toString())
-        assertEquals("""{"name":"Tulips","description":"","category":"Flowers","price":"6.00","imageUrl":null}""", remove.toString())
+        assertEquals("""{"name":"Tulips","description":"Spring","category":"Flowers","price":null,"version":3}""", keep.toString())
+        assertEquals("""{"name":"Tulips","description":"Spring","category":"Flowers","price":"6.00","imageUrl":null}""", remove.toString())
         assertEquals("https://cdn/p.jpg", set["imageUrl"].toString().trim('"'))
+    }
+
+    @Test
+    fun `a blank description is left out of the product body`() {
+        val body = productBody("Tulips", "  ", "Flowers", 6.0, PhotoChange.Keep, version = null)
+
+        assertEquals(false, "description" in body)
     }
 
     @Test
