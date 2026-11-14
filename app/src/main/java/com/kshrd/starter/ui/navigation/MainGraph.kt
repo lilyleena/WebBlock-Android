@@ -1,14 +1,16 @@
 package com.kshrd.starter.ui.navigation
 
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Modifier
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
@@ -22,9 +24,9 @@ import com.kshrd.core.navigation.MonitorTab
 import com.kshrd.core.navigation.MyWebsites
 import com.kshrd.core.navigation.NotificationDetail
 import com.kshrd.core.navigation.Notifications
+import com.kshrd.core.navigation.Onboarding
 import com.kshrd.core.navigation.ProductDetail
 import com.kshrd.core.navigation.ProductsTab
-import com.kshrd.core.navigation.Onboarding
 import com.kshrd.core.navigation.navigateTo
 import com.kshrd.coreui.components.nav.AppBottomBar
 import com.kshrd.coreui.motion.AppMotion
@@ -56,6 +58,10 @@ fun MainGraph(navController: NavHostController) {
     // The bottom bar shows on the three tabs only; a product's page has its own Edit / Delete bar instead.
     val barTab = currentTab
     val isAuth = backStackEntry.isOn<Onboarding>() || backStackEntry.isOn<Login>() || backStackEntry.isOn<ForgotPassword>()
+    val sessionWatcher: SessionWatcherViewModel = hiltViewModel()
+    LaunchedEffect(sessionWatcher) {
+        sessionWatcher.expired.collect { navController.navigateTo(Login) { popUpTo(navController.graph.id) { inclusive = true } } }
+    }
 
     Scaffold(
         contentWindowInsets = WindowInsets(0),

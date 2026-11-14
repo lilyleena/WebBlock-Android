@@ -41,6 +41,16 @@ class SignInWithGoogleUseCase
                 .onEach { if (it is DataState.Success) session.signIn(it.data) }
     }
 
+/** Restores a stored session on launch and starts it; `null` when there is none (or it ended). */
+class RestoreSessionUseCase
+    @Inject
+    constructor(
+        private val repository: AuthRepository,
+        private val session: SessionStore,
+    ) {
+        suspend operator fun invoke(): SessionOwner? = repository.restoreSession()?.also(session::signIn)
+    }
+
 /** Whether this account has already seen the intro. */
 class HasSeenOnboardingUseCase
     @Inject

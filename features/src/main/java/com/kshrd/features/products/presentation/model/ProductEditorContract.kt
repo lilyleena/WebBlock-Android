@@ -13,6 +13,12 @@ data class ProductEditorUiState(
     val price: String = "",
     val description: String = "",
     val imageUrl: String = "",
+    /** The loaded product's version (`null` for a new product). */
+    val version: Long? = null,
+    /** The price was hidden: an empty price field keeps it hidden. */
+    val wasPriceHidden: Boolean = false,
+    /** Why the last save failed ("changed somewhere else", a plan limit…); cleared on the next save. */
+    val saveError: String? = null,
     val isUploadingPhoto: Boolean = false,
     val photoError: String? = null,
     val categories: List<String> = emptyList(),

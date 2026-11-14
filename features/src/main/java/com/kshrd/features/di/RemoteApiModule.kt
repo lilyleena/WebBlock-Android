@@ -6,6 +6,10 @@ import com.kshrd.features.remote.api.ProductApi
 import com.kshrd.features.remote.api.ProjectApi
 import com.kshrd.features.remote.api.ProvisioningApi
 import com.kshrd.features.remote.api.UserApi
+import com.kshrd.features.remote.mapper.MonitorFormat
+import com.kshrd.features.remote.repository.AndroidPhotoEncoder
+import com.kshrd.features.remote.repository.DeviceMonitorFormat
+import com.kshrd.features.remote.repository.PhotoEncoder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,4 +44,11 @@ object RemoteApiModule {
     @Provides
     @Singleton
     fun provideNotificationApi(retrofit: Retrofit): NotificationApi = retrofit.create(NotificationApi::class.java)
+
+    @Provides
+    fun providePhotoEncoder(impl: AndroidPhotoEncoder): PhotoEncoder = impl
+
+    /** Relative times and dates in the device's language (the bell and Monitor). */
+    @Provides
+    fun provideDateFormat(): MonitorFormat = DeviceMonitorFormat
 }

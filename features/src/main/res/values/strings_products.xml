@@ -71,4 +71,6 @@
     <string name="pv_toast_saved_message">Your website shows them after your next deploy.</string>
     <string name="pv_toast_deleted_title">Product deleted</string>
     <string name="pv_toast_deleted_message">“%1$s” is removed after your next deploy.</string>
+    <string name="pv_price_hidden">Price hidden</string>
+    <string name="pv_price_hidden_hint">The price is hidden on your website. Leave this empty to keep it hidden.</string>
 </resources>

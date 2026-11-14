@@ -25,7 +25,7 @@ class ProductEditorController(
     private val websiteId: () -> String?,
     private val saveProduct: SaveProductUseCase,
     private val addCategory: AddCategoryUseCase,
-    private val uploadPhoto: (sourceUri: String) -> Flow<DataState<String>>,
+    private val uploadPhoto: (websiteId: String, sourceUri: String) -> Flow<DataState<String>>,
     private val onSaved: (product: Product, wasNew: Boolean) -> Unit,
     private val onDeleteRequested: (productId: String) -> Unit,
 ) {
@@ -46,9 +46,12 @@ class ProductEditorController(
                 productId = product.id,
                 name = product.name,
                 category = product.category,
-                price = "%.2f".format(java.util.Locale.US, product.price),
+                // A hidden price opens empty; leaving it empty keeps it hidden.
+                price = if (product.isPriceHidden) "" else "%.2f".format(java.util.Locale.US, product.price),
                 description = product.description,
                 imageUrl = product.imageUrl,
+                version = product.version,
+                wasPriceHidden = product.isPriceHidden,
                 categories = categories,
             )
     }
@@ -84,11 +87,12 @@ class ProductEditorController(
     }
 
     private fun draftOf(s: ProductEditorUiState) =
-        ProductDraft(s.productId, s.name, s.category, s.price, s.description, s.imageUrl)
+        ProductDraft(s.productId, s.name, s.category, s.price, s.description, s.imageUrl, s.version, s.wasPriceHidden)
 
     private fun upload(uri: String) {
+        val site = websiteId() ?: return
         scope.launch {
-            uploadPhoto(uri).collect { result ->
+            uploadPhoto(site, uri).collect { result ->
                 when (result) {
                     is DataState.Loading -> edit { it.copy(isUploadingPhoto = true, photoError = null) }
                     is DataState.Success -> edit { it.copy(imageUrl = result.data, isUploadingPhoto = false, photoError = null) }
@@ -112,11 +116,12 @@ class ProductEditorController(
         scope.launch {
             saveProduct(site, draft).collect { result ->
                 when (result) {
-                    is DataState.Loading -> edit { it.copy(isSaving = true) }
+                    is DataState.Loading -> edit { it.copy(isSaving = true, saveError = null) }
                     is DataState.Success -> {
                         close()
                         onSaved(result.data, current.isNew)
                     }
+                    is DataState.Error -> edit { it.copy(isSaving = false, saveError = result.message) }
                     else -> edit { it.copy(isSaving = false) }
                 }
             }

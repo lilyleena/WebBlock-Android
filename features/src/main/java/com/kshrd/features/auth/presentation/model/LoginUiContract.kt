@@ -13,6 +13,8 @@ data class LoginUiState(
     val submitError: String? = null,
     val isLoading: Boolean = false,
     val showGoogleChooser: Boolean = false,
+    /** Google sign-in is off with the v2 API until the owner turns it on (G1); the sample data keeps its chooser. */
+    val googleEnabled: Boolean = true,
 )
 
 sealed interface LoginEvent {

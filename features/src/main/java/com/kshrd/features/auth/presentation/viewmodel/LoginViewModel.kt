@@ -2,10 +2,12 @@ package com.kshrd.features.auth.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kshrd.core.AppConfig
 import com.kshrd.core.data.entity.DataState
 import com.kshrd.core.presentation.OneShotEvents
 import com.kshrd.core.session.SessionOwner
 import com.kshrd.features.auth.domain.usecase.HasSeenOnboardingUseCase
+import com.kshrd.features.auth.domain.usecase.RestoreSessionUseCase
 import com.kshrd.features.auth.domain.usecase.SignInUseCase
 import com.kshrd.features.auth.domain.usecase.SignInWithGoogleUseCase
 import com.kshrd.features.auth.domain.validation.AuthValidator
@@ -29,12 +31,23 @@ class LoginViewModel
         private val signIn: SignInUseCase,
         private val signInWithGoogle: SignInWithGoogleUseCase,
         private val hasSeenOnboarding: HasSeenOnboardingUseCase,
+        restoreSession: RestoreSessionUseCase,
     ) : ViewModel() {
-        private val _state = MutableStateFlow(LoginUiState())
+        private val _state = MutableStateFlow(LoginUiState(googleEnabled = AppConfig.useMockData))
         val state: StateFlow<LoginUiState> = _state.asStateFlow()
 
         private val _effects = OneShotEvents<LoginEffect>()
         val effects = _effects.events
+
+        init {
+            // A stored session (G8: about 30 days idle) skips the form: refresh it and go to My Websites.
+            viewModelScope.launch {
+                _state.update { it.copy(isLoading = true) }
+                val owner = restoreSession()
+                _state.update { it.copy(isLoading = false) }
+                if (owner != null) _effects.emit(LoginEffect.SignedIn(showIntro = false))
+            }
+        }
 
         /** Set once the owner taps "Sign in", so missing fields are explained only after they try. */
         private var attempted = false

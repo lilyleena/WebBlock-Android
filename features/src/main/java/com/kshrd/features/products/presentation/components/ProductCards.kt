@@ -162,7 +162,7 @@ fun ProductRow(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
-                Text(formatPrice(product.price), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = wb.brand)
+                Text(priceLabel(product), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = wb.brand)
             }
         }
         ProductMenu(product, onEdit, onDelete)
@@ -219,7 +219,7 @@ fun ProductTile(
             modifier = Modifier.fillMaxWidth().padding(start = Space.xs, top = Space.xxs),
         ) {
             Text(
-                formatPrice(product.price),
+                priceLabel(product),
                 style = MaterialTheme.typography.titleLarge,
                 color = wb.brand,
                 maxLines = 1,
@@ -278,3 +278,8 @@ private fun ProductCardsPreview() {
         }
     }
 }
+
+/** "$38.00", or "Price hidden" for a product whose price the website doesn't show (G7). */
+@Composable
+internal fun priceLabel(product: Product): String =
+    if (product.isPriceHidden) stringResource(R.string.pv_price_hidden) else formatPrice(product.price)

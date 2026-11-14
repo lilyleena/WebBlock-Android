@@ -45,7 +45,10 @@ class ProductRepositoryImpl
             name: String,
         ): Flow<DataState<String>> = flow { emit(source.addCategory(websiteId, name).toDataState()) }
 
-        override fun uploadPhoto(sourceUri: String): Flow<DataState<String>> = flow { emit(photoStore.store(sourceUri).toDataState()) }
+        override fun uploadPhoto(
+            websiteId: String,
+            sourceUri: String,
+        ): Flow<DataState<String>> = flow { emit(photoStore.store(sourceUri).toDataState()) }
 
         private companion object {
             const val LOAD_LATENCY_MS = 600L

@@ -46,7 +46,6 @@ import com.kshrd.coreui.components.card.glass
 import com.kshrd.coreui.components.card.wbCard
 import com.kshrd.coreui.components.menu.WbDropdownMenu
 import com.kshrd.coreui.components.menu.WbMenuItem
-import com.kshrd.coreui.format.formatPrice
 import com.kshrd.coreui.icons.WebIcons
 import com.kshrd.coreui.preview.PreviewSurface
 import com.kshrd.coreui.preview.ThemePreviews
@@ -151,7 +150,7 @@ fun ProductDetailBody(
         }
         Column(verticalArrangement = Arrangement.spacedBy(Space.xs)) {
             Text(product.name, style = MaterialTheme.typography.headlineSmall, color = wb.text)
-            Text(formatPrice(product.price), style = MaterialTheme.typography.headlineSmall, color = wb.brand)
+            Text(priceLabel(product), style = MaterialTheme.typography.headlineSmall, color = wb.brand)
             if (product.description.isNotBlank()) {
                 Text(
                     product.description,

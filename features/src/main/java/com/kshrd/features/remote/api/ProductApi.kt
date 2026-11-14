@@ -62,6 +62,21 @@ interface ProductApi {
         @Path("productId") productId: String,
     ): ProductDto
 
+    /** The website's image library (every upload, used or not). */
+    @GET("api/project/v2/projects/{projectId}/media")
+    suspend fun media(
+        @Path("projectId") projectId: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int = ProjectApi.PROJECT_PAGE_SIZE,
+    ): PageDto<MediaAssetDto>
+
+    /** Deletes an image nothing uses: 204, 409 `MEDIA_IN_USE` while a product, the logo, a page or a deploy uses it. */
+    @DELETE("api/project/v2/projects/{projectId}/media/{mediaId}")
+    suspend fun deleteMedia(
+        @Path("projectId") projectId: String,
+        @Path("mediaId") mediaId: String,
+    )
+
     /** JPEG or PNG, 2 MiB at most. 422 `STORAGE_LIMIT_REACHED` or `PHOTO_LIMIT_REACHED` when over the plan's limit. */
     @Multipart
     @POST("api/project/v2/projects/{projectId}/media")
