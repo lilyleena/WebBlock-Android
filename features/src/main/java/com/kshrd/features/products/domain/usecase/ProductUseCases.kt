@@ -24,13 +24,16 @@ object ProductValidator {
     /** A hidden price (G7) stays hidden while the price field is left empty; typing a price shows it. */
     fun keepsPriceHidden(draft: ProductDraft): Boolean = draft.wasPriceHidden && draft.priceText.isBlank()
 
+    /** Project's rule: up to 6 digits, optionally 1 or 2 decimals ("3.50"); anything else is refused, not rounded. */
+    private val PRICE = Regex("""^\d{1,6}(\.\d{1,2})?$""")
+
     fun parsePrice(text: String): Double? =
         text
             .trim()
             .removePrefix("$")
             .replace(",", "")
-            .toDoubleOrNull()
-            ?.takeIf { it >= 0.0 }
+            .takeIf { PRICE.matches(it) }
+            ?.toDoubleOrNull()
 }
 
 class ObserveCatalogUseCase
