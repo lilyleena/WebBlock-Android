@@ -107,7 +107,9 @@ private fun usageMeters(
             label = products?.label,
             isUsedUnknown = products?.used == null,
         ),
-        photos?.let { UsageMeter(UsageKind.Photos, used = it.used ?: 0, limit = it.toLimit(), label = it.label, isUsedUnknown = it.used == null) },
+        photos?.let {
+            UsageMeter(UsageKind.Photos, used = it.used ?: 0, limit = it.toLimit(), label = it.label, isUsedUnknown = it.used == null)
+        },
     )
 
 private fun ReleaseDto.toDeploy(liveFor: String?): Deploy =
