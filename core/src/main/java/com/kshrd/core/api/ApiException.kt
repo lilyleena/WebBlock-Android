@@ -47,12 +47,17 @@ class ApiException(
 
         fun from(error: HttpException): ApiException {
             val response = error.response()
-            return parse(
-                status = error.code(),
-                body = response?.errorBody()?.string(),
-                retryAfter = response?.headers()?.get("Retry-After"),
-                requestIdHeader = response?.headers()?.get("X-Request-Id"),
-            )
+            val problem =
+                parse(
+                    status = error.code(),
+                    body = response?.errorBody()?.string(),
+                    retryAfter = response?.headers()?.get("Retry-After"),
+                    requestIdHeader = response?.headers()?.get("X-Request-Id"),
+                )
+            val request = response?.raw()?.request
+            val requestId = problem.requestId ?: "-"
+            ApiLog.sink("${request?.method} ${request?.url?.encodedPath} -> ${problem.status} ${problem.code} requestId=$requestId")
+            return problem
         }
 
         fun parse(
