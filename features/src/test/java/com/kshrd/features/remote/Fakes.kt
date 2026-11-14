@@ -100,7 +100,13 @@ class FakeUserApi : UserApi {
         return signInAnswer()
     }
 
-    override suspend fun signInWithGoogle(body: AppSignInRequest): TokenSetDto = throw httpError(404, "account-not-found")
+    var googleRequest: AppSignInRequest? = null
+    var googleAnswer: () -> TokenSetDto = { throw httpError(404, "account-not-found") }
+
+    override suspend fun signInWithGoogle(body: AppSignInRequest): TokenSetDto {
+        googleRequest = body
+        return googleAnswer()
+    }
 
     override suspend fun signOut(body: RefreshTokenRequest) {
         calls += "signOut ${body.refreshToken}"

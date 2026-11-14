@@ -6,11 +6,14 @@ import com.kshrd.core.api.apiCall
 import com.kshrd.core.api.apiFlow
 import com.kshrd.core.auth.RefreshTokenRequest
 import com.kshrd.core.auth.SessionManager
+import com.kshrd.core.auth.TokenSetDto
 import com.kshrd.core.data.entity.DataState
 import com.kshrd.core.data.entity.ErrorCode
 import com.kshrd.core.session.SessionOwner
+import com.kshrd.features.auth.data.google.GOOGLE_REDIRECT_URI
 import com.kshrd.features.auth.domain.repository.AuthRepository
 import com.kshrd.features.remote.api.UserApi
+import com.kshrd.features.remote.dto.AppSignInRequest
 import com.kshrd.features.remote.dto.EmailRequest
 import com.kshrd.features.remote.dto.NewPasswordRequest
 import com.kshrd.features.remote.dto.SignInRequest
@@ -29,7 +32,7 @@ private const val TAG = "ApiAuthRepository"
 internal const val OWNERS_ONLY = "This app is for website owners. Admins use the WebBlock website."
 
 /** Google sign-in stays off until User's change is on AWS and the owner turns it on (G1). */
-internal const val GOOGLE_OFF = "Google sign-in isn't available in the app yet. Sign in with your email and password."
+internal const val GOOGLE_OFF = "Google sign-in isn't available in the app. Sign in with your email and password."
 
 /** User v2 sign-in, session and password reset (docs/API-MAPPING.md 2.1). */
 @Singleton
@@ -46,18 +49,17 @@ class ApiAuthRepository
             email: String,
             password: String,
         ): Flow<DataState<SessionOwner>> =
-            apiFlow {
-                val tokens = userApi.signIn(SignInRequest(email, password))
-                session.start(tokens)
-                if ("ADMIN" in tokens.roles && "USER" !in tokens.roles) {
-                    signOut()
-                    throw OwnersOnlyException()
-                }
-                owner()
-            }
+            apiFlow { startSession(userApi.signIn(SignInRequest(email, password))) }
 
+        /** The browser flow runs in `GoogleSignIn`; the chooser of the sample data doesn't apply here. */
         override fun signInWithGoogle(): Flow<DataState<SessionOwner>> =
             flowOf(DataState.Error(ErrorCode.UNKNOWN_ERROR, GOOGLE_OFF))
+
+        override fun completeGoogleSignIn(
+            code: String,
+            codeVerifier: String,
+        ): Flow<DataState<SessionOwner>> =
+            apiFlow { startSession(userApi.signInWithGoogle(AppSignInRequest(code, codeVerifier, GOOGLE_REDIRECT_URI))) }
 
         override suspend fun restoreSession(): SessionOwner? {
             if (!session.hasSession()) return null
@@ -104,6 +106,16 @@ class ApiAuthRepository
                 userApi.confirmPasswordReset(NewPasswordRequest(token, newPassword, newPassword))
                 verificationTokens.remove(email.lowercase())
             }
+        }
+
+        /** Keeps the tokens, refuses an admin-only account, and loads the owner. */
+        private suspend fun startSession(tokens: TokenSetDto): SessionOwner {
+            session.start(tokens)
+            if ("ADMIN" in tokens.roles && "USER" !in tokens.roles) {
+                signOut()
+                throw OwnersOnlyException()
+            }
+            return owner()
         }
 
         private suspend fun owner(): SessionOwner {

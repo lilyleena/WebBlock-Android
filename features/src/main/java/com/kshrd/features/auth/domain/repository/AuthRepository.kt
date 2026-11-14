@@ -19,6 +19,12 @@ interface AuthRepository {
 
     fun signInWithGoogle(): Flow<DataState<SessionOwner>>
 
+    /** Finishes a browser "Continue with Google" with its authorization code and PKCE verifier (G1). */
+    fun completeGoogleSignIn(
+        code: String,
+        codeVerifier: String,
+    ): Flow<DataState<SessionOwner>>
+
     fun requestResetCode(email: String): Flow<DataState<Unit>>
 
     fun verifyResetCode(

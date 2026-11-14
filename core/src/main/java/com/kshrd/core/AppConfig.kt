@@ -7,4 +7,10 @@ object AppConfig {
 
     /** The web app's sign-up page, or `null` to hide the link (until the coordinator gives the real URL). */
     val signUpUrl: String? = BuildConfig.SIGN_UP_URL.ifBlank { null }
+
+    /** Keycloak realm for "Continue with Google". */
+    val authRealmUrl: String = BuildConfig.AUTH_REALM_URL.trimEnd('/')
+
+    /** "Continue with Google" through the browser (the v2 API only). */
+    val googleSignInEnabled: Boolean = BuildConfig.GOOGLE_SIGN_IN && !BuildConfig.USE_MOCK_DATA
 }

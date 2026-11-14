@@ -34,6 +34,9 @@ sealed interface LoginEvent {
     data object GoogleDismissed : LoginEvent
 
     data object GoogleAccountClicked : LoginEvent
+
+    /** The device has no browser to open the Google page. */
+    data object BrowserUnavailable : LoginEvent
 }
 
 sealed interface LoginEffect {
@@ -43,4 +46,7 @@ sealed interface LoginEffect {
     ) : LoginEffect
 
     data class OpenForgotPassword(val email: String) : LoginEffect
+
+    /** "Continue with Google": open Keycloak's sign-in page in the browser. */
+    data class OpenBrowser(val url: String) : LoginEffect
 }

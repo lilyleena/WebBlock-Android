@@ -6,6 +6,9 @@ import com.kshrd.core.AppConfig
 import com.kshrd.core.data.entity.DataState
 import com.kshrd.core.presentation.OneShotEvents
 import com.kshrd.core.session.SessionOwner
+import com.kshrd.features.auth.data.google.GoogleCallback
+import com.kshrd.features.auth.data.google.GoogleSignIn
+import com.kshrd.features.auth.domain.usecase.CompleteGoogleSignInUseCase
 import com.kshrd.features.auth.domain.usecase.HasSeenOnboardingUseCase
 import com.kshrd.features.auth.domain.usecase.RestoreSessionUseCase
 import com.kshrd.features.auth.domain.usecase.SignInUseCase
@@ -20,9 +23,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val NO_BROWSER = "There is no browser on this phone to open Google sign-in."
 
 @HiltViewModel
 class LoginViewModel
@@ -30,10 +36,12 @@ class LoginViewModel
     constructor(
         private val signIn: SignInUseCase,
         private val signInWithGoogle: SignInWithGoogleUseCase,
+        private val completeGoogleSignIn: CompleteGoogleSignInUseCase,
+        private val googleSignIn: GoogleSignIn,
         private val hasSeenOnboarding: HasSeenOnboardingUseCase,
         restoreSession: RestoreSessionUseCase,
     ) : ViewModel() {
-        private val _state = MutableStateFlow(LoginUiState(googleEnabled = AppConfig.useMockData))
+        private val _state = MutableStateFlow(LoginUiState(googleEnabled = AppConfig.useMockData || AppConfig.googleSignInEnabled))
         val state: StateFlow<LoginUiState> = _state.asStateFlow()
 
         private val _effects = OneShotEvents<LoginEffect>()
@@ -46,6 +54,21 @@ class LoginViewModel
                 val owner = restoreSession()
                 _state.update { it.copy(isLoading = false) }
                 if (owner != null) _effects.emit(LoginEffect.SignedIn(showIntro = false))
+            }
+            // The browser's answer to "Continue with Google", handed over by the redirect activity.
+            viewModelScope.launch {
+                googleSignIn.result.filterNotNull().collect { callback ->
+                    googleSignIn.consume()
+                    onGoogleCallback(callback)
+                }
+            }
+        }
+
+        private fun onGoogleCallback(callback: GoogleCallback) {
+            when (callback) {
+                is GoogleCallback.Code -> run(completeGoogleSignIn(callback.code, callback.codeVerifier)) {}
+                is GoogleCallback.Failed -> _state.update { it.copy(submitError = callback.message) }
+                GoogleCallback.Cancelled -> Unit
             }
         }
 
@@ -65,7 +88,14 @@ class LoginViewModel
                 }
                 LoginEvent.SignInClicked -> submit()
                 LoginEvent.ForgotPasswordClicked -> _effects.tryEmit(LoginEffect.OpenForgotPassword(_state.value.email))
-                LoginEvent.GoogleClicked -> _state.update { it.copy(showGoogleChooser = true, submitError = null) }
+                LoginEvent.GoogleClicked ->
+                    if (AppConfig.useMockData) {
+                        _state.update { it.copy(showGoogleChooser = true, submitError = null) }
+                    } else {
+                        _state.update { it.copy(submitError = null) }
+                        _effects.tryEmit(LoginEffect.OpenBrowser(googleSignIn.start()))
+                    }
+                LoginEvent.BrowserUnavailable -> _state.update { it.copy(submitError = NO_BROWSER) }
                 LoginEvent.GoogleDismissed -> _state.update { it.copy(showGoogleChooser = false, submitError = null) }
                 LoginEvent.GoogleAccountClicked -> run(signInWithGoogle()) { _state.update { it.copy(showGoogleChooser = false) } }
             }

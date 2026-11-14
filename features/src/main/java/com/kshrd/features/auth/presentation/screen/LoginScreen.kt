@@ -1,5 +1,9 @@
 package com.kshrd.features.auth.presentation.screen
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -74,10 +79,18 @@ fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
     OnEachEvent(viewModel.effects) { effect ->
         when (effect) {
             is LoginEffect.SignedIn -> onSignedIn(effect.showIntro)
             is LoginEffect.OpenForgotPassword -> onForgotPassword(effect.email)
+            is LoginEffect.OpenBrowser ->
+                try {
+                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(effect.url)))
+                } catch (e: ActivityNotFoundException) {
+                    Log.w("LoginScreen", "No browser for Google sign-in", e)
+                    viewModel.onEvent(LoginEvent.BrowserUnavailable)
+                }
         }
     }
     LaunchedEffect(prefillEmail) {

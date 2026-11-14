@@ -41,6 +41,23 @@ class SignInWithGoogleUseCase
                 .onEach { if (it is DataState.Success) session.signIn(it.data) }
     }
 
+/** Finishes the browser "Continue with Google" and starts the session. */
+class CompleteGoogleSignInUseCase
+    @Inject
+    constructor(
+        private val repository: AuthRepository,
+        private val session: SessionStore,
+    ) {
+        operator fun invoke(
+            code: String,
+            codeVerifier: String,
+        ): Flow<DataState<SessionOwner>> =
+            repository
+                .completeGoogleSignIn(code, codeVerifier)
+                .asUseCaseFlow()
+                .onEach { if (it is DataState.Success) session.signIn(it.data) }
+    }
+
 /** Restores a stored session on launch and starts it; `null` when there is none (or it ended). */
 class RestoreSessionUseCase
     @Inject
