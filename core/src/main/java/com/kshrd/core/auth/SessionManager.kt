@@ -106,18 +106,14 @@ class SessionManager internal constructor(
                 sessionApi.refresh(RefreshTokenRequest(refreshToken))
             } catch (e: HttpException) {
                 if (e.code() in SESSION_ENDING_STATUSES) {
-                    endSession()
+                    clear()
+                    _expired.tryEmit(Unit)
                     return null
                 }
                 throw e
             }
         start(set)
         return set.accessToken
-    }
-
-    private fun endSession() {
-        clear()
-        _expired.tryEmit(Unit)
     }
 
     private fun current(): StoredTokens? {

@@ -17,6 +17,7 @@ internal const val MAX_PHOTO_BYTES = 2 * 1024 * 1024
 private const val MAX_SIDE_PX = 2048
 
 /** JPEG qualities tried in turn until the photo fits (the iOS app's steps). */
+@Suppress("MagicNumber") // The steps themselves.
 private val JPEG_QUALITIES = listOf(85, 70, 55, 40)
 
 /** A photo ready for `POST /media`. */

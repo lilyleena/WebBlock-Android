@@ -66,7 +66,7 @@ class InMemoryMonitorDataSource
                 usage =
                     listOf(
                         UsageMeter(UsageKind.Products, 26, plan.maxProducts),
-                        UsageMeter(UsageKind.Photos, 41, UsageLimit.Limited(samplePhotoLimit(plan))),
+                        UsageMeter(UsageKind.Photos, SAMPLE_PHOTOS_USED, UsageLimit.Limited(samplePhotoLimit(plan))),
                     ),
                 logs = logs,
                 lastDeployAgo = "2 days ago",
@@ -123,6 +123,7 @@ class InMemoryMonitorDataSource
 
         private companion object {
             const val LATENCY_MS = 450L
+            const val SAMPLE_PHOTOS_USED = 41
             const val SAMPLE_YEAR = 2026
             const val SECONDS_IN_MINUTE = 60
         }
