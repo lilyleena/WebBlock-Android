@@ -310,6 +310,22 @@ class RepositoryTest {
     // Notifications
 
     @Test
+    fun `an item opened from the list and its detail is marked read with one PATCH, a read one with none`() =
+        runTest {
+            val api = FakeNotificationApi()
+            api.items += NotificationDto("k1", "Petal", "Live", websiteId = "w1", createdAt = "2026-11-14T03:00:00Z", read = false)
+            api.items += NotificationDto("k2", "Petal", "Old", websiteId = "w1", createdAt = "2026-11-13T03:00:00Z", read = true)
+            val repository = ApiNotificationsRepository(api, FixedFormat)
+            repository.observeNotifications().first()
+
+            repository.markRead("k1")
+            repository.markRead("k1")
+            repository.markRead("k2")
+
+            assertEquals(listOf("k1"), api.marked)
+        }
+
+    @Test
     fun `opening a notification marks it read on screen even when the PATCH fails`() =
         runTest {
             val api = FakeNotificationApi().apply { markFails = true }
