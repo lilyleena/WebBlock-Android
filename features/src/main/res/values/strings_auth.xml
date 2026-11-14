@@ -39,10 +39,15 @@
     <string name="auth_ob_step_3">Publish</string>
     <string name="auth_ob_step_3_sub">Live on webblock.com</string>
     <string name="auth_ob_step_3_url">yourshop.webblock.com</string>
-    <string name="auth_ob_look_1">"Baked fresh,\nevery morning."</string>
-    <string name="auth_ob_look_2">"Fresh flowers\nfor every moment."</string>
-    <string name="auth_ob_look_3">"Roasted this week,\nbrewed for you."</string>
-    <string name="auth_ob_look_4">"Sound you\ncan feel."</string>
+    <!-- Template names from the WebBlock website's template catalogue (brand names, not translated). -->
+    <string name="auth_ob_template_plates" translatable="false">Plates</string>
+    <string name="auth_ob_template_petal_stem" translatable="false">Petal &amp; Stem</string>
+    <string name="auth_ob_template_sugar_crumb" translatable="false">Sugar Crumb</string>
+    <string name="auth_ob_template_kiln_coffee" translatable="false">Kiln Coffee</string>
+    <string name="auth_ob_template_northpoint_audio" translatable="false">Northpoint Audio</string>
+    <string name="auth_ob_template_cold_brew_co" translatable="false">Cold Brew Co.</string>
+    <string name="auth_ob_template_keycap_lab" translatable="false">Keycap Lab</string>
+    <string name="auth_ob_template_stitch_and_shell" translatable="false">Stitch &amp; Shell</string>
     <string name="auth_ob_open_today">Open today</string>
     <string name="auth_ob_hours">9:00 AM – 6:00 PM</string>
     <string name="auth_ob_in_stock">In stock</string>

@@ -161,17 +161,23 @@ private fun StepList(
     }
 }
 
-private data class Look(val title: Int, val background: Color, val foreground: Color, val photo: Int?)
+/** One WebBlock template: its home-page screenshot (from the website's template catalogue) and name. */
+private data class Look(val name: Int, val screenshot: Int)
 
 private val Looks =
     listOf(
-        Look(R.string.auth_ob_look_1, Color(0xFFFBDCE6), Color(0xFF8A2F4D), null),
-        Look(R.string.auth_ob_look_2, Color(0xFFF4EEE6), Color(0xFF1A273D), R.drawable.table_arrangement),
-        Look(R.string.auth_ob_look_3, Color(0xFF2B1D16), Color(0xFFF3E3CF), null),
-        Look(R.string.auth_ob_look_4, Color(0xFFECEEF2), Color(0xFF1A273D), R.drawable.stone_vase),
+        Look(R.string.auth_ob_template_plates, R.drawable.template_plates),
+        Look(R.string.auth_ob_template_petal_stem, R.drawable.template_petal_stem),
+        Look(R.string.auth_ob_template_sugar_crumb, R.drawable.template_sugar_crumb),
+        Look(R.string.auth_ob_template_kiln_coffee, R.drawable.template_kiln_coffee),
+        Look(R.string.auth_ob_template_northpoint_audio, R.drawable.template_northpoint_audio),
+        Look(R.string.auth_ob_template_cold_brew_co, R.drawable.template_cold_brew_co),
+        Look(R.string.auth_ob_template_keycap_lab, R.drawable.template_keycap_lab),
+        Look(R.string.auth_ob_template_stitch_and_shell, R.drawable.template_stitch_and_shell),
     )
 
-private const val CARD_WIDTH = 112f
+// The screenshots are 2560 x 1584 desktop pages; the card keeps roughly that shape.
+private const val CARD_WIDTH = 108f
 private const val CARD_GAP = 10f
 private const val MARQUEE_SPEED = 22f
 
@@ -224,26 +230,38 @@ private fun TemplateMarquee(
 
 @Composable
 private fun LookCard(look: Look) {
-    val shape = RoundedCornerShape(12.dp)
-    Row(
+    val shape = RoundedCornerShape(10.dp)
+    Box(
         modifier =
             Modifier
                 .size(width = CARD_WIDTH.dp, height = 66.dp)
                 .shadow(4.dp, shape, ambientColor = Color.Black.copy(alpha = 0.10f), spotColor = Color.Black.copy(alpha = 0.10f))
-                .background(look.background, shape)
-                .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                .clip(shape)
+                .background(Color.White),
+        contentAlignment = Alignment.BottomStart,
     ) {
-        Text(stringResource(look.title), fontSize = fixedSp(8f), fontWeight = FontWeight.Bold, color = look.foreground, modifier = Modifier.weight(1f))
-        if (look.photo != null) {
-            Image(
-                painter = painterResource(look.photo),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(width = 38.dp, height = 54.dp).clip(RoundedCornerShape(6.dp)),
-            )
-        }
+        Image(
+            painter = painterResource(look.screenshot),
+            contentDescription = null, // The template name below is the text alternative.
+            contentScale = ContentScale.Crop,
+            alignment = Alignment.TopCenter,
+            modifier = Modifier.matchParentSize(),
+        )
+        // Dark fade at the bottom so the white name stays readable on any screenshot.
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .height(28.dp)
+                .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(alpha = 0.62f)))),
+        )
+        Text(
+            stringResource(look.name),
+            fontSize = fixedSp(8f),
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            maxLines = 1,
+            modifier = Modifier.padding(horizontal = 7.dp, vertical = 5.dp),
+        )
     }
 }
 
