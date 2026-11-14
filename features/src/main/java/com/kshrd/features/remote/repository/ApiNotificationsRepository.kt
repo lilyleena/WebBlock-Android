@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -50,9 +51,19 @@ class ApiNotificationsRepository
                 emitAll(items.map { list -> list.orEmpty().count { it.unread } })
             }
 
+        /** Ids with a PATCH on its way: the list and the detail screen both mark the opened item. */
+        private val marking = ConcurrentHashMap.newKeySet<String>()
+
+        /** Sends the PATCH only for an item that is unread (or not loaded yet), and only once at a time. */
         override suspend fun markRead(id: String) {
+            val wasUnread = items.value?.firstOrNull { it.id == id }?.unread ?: true
             items.update { list -> list?.map { if (it.id == id) it.copy(unread = false) else it } }
-            optional { notificationApi.markRead(id) }
+            if (!wasUnread || !marking.add(id)) return
+            try {
+                optional { notificationApi.markRead(id) }
+            } finally {
+                marking.remove(id)
+            }
         }
 
         override suspend fun markAllRead() {
