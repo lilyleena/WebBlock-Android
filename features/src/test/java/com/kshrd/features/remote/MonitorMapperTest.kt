@@ -4,6 +4,7 @@ import com.kshrd.features.monitor.domain.model.LogCategory
 import com.kshrd.features.monitor.domain.model.LogOutcome
 import com.kshrd.features.monitor.domain.model.SiteHealth
 import com.kshrd.features.monitor.domain.model.UsageKind
+import com.kshrd.features.monitor.domain.model.UsageLimit
 import com.kshrd.features.remote.dto.ActivityEventDto
 import com.kshrd.features.remote.dto.DeployStatsDto
 import com.kshrd.features.remote.dto.PersonDto
@@ -59,8 +60,8 @@ class MonitorMapperTest {
         val data = MonitorParts(PlanTier.Plus, usage = usage).toMonitorData(now, format)
 
         assertEquals(listOf(UsageKind.Products), data.usage.map { it.kind })
-        assertEquals(30, data.usage.single().limit)
-        assertEquals(20, data.plan.maxWebsites)
+        assertEquals(UsageLimit.Limited(30), data.usage.single().limit)
+        assertEquals(UsageLimit.Limited(20), data.plan.maxWebsites)
         assertEquals("Draft websites", data.websitesLabel)
         assertEquals(2, data.websitesUsed)
         assertEquals("day:${parseApiTime("2026-12-01T00:00:00Z")}", data.resetsOn)
@@ -73,7 +74,7 @@ class MonitorMapperTest {
         val photos = MonitorParts(PlanTier.FreeTrial, usage = usage).toMonitorData(now, format).usage.single { it.kind == UsageKind.Photos }
 
         assertEquals(12, photos.used)
-        assertEquals(30, photos.limit)
+        assertEquals(UsageLimit.Limited(30), photos.limit)
         assertEquals("Photos", photos.label)
         assertEquals(false, photos.isUsedUnknown)
     }
@@ -86,12 +87,13 @@ class MonitorMapperTest {
         val photos = MonitorParts(PlanTier.Plus, usage = usage).toMonitorData(now, format).usage.single { it.kind == UsageKind.Photos }
 
         assertEquals(true, photos.isUsedUnknown)
-        assertEquals(30, photos.limit)
+        assertEquals(0f, photos.fraction)
+        assertEquals(UsageLimit.Limited(30), photos.limit)
         assertEquals("Photos per website", photos.label)
     }
 
     @Test
-    fun `the trial counts deploys, and missing limits fall back to the plan`() {
+    fun `the trial counts deploys, and a null limit is unlimited`() {
         val usage =
             PlanUsageDto(
                 metrics =
@@ -104,10 +106,12 @@ class MonitorMapperTest {
         val data = MonitorParts(PlanTier.FreeTrial, usage = usage).toMonitorData(now, format)
 
         assertEquals(1, data.redeploysUsed)
-        assertEquals(1, data.plan.maxRedeploys)
+        assertEquals(UsageLimit.Limited(1), data.plan.maxRedeploys)
         assertEquals("Deploys", data.redeploysLabel)
-        assertEquals(0, data.usage.single().used)
-        assertEquals(PlanTier.FreeTrial.products, data.usage.single().limit)
+        assertEquals(true, data.usage.single().isUsedUnknown)
+        assertEquals(UsageLimit.Unlimited, data.usage.single().limit)
+        assertEquals(UsageLimit.Unlimited, data.plan.maxProducts)
+        assertEquals(0f, data.usage.single().fraction)
     }
 
     @Test
@@ -118,7 +122,12 @@ class MonitorMapperTest {
         assertNull(data.uptimePercent)
         assertEquals("—", data.resetsOn)
         assertEquals("—", data.lastDeployAgo)
-        assertEquals(PlanTier.Pro.products, data.plan.maxProducts)
+        // Payment sent nothing: no limit is invented ("/ —" on screen).
+        assertNull(data.plan.maxProducts)
+        assertNull(data.plan.maxRedeploys)
+        assertNull(data.plan.maxWebsites)
+        assertNull(data.usage.single().limit)
+        assertEquals(true, data.usage.single().isUsedUnknown)
     }
 
     @Test

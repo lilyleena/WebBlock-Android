@@ -8,6 +8,7 @@ import com.kshrd.features.monitor.domain.model.MonitorData
 import com.kshrd.features.monitor.domain.model.Plan
 import com.kshrd.features.monitor.domain.model.SiteHealth
 import com.kshrd.features.monitor.domain.model.UsageKind
+import com.kshrd.features.monitor.domain.model.UsageLimit
 import com.kshrd.features.monitor.domain.model.UsageMeter
 import com.kshrd.features.remote.dto.ActivityEventDto
 import com.kshrd.features.remote.dto.DeployStatsDto
@@ -47,9 +48,9 @@ interface MonitorFormat {
 }
 
 /**
- * docs/API-MAPPING.md 2.6. Used amounts, limits and labels come from Payment's `metrics[]` (a missing limit falls back
- * to [PlanTier]). The free trial has `deploys` instead of `redeploys`. The photos meter exists only with a `photos`
- * metric.
+ * docs/API-MAPPING.md 2.6. Used amounts, limits and labels come from Payment's `metrics[]` only (decision D1): no
+ * limit is hard-coded on the API path. `limit: null` is unlimited; a metric Payment didn't send has no limit (`null`).
+ * The free trial has `deploys` instead of `redeploys`. The photos meter exists only with a `photos` metric.
  */
 fun MonitorParts.toMonitorData(
     nowMillis: Long,
@@ -69,15 +70,14 @@ fun MonitorParts.toMonitorData(
             Plan(
                 name = plan.title,
                 logsEnabled = plan.showsActivityLog,
-                maxProducts = products?.limit ?: plan.products,
-                maxPhotos = photos?.limit ?: 0,
-                maxRedeploys = redeploys?.limit ?: plan.redeploys,
-                maxWebsites = websites?.limit ?: plan.websites,
+                maxProducts = products?.toLimit(),
+                maxRedeploys = redeploys?.toLimit(),
+                maxWebsites = websites?.toLimit(),
             ),
         uptimePercent = uptime,
-        uptimeCheckedAtMillis = if (uptime == null) null else parseApiTime(status?.checkedAt),
+        uptimeCheckedAtMillis = if (uptime == null) null else parseApiTime(status.checkedAt),
         deploys = releases.mapIndexed { index, release -> release.toDeploy(liveFor(releases, index, nowMillis)) },
-        usage = usageMeters(products, photos, plan),
+        usage = usageMeters(products, photos),
         logs = activity.map { it.toLogEntry() },
         lastDeployAgo = latestAt?.let(format::relative) ?: "—",
         lastDeployDetail = if (latest != null && latestAt != null) format.deployDetail(latest.number, latestAt) else "",
@@ -91,22 +91,23 @@ fun MonitorParts.toMonitorData(
     )
 }
 
+/** Payment's limit: `null` is unlimited. */
+private fun UsageMetricDto.toLimit(): UsageLimit = limit?.let { UsageLimit.Limited(it) } ?: UsageLimit.Unlimited
+
+/** The products meter always (its limit "/ —" when Payment didn't send it); the photos meter only with Payment's metric. */
 private fun usageMeters(
     products: UsageMetricDto?,
     photos: UsageMetricDto?,
-    plan: PlanTier,
 ): List<UsageMeter> =
     listOfNotNull(
         UsageMeter(
             UsageKind.Products,
             used = products?.used ?: 0,
-            limit = products?.limit ?: plan.products,
+            limit = products?.toLimit(),
             label = products?.label,
-            isUsedUnknown = products != null && products.used == null,
+            isUsedUnknown = products?.used == null,
         ),
-        photos?.let {
-            UsageMeter(UsageKind.Photos, used = it.used ?: 0, limit = it.limit ?: 0, label = it.label, isUsedUnknown = it.used == null)
-        },
+        photos?.let { UsageMeter(UsageKind.Photos, used = it.used ?: 0, limit = it.toLimit(), label = it.label, isUsedUnknown = it.used == null) },
     )
 
 private fun ReleaseDto.toDeploy(liveFor: String?): Deploy =

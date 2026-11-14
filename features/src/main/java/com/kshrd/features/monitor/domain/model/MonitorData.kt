@@ -4,15 +4,30 @@ import androidx.compose.runtime.Immutable
 
 enum class SiteHealth { Online, Draft, Offline }
 
-/** What the owner's plan allows. Activity logs are shown to everyone in the iOS design. */
+/**
+ * One plan allowance, from Payment's `metrics[].limit` (decision D1): a number, or [Unlimited] when Payment sends
+ * `limit: null` (an admin removed the limit). A meter Payment didn't send has no [UsageLimit] at all (`null`).
+ */
+sealed interface UsageLimit {
+    @Immutable
+    data class Limited(
+        val value: Int,
+    ) : UsageLimit
+
+    data object Unlimited : UsageLimit
+}
+
+/**
+ * What the owner's plan allows. Activity logs are shown to everyone in the iOS design.
+ * A `null` limit means Payment didn't send that meter: the screen shows "/ —".
+ */
 @Immutable
 data class Plan(
     val name: String,
     val logsEnabled: Boolean,
-    val maxProducts: Int = 0,
-    val maxPhotos: Int = 0,
-    val maxRedeploys: Int = 0,
-    val maxWebsites: Int = 0,
+    val maxProducts: UsageLimit? = null,
+    val maxRedeploys: UsageLimit? = null,
+    val maxWebsites: UsageLimit? = null,
 )
 
 @Immutable
@@ -32,15 +47,27 @@ enum class UsageKind { Products, Photos }
 data class UsageMeter(
     val kind: UsageKind,
     val used: Int,
-    val limit: Int,
+    /** `null`: Payment didn't send this meter's limit. */
+    val limit: UsageLimit?,
     /** Payment's title for the meter; `null` keeps the app's own. */
     val label: String? = null,
     /** Payment could not count it (`used: null`): the screen shows "—" or no bar instead of 0. */
     val isUsedUnknown: Boolean = false,
 ) {
-    val left: Int get() = (limit - used).coerceAtLeast(0)
-    val fraction: Float get() = if (limit == 0) 0f else (used.toFloat() / limit).coerceIn(0f, 1f)
+    /** Share of the limit used; 0 (an empty bar) when unlimited, unknown or without a limit. */
+    val fraction: Float get() = usedFraction(used, limit, isUsedUnknown)
 }
+
+/** Share of [limit] used, for a bar: 0 when unlimited, not sent, unknown or a zero limit. */
+fun usedFraction(
+    used: Int,
+    limit: UsageLimit?,
+    isUsedUnknown: Boolean = false,
+): Float =
+    when {
+        isUsedUnknown || limit !is UsageLimit.Limited || limit.value <= 0 -> 0f
+        else -> (used.toFloat() / limit.value).coerceIn(0f, 1f)
+    }
 
 enum class LogCategory { Deploys, Products, Business }
 

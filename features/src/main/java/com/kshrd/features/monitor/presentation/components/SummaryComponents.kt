@@ -63,17 +63,24 @@ import com.kshrd.coreui.theme.Space
 import com.kshrd.coreui.theme.wb
 import com.kshrd.features.R
 import com.kshrd.features.monitor.domain.model.MonitorData
+import com.kshrd.features.monitor.domain.model.UsageKind
+import com.kshrd.features.monitor.domain.model.UsageLimit
+import com.kshrd.features.monitor.domain.model.UsageMeter
+import com.kshrd.features.monitor.domain.model.usedFraction
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 
 private const val PERCENT = 100
+private const val MAX_SEGMENTS = 10
 
 /** iOS "Summary" card: the success ring next to uptime / products / photos bars. */
 @Composable
 fun SummaryCard(data: MonitorData) {
     val wb = MaterialTheme.wb
-    val plan = data.plan
+    val products = data.usage.firstOrNull { it.kind == UsageKind.Products }
+    // Shown only when Payment sends a photos metric (the mock always has one).
+    val photos = data.usage.firstOrNull { it.kind == UsageKind.Photos }
     WbCard {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.m)) {
             SuccessRing(succeeded = data.succeededCount, failed = data.failedCount)
@@ -88,29 +95,39 @@ fun SummaryCard(data: MonitorData) {
                 MetricBar(
                     icon = WebIcons.Package,
                     tint = wb.brand,
-                    title = stringResource(R.string.bm_products),
-                    value = stringResource(R.string.bm_used_of, usageUsed(data, true), plan.maxProducts),
-                    fraction = usageUsed(data, true).toFloat() / max(plan.maxProducts, 1),
+                    title = products?.label ?: stringResource(R.string.bm_products),
+                    value = usedOfText(products),
+                    fraction = products?.fraction ?: 0f,
                 )
-                MetricBar(
-                    icon = Icons.Outlined.Image,
-                    tint = wb.amber,
-                    title = stringResource(R.string.bm_photos),
-                    value = stringResource(R.string.bm_used_of, usageUsed(data, false), plan.maxPhotos),
-                    fraction = usageUsed(data, false).toFloat() / max(plan.maxPhotos, 1),
-                )
+                if (photos != null) {
+                    MetricBar(
+                        icon = Icons.Outlined.Image,
+                        tint = wb.amber,
+                        title = photos.label ?: stringResource(R.string.bm_photos),
+                        value = usedOfText(photos),
+                        fraction = photos.fraction,
+                    )
+                }
             }
         }
     }
 }
 
-private fun usageUsed(
-    data: MonitorData,
-    products: Boolean,
-): Int =
-    data.usage
-        .firstOrNull { (it.kind == com.kshrd.features.monitor.domain.model.UsageKind.Products) == products }
-        ?.used ?: 0
+/** "26 / 30", "12 / Unlimited", "— / 30" (not counted yet) or "— / —" (Payment sent no meter). */
+@Composable
+private fun usedOfText(meter: UsageMeter?): String {
+    val used = if (meter == null || meter.isUsedUnknown) stringResource(R.string.bm_dash) else meter.used.toString()
+    return stringResource(R.string.bm_used_of_text, used, limitText(meter?.limit))
+}
+
+/** The limit as shown: a number, "Unlimited", or "—" when Payment didn't send it. */
+@Composable
+private fun limitText(limit: UsageLimit?): String =
+    when (limit) {
+        is UsageLimit.Limited -> limit.value.toString()
+        UsageLimit.Unlimited -> stringResource(R.string.bm_unlimited)
+        null -> stringResource(R.string.bm_dash)
+    }
 
 /** Ring with the success percentage in the middle. */
 @Composable
@@ -204,8 +221,22 @@ fun PlanUsageCard(data: MonitorData) {
     WbCard {
         Column(verticalArrangement = Arrangement.spacedBy(Space.m)) {
             Row(horizontalArrangement = Arrangement.spacedBy(Space.m)) {
-                UsageTile(WebIcons.Refresh, wb.purple, stringResource(R.string.bm_redeploys), data.redeploysUsed, plan.maxRedeploys, Modifier.weight(1f))
-                UsageTile(Icons.Outlined.Layers, wb.brand, stringResource(R.string.bm_websites_label), data.websitesUsed, plan.maxWebsites, Modifier.weight(1f))
+                UsageTile(
+                    WebIcons.Refresh,
+                    wb.purple,
+                    data.redeploysLabel ?: stringResource(R.string.bm_redeploys),
+                    data.redeploysUsed,
+                    plan.maxRedeploys,
+                    Modifier.weight(1f),
+                )
+                UsageTile(
+                    Icons.Outlined.Layers,
+                    wb.brand,
+                    data.websitesLabel ?: stringResource(R.string.bm_websites_label),
+                    data.websitesUsed,
+                    plan.maxWebsites,
+                    Modifier.weight(1f),
+                )
             }
             HorizontalDivider(color = wb.border)
             Text(
@@ -224,22 +255,30 @@ private fun UsageTile(
     tint: Color,
     title: String,
     used: Int,
-    limit: Int,
+    limit: UsageLimit?,
     modifier: Modifier = Modifier,
 ) {
     val wb = MaterialTheme.wb
-    val left = max(limit - used, 0)
-    val full = used >= limit
-    val segments = min(max(limit, 1), 10)
-    val filled = (min(used.toFloat() / max(limit, 1), 1f) * segments).roundToInt()
-    val caption = if (full) stringResource(R.string.bm_limit_reached) else stringResource(R.string.bm_left, left)
+    val cap = (limit as? UsageLimit.Limited)?.value
+    val full = cap != null && used >= cap
+    // Unlimited or not sent: an empty row of blocks.
+    val segments = if (cap != null) min(max(cap, 1), MAX_SEGMENTS) else MAX_SEGMENTS
+    val filled = (usedFraction(used, limit) * segments).roundToInt()
+    val limitLabel = limitText(limit)
+    val caption =
+        when {
+            limit == null -> stringResource(R.string.bm_limit_not_available)
+            limit == UsageLimit.Unlimited -> stringResource(R.string.bm_no_limit)
+            full -> stringResource(R.string.bm_limit_reached)
+            else -> stringResource(R.string.bm_left, max((cap ?: 0) - used, 0))
+        }
     Column(
         verticalArrangement = Arrangement.spacedBy(Space.xs),
         modifier =
             modifier
                 .background(tint.copy(alpha = 0.07f), RoundedCornerShape(Radius.panel))
                 .padding(Space.s)
-                .clearAndSetSemantics { contentDescription = "$title: $used / $limit, $caption" },
+                .clearAndSetSemantics { contentDescription = "$title: $used / $limitLabel, $caption" },
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.xxs)) {
             Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(Sizes.iconSmall))
@@ -248,7 +287,7 @@ private fun UsageTile(
         Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(Space.xxs)) {
             Text("$used", style = MaterialTheme.typography.headlineLarge, color = wb.text)
             Text(
-                stringResource(R.string.bm_slash_limit, limit),
+                stringResource(R.string.bm_slash_text, limitLabel),
                 style = MaterialTheme.typography.bodyMedium,
                 color = wb.muted,
                 modifier = Modifier.padding(bottom = Space.xxs),

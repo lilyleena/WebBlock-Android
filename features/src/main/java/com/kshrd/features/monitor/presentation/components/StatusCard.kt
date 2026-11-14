@@ -61,6 +61,7 @@ import com.kshrd.features.monitor.domain.model.Deploy
 import com.kshrd.features.monitor.domain.model.MonitorData
 import com.kshrd.features.monitor.domain.model.Plan
 import com.kshrd.features.monitor.domain.model.SiteHealth
+import com.kshrd.features.monitor.domain.model.UsageLimit
 
 /** Heights (0..1, bottom up) of the line's points, as in the iOS Status card. */
 private val Rise = floatArrayOf(0.12f, 0.28f, 0.36f, 0.5f, 0.58f, 0.76f, 0.9f)
@@ -224,7 +225,14 @@ private fun smoothPath(pts: List<Offset>): Path {
 internal val previewMonitor =
     MonitorData(
         health = SiteHealth.Online,
-        plan = Plan("Plus", false, maxProducts = 30, maxPhotos = 60, maxRedeploys = 5, maxWebsites = 1),
+        plan =
+            Plan(
+                "Plus",
+                false,
+                maxProducts = UsageLimit.Limited(30),
+                maxRedeploys = UsageLimit.Limited(5),
+                maxWebsites = UsageLimit.Unlimited,
+            ),
         uptimePercent = 99.98,
         deploys =
             listOf(

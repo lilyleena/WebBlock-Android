@@ -9,6 +9,7 @@ import com.kshrd.features.monitor.domain.model.MonitorData
 import com.kshrd.features.monitor.domain.model.Plan
 import com.kshrd.features.monitor.domain.model.SiteHealth
 import com.kshrd.features.monitor.domain.model.UsageKind
+import com.kshrd.features.monitor.domain.model.UsageLimit
 import com.kshrd.features.monitor.domain.model.UsageMeter
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime
@@ -65,7 +66,7 @@ class InMemoryMonitorDataSource
                 usage =
                     listOf(
                         UsageMeter(UsageKind.Products, 26, plan.maxProducts),
-                        UsageMeter(UsageKind.Photos, 41, plan.maxPhotos),
+                        UsageMeter(UsageKind.Photos, 41, UsageLimit.Limited(samplePhotoLimit(plan))),
                     ),
                 logs = logs,
                 lastDeployAgo = "2 days ago",
@@ -81,11 +82,29 @@ class InMemoryMonitorDataSource
         private fun planFor(email: String): Plan {
             val name = email.lowercase()
             return when {
-                name.startsWith("ultra") -> Plan("Ultra", logsEnabled = true, maxProducts = 1000, maxPhotos = 2000, maxRedeploys = 100, maxWebsites = 10)
-                name.startsWith("pro") -> Plan("Pro", logsEnabled = true, maxProducts = 200, maxPhotos = 400, maxRedeploys = 30, maxWebsites = 3)
-                else -> Plan("Plus", logsEnabled = false, maxProducts = 30, maxPhotos = 60, maxRedeploys = 5, maxWebsites = 1)
+                name.startsWith("ultra") -> samplePlan("Ultra", logsEnabled = true, products = 1000, redeploys = 100, websites = 10)
+                name.startsWith("pro") -> samplePlan("Pro", logsEnabled = true, products = 200, redeploys = 30, websites = 3)
+                else -> samplePlan("Plus", logsEnabled = false, products = 30, redeploys = 5, websites = 1)
             }
         }
+
+        /** Sample allowances for the mock only; the API path takes every limit from Payment. */
+        private fun samplePlan(
+            name: String,
+            logsEnabled: Boolean,
+            products: Int,
+            redeploys: Int,
+            websites: Int,
+        ) = Plan(
+            name,
+            logsEnabled,
+            maxProducts = UsageLimit.Limited(products),
+            maxRedeploys = UsageLimit.Limited(redeploys),
+            maxWebsites = UsageLimit.Limited(websites),
+        )
+
+        /** The owner's photos-per-website numbers (the same as the product allowance), sample data. */
+        private fun samplePhotoLimit(plan: Plan): Int = (plan.maxProducts as? UsageLimit.Limited)?.value ?: 0
 
         private fun deploy(
             number: Int,

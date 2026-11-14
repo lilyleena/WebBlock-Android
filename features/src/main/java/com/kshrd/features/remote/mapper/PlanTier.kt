@@ -1,22 +1,17 @@
 package com.kshrd.features.remote.mapper
 
 /**
- * The plans and their published limits, used only when Payment's usage has no limit for a meter (decision D1:
- * Payment's `metrics[].limit` wins). There is deliberately no photo number here: the photos meter shows only with
- * Payment's `photos` metric, and its limit comes from that metric.
+ * The plans by Payment's code: the title and whether Project keeps an activity log. There are deliberately no limits
+ * here: every limit comes from Payment's `metrics[].limit` (decision D1); sample numbers live only in the mock data.
  */
-@Suppress("MagicNumber") // The published plan table, the same as the iOS app's PlanTier.
 enum class PlanTier(
     val code: String,
     val title: String,
-    val websites: Int,
-    val redeploys: Int,
-    val products: Int,
 ) {
-    FreeTrial("FREE_TRIAL", "Free trial", websites = 1, redeploys = 0, products = 30),
-    Plus("PLUS", "Plus", websites = 1, redeploys = 5, products = 30),
-    Pro("PRO", "Pro", websites = 3, redeploys = 30, products = 200),
-    Ultra("ULTRA", "Ultra", websites = 10, redeploys = 100, products = 1000),
+    FreeTrial("FREE_TRIAL", "Free trial"),
+    Plus("PLUS", "Plus"),
+    Pro("PRO", "Pro"),
+    Ultra("ULTRA", "Ultra"),
     ;
 
     /** Project's activity log answers 403 on the other plans. */
