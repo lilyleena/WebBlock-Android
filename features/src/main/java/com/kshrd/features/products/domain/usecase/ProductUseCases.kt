@@ -19,7 +19,14 @@ object ProductValidator {
             if (draft.name.isBlank()) add(ProductFormError.NameEmpty)
             if (draft.category.isBlank()) add(ProductFormError.CategoryEmpty)
             if (!keepsPriceHidden(draft) && parsePrice(draft.priceText) == null) add(ProductFormError.PriceInvalid)
+            if (!isDescriptionValid(draft.description)) add(ProductFormError.DescriptionLength)
         }
+
+    /** Project's rule: none (blank), or 10 to 300 characters once trimmed. */
+    const val DESCRIPTION_MIN = 10
+    const val DESCRIPTION_MAX = 300
+
+    fun isDescriptionValid(text: String): Boolean = text.trim().let { it.isEmpty() || it.length in DESCRIPTION_MIN..DESCRIPTION_MAX }
 
     /** A hidden price (G7) stays hidden while the price field is left empty; typing a price shows it. */
     fun keepsPriceHidden(draft: ProductDraft): Boolean = draft.wasPriceHidden && draft.priceText.isBlank()

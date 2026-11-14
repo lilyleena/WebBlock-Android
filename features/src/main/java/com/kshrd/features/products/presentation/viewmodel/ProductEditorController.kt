@@ -65,7 +65,7 @@ class ProductEditorController(
             is ProductEditorEvent.NameChanged -> edit { it.copy(name = event.value, errors = it.errors - NAME) }
             is ProductEditorEvent.CategoryChanged -> edit { it.copy(category = event.value, errors = it.errors - CATEGORY) }
             is ProductEditorEvent.PriceChanged -> edit { it.copy(price = event.value, errors = it.errors - PRICE) }
-            is ProductEditorEvent.DescriptionChanged -> edit { it.copy(description = event.value) }
+            is ProductEditorEvent.DescriptionChanged -> edit { it.copy(description = event.value, errors = it.errors - DESCRIPTION) }
             is ProductEditorEvent.PhotoPicked -> upload(event.uri)
             ProductEditorEvent.PhotoRemoved -> edit { it.copy(imageUrl = "", photoError = null) }
             ProductEditorEvent.SaveClicked -> save()
@@ -154,5 +154,6 @@ class ProductEditorController(
         val NAME = com.kshrd.features.products.domain.model.ProductFormError.NameEmpty
         val CATEGORY = com.kshrd.features.products.domain.model.ProductFormError.CategoryEmpty
         val PRICE = com.kshrd.features.products.domain.model.ProductFormError.PriceInvalid
+        val DESCRIPTION = com.kshrd.features.products.domain.model.ProductFormError.DescriptionLength
     }
 }
