@@ -38,7 +38,7 @@ data class ProductDraft(
     val wasPriceHidden: Boolean = false,
 )
 
-enum class ProductFormError { NameEmpty, CategoryEmpty, PriceInvalid }
+enum class ProductFormError { NameEmpty, CategoryEmpty, PriceInvalid, DescriptionLength }
 
 /**
  * `Product.imageUrl` is either empty (leaf placeholder), a picked photo (`file://`, `content://`, `https://`),

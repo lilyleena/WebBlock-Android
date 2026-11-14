@@ -4,6 +4,7 @@ import com.kshrd.features.products.domain.model.ProductDraft
 import com.kshrd.features.products.domain.model.ProductFormError
 import com.kshrd.features.products.domain.usecase.ProductValidator
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -24,6 +25,23 @@ class ProductValidatorTest {
         assertNull(ProductValidator.parsePrice("-1"))
         assertNull(ProductValidator.parsePrice("4."))
         assertNull(ProductValidator.parsePrice("abc"))
+    }
+
+    @Test
+    fun `a description is empty or 10 to 300 characters once trimmed`() {
+        assertTrue(ProductValidator.isDescriptionValid(""))
+        assertTrue(ProductValidator.isDescriptionValid("   "))
+        assertTrue(ProductValidator.isDescriptionValid("  Ten chars!  "))
+        assertTrue(ProductValidator.isDescriptionValid("x".repeat(300)))
+        assertFalse(ProductValidator.isDescriptionValid("Too short"))
+        assertFalse(ProductValidator.isDescriptionValid("x".repeat(301)))
+    }
+
+    @Test
+    fun `a short description is a form error`() {
+        val draft = ProductDraft(null, "Tulips", "Flowers", "6.00", "Nice", "")
+
+        assertEquals(setOf(ProductFormError.DescriptionLength), ProductValidator.validate(draft))
     }
 
     @Test

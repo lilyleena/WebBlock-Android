@@ -170,6 +170,7 @@ private fun EditorFields(
         value = state.description,
         onValueChange = { onEvent(ProductEditorEvent.DescriptionChanged(it)) },
         placeholder = stringResource(R.string.pv_description_placeholder),
+        error = if (ProductFormError.DescriptionLength in state.errors) stringResource(R.string.pv_error_description) else null,
         isOptional = true,
         minLines = 3,
         imeAction = ImeAction.Default,
