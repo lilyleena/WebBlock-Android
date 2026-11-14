@@ -92,10 +92,13 @@
     <string name="bm_uptime">Uptime</string>
     <string name="bm_products">Products</string>
     <string name="bm_photos">Photos</string>
-    <string name="bm_used_of">%1$d / %2$d</string>
     <string name="bm_redeploys">Redeploys</string>
     <string name="bm_websites_label">Websites</string>
-    <string name="bm_slash_limit">/ %1$d</string>
+    <string name="bm_used_of_text">%1$s / %2$s</string>
+    <string name="bm_slash_text">/ %1$s</string>
+    <string name="bm_unlimited">Unlimited</string>
+    <string name="bm_no_limit">No limit</string>
+    <string name="bm_limit_not_available">Limit not available</string>
     <string name="bm_left">%1$d left</string>
     <string name="bm_limit_reached">Limit reached</string>
     <string name="bm_plan_resets">%1$s plan · resets on %2$s</string>

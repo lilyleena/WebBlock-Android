@@ -15,6 +15,10 @@ data class Website(
     val url: String?,
     /** Bundled logo; `null` falls back to the initials tile. Becomes a remote URL once a backend exists. */
     @DrawableRes val logoRes: Int? = null,
+    /** The business logo from the API (G4); wins over [logoRes]. */
+    val logoUrl: String? = null,
+    /** A live site whose hosting is offline (billing): still editable, with an "Offline" badge and a renew note. */
+    val isHostingOffline: Boolean = false,
 ) {
     /** Only live websites have a management portal in the app. */
     val hasPortal: Boolean get() = status == WebsiteStatus.Live

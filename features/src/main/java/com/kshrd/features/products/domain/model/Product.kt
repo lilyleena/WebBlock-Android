@@ -10,6 +10,10 @@ data class Product(
     val price: Double,
     val description: String,
     val imageUrl: String,
+    /** The server's version for optimistic locking; `null` for a product never loaded from the API (saved with POST). */
+    val version: Long? = null,
+    /** A hidden price (G7): [price] is 0 and the app shows "Price hidden". */
+    val isPriceHidden: Boolean = false,
 )
 
 /** Everything the products tab needs for one website. */

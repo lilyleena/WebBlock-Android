@@ -22,6 +22,8 @@ data class AppNotification(
     val websiteId: String? = null,
     val target: PortalTarget? = null,
     val actionTitle: String? = null,
+    /** The website's logo from the API; wins over [logoRes]. */
+    val logoUrl: String? = null,
 ) {
     /** Sent by WebBlock itself (billing, support, welcome) rather than by one of the owner's websites. */
     val isFromWebBlock: Boolean get() = source.startsWith("WebBlock")
