@@ -2,6 +2,7 @@ package com.kshrd.core.api
 
 import com.kshrd.core.data.entity.DataState
 import com.kshrd.core.data.entity.ErrorCode
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
@@ -73,6 +74,27 @@ class ApiExceptionTest {
 
         assertEquals(mapOf("email" to listOf("must be an email")), user.fieldErrors)
         assertEquals(mapOf("name" to listOf("REQUIRED")), project.fieldErrors)
+    }
+
+    @Test
+    fun `a failed call is reported with its request id, never its body`() {
+        val lines = mutableListOf<String>()
+        ApiLog.sink = { lines += it }
+        val body = """{"type":"urn:webblock:problem:product-not-found","status":404,"detail":"secret detail"}"""
+        val raw =
+            okhttp3.Response
+                .Builder()
+                .request(okhttp3.Request.Builder().url("https://wb-api.roa-dev.digital/api/project/v2/projects/p1").build())
+                .protocol(okhttp3.Protocol.HTTP_1_1)
+                .code(404)
+                .message("Not Found")
+                .header("X-Request-Id", "req-42")
+                .build()
+
+        ApiException.from(retrofit2.HttpException(retrofit2.Response.error<Any>(body.toResponseBody(), raw)))
+
+        ApiLog.sink = {}
+        assertEquals(listOf("GET /api/project/v2/projects/p1 -> 404 product-not-found requestId=req-42"), lines)
     }
 
     @Test
