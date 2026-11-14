@@ -13,3 +13,7 @@ use.mock.data=false
 
 # The web app's sign-up page. Empty (the default) hides the "Create your account on the website" link.
 sign.up.url=
+
+# Keycloak realm and the Google sign-in switch (the v2 API only; the sample data has its own chooser).
+auth.realm.url=https://wb-auth.roa-dev.digital/realms/webblock
+google.sign.in=true

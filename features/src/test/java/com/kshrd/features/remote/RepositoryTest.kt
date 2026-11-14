@@ -73,6 +73,29 @@ class RepositoryTest {
         }
 
     @Test
+    fun `Google sends the code, the verifier and the redirect, and starts the session`() =
+        runTest {
+            val api = FakeUserApi().apply { googleAnswer = { tokenSet() } }
+            val session = sessionManager()
+
+            val result = ApiAuthRepository(api, session).completeGoogleSignIn("code-1", "verifier-1").first()
+
+            assertTrue(result is DataState.Success)
+            assertEquals("com.webblock.app:/oauth2redirect", api.googleRequest?.redirectUri)
+            assertEquals("verifier-1", api.googleRequest?.codeVerifier)
+            assertTrue(session.hasSession())
+        }
+
+    @Test
+    fun `an unknown Google identity is told to create the account on the website`() =
+        runTest {
+            val result = ApiAuthRepository(FakeUserApi(), sessionManager()).completeGoogleSignIn("code-1", "verifier-1").first()
+
+            assertEquals(404, (result as DataState.Error).code)
+            assertEquals("Create your account on the WebBlock website first, then sign in here.", result.message)
+        }
+
+    @Test
     fun `the reset confirms with the token from the verification`() =
         runTest {
             val api = FakeUserApi()

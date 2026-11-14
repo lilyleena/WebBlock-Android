@@ -27,6 +27,11 @@ class AuthRepositoryImpl
 
         override fun signInWithGoogle(): Flow<DataState<SessionOwner>> = flow { emit(source.signInWithGoogle().toDataState()) }
 
+        override fun completeGoogleSignIn(
+            code: String,
+            codeVerifier: String,
+        ): Flow<DataState<SessionOwner>> = signInWithGoogle()
+
         override fun requestResetCode(email: String): Flow<DataState<Unit>> = flow { emit(source.requestResetCode().toDataState()) }
 
         override fun verifyResetCode(

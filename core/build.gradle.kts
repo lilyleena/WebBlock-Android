@@ -19,6 +19,10 @@ val apiBaseUrl = localProps.getProperty("api.base.url", "https://wb-api.roa-dev.
 val useMockData = localProps.getProperty("use.mock.data", "false").toBoolean()
 // The web app's sign-up page; empty hides the "Create your account on the website" link (owner, 14 Nov 2026).
 val signUpUrl = localProps.getProperty("sign.up.url", "")
+// Keycloak realm for "Continue with Google" (public client webblock-ios, PKCE).
+val authRealmUrl = localProps.getProperty("auth.realm.url", "https://wb-auth.roa-dev.digital/realms/webblock")
+// Google sign-in with the v2 API (on since 14 Nov 2026: no new accounts from the app, rule b).
+val googleSignIn = localProps.getProperty("google.sign.in", "true").toBoolean()
 
 android {
     namespace = "com.kshrd.core"
@@ -31,6 +35,8 @@ android {
         buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
         buildConfigField("boolean", "USE_MOCK_DATA", "$useMockData")
         buildConfigField("String", "SIGN_UP_URL", "\"$signUpUrl\"")
+        buildConfigField("String", "AUTH_REALM_URL", "\"$authRealmUrl\"")
+        buildConfigField("boolean", "GOOGLE_SIGN_IN", "$googleSignIn")
     }
     buildTypes {
         release {

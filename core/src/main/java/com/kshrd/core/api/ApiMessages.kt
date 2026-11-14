@@ -21,6 +21,7 @@ object ApiMessages {
             "session-expired" to "Your session has ended. Please sign in again.",
             "account-suspended" to "This account is suspended. Contact WebBlock support.",
             "account-not-found" to "Create your account on the WebBlock website first, then sign in here.",
+            "sign-in-code-invalid" to "Google sign-in didn't finish. Try again.",
             "account-email-in-use" to "This email already has a WebBlock account. Sign in with its email and password.",
             "otp-too-many-attempts" to "Too many wrong codes. Ask for a new code and try again.",
             "otp-invalid" to "That code isn't right. Try again.",

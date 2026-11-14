@@ -25,5 +25,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- "Continue with Google": Keycloak redirects to com.webblock.app:/oauth2redirect (the same as iOS). A path
+             filter needs a host, so the scheme alone is matched; GoogleSignIn checks the rest (pending sign-in, state). -->
+        <activity
+            android:name=".auth.GoogleRedirectActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="com.webblock.app" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>
