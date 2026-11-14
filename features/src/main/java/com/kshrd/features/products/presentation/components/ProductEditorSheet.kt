@@ -117,6 +117,7 @@ fun ProductEditorContent(
                 onRemove = { onEvent(ProductEditorEvent.PhotoRemoved) },
             )
             EditorFields(state, onEvent)
+            state.saveError?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.wb.red) }
         }
         Row(
             horizontalArrangement = Arrangement.spacedBy(Space.s),
@@ -160,6 +161,7 @@ private fun EditorFields(
         onValueChange = { onEvent(ProductEditorEvent.PriceChanged(it)) },
         placeholder = stringResource(R.string.pv_price_placeholder),
         error = if (ProductFormError.PriceInvalid in state.errors) stringResource(R.string.pv_error_price) else null,
+        hint = if (state.wasPriceHidden) stringResource(R.string.pv_price_hidden_hint) else null,
         keyboardType = KeyboardType.Decimal,
         prefix = stringResource(R.string.pv_price_prefix),
     )

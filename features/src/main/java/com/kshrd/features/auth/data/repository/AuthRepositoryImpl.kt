@@ -9,12 +9,17 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-/** Delegates to the in-memory source. Replace the source with a service/API when the backend exists. */
+/** The sample-data auth (`use.mock.data=true`); `ApiAuthRepository` is the User v2 one. */
 class AuthRepositoryImpl
     @Inject
     constructor(
         private val source: InMemoryAuthDataSource,
     ) : AuthRepository {
+        /** The sample data keeps no session between launches. */
+        override suspend fun restoreSession(): SessionOwner? = null
+
+        override suspend fun signOut() = Unit
+
         override fun signIn(
             email: String,
             password: String,

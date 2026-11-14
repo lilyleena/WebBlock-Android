@@ -32,6 +32,10 @@ data class ProductDraft(
     val priceText: String,
     val description: String,
     val imageUrl: String,
+    /** The loaded product's version, sent back on an update (`null` for a new product). */
+    val version: Long? = null,
+    /** The product's price was hidden when the editor opened: an empty price field keeps it hidden. */
+    val wasPriceHidden: Boolean = false,
 )
 
 enum class ProductFormError { NameEmpty, CategoryEmpty, PriceInvalid }

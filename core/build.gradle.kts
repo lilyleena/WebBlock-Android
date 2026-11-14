@@ -15,6 +15,10 @@ val localProps =
         rootProject.file("local.properties").takeIf { it.exists() }?.inputStream()?.use { load(it) }
     }
 val apiBaseUrl = localProps.getProperty("api.base.url", "https://wb-api.roa-dev.digital/")
+// true runs every screen on the in-memory sample data (no network), as the starter did.
+val useMockData = localProps.getProperty("use.mock.data", "false").toBoolean()
+// The web app's sign-up page; empty hides the "Create your account on the website" link (owner, 14 Nov 2026).
+val signUpUrl = localProps.getProperty("sign.up.url", "")
 
 android {
     namespace = "com.kshrd.core"
@@ -25,6 +29,8 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
         buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
+        buildConfigField("boolean", "USE_MOCK_DATA", "$useMockData")
+        buildConfigField("String", "SIGN_UP_URL", "\"$signUpUrl\"")
     }
     buildTypes {
         release {

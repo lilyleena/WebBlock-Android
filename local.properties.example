@@ -7,3 +7,9 @@ sdk.dir=/path/to/your/Android/Sdk
 # Base URL used by the Retrofit client in :core (must end with a slash).
 # The WebBlock v2 API on AWS (the default when this line is missing).
 api.base.url=https://wb-api.roa-dev.digital/
+
+# true: every screen runs on the in-memory sample data, with no network (default false: the v2 API).
+use.mock.data=false
+
+# The web app's sign-up page. Empty (the default) hides the "Create your account on the website" link.
+sign.up.url=

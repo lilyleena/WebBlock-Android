@@ -66,8 +66,10 @@ class MyWebsitesViewModel
                 MyWebsitesEvent.LogoutDismissed -> _state.update { it.copy(showLogoutDialog = false) }
                 MyWebsitesEvent.LogoutConfirmed -> {
                     _state.update { it.copy(showLogoutDialog = false) }
-                    signOut()
-                    _effects.tryEmit(MyWebsitesEffect.SignedOut)
+                    viewModelScope.launch {
+                        signOut()
+                        _effects.tryEmit(MyWebsitesEffect.SignedOut)
+                    }
                 }
             }
         }

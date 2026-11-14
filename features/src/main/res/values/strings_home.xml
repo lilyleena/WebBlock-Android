@@ -19,6 +19,8 @@
     </plurals>
     <string name="home_open_portal_hint">Opens the business portal for %1$s</string>
     <string name="home_pill_live">Live</string>
+    <string name="home_pill_offline">Offline</string>
+    <string name="home_offline_note">Your website is offline. You can still edit it here; renew your plan on the WebBlock website to bring it back.</string>
     <string name="home_chip_products">Products</string>
     <string name="home_chip_business">Business info</string>
     <string name="home_chip_monitor">Monitor</string>

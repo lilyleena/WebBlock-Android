@@ -19,8 +19,11 @@ interface ProductRepository {
         productId: String,
     ): Flow<DataState<Unit>>
 
-    /** Stores a photo the owner picked on their device and returns the URL to show. An upload with a real backend. */
-    fun uploadPhoto(sourceUri: String): Flow<DataState<String>>
+    /** Stores a photo the owner picked on their device and returns the URL to show (an upload to the website's media). */
+    fun uploadPhoto(
+        websiteId: String,
+        sourceUri: String,
+    ): Flow<DataState<String>>
 
     fun addCategory(
         websiteId: String,

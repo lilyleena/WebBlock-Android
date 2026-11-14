@@ -5,6 +5,7 @@ import com.kshrd.core.data.entity.asUseCaseFlow
 import com.kshrd.core.data.entity.mapSuccess
 import com.kshrd.core.session.SessionOwner
 import com.kshrd.core.session.SessionStore
+import com.kshrd.features.auth.domain.repository.AuthRepository
 import com.kshrd.core.session.WorkspaceWebsite
 import com.kshrd.features.website.domain.model.Website
 import com.kshrd.features.website.domain.repository.WebsiteRepository
@@ -57,10 +58,15 @@ class ObserveOwnerUseCase
         operator fun invoke(): StateFlow<SessionOwner?> = session.owner
     }
 
+/** Ends the session on the server and the device, then forgets the owner and the selected website. */
 class SignOutUseCase
     @Inject
     constructor(
         private val session: SessionStore,
+        private val auth: AuthRepository,
     ) {
-        operator fun invoke() = session.signOut()
+        suspend operator fun invoke() {
+            auth.signOut()
+            session.signOut()
+        }
     }

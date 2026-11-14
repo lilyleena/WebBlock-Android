@@ -4,6 +4,8 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.kshrd.coreui.components.image.RemoteImage
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -55,7 +57,18 @@ fun WebsiteLogo(
     modifier: Modifier = Modifier,
     size: Dp = 56.dp,
 ) {
-    LogoAvatar(logoRes = website.logoRes, initials = website.initials, modifier = modifier, size = size)
+    val logoUrl = website.logoUrl
+    if (logoUrl != null) {
+        // The business logo from the API (G4); a failed load shows the soft placeholder.
+        RemoteImage(
+            url = logoUrl,
+            contentDescription = null,
+            modifier = modifier.size(size).border(1.dp, MaterialTheme.wb.border, CircleShape),
+            shape = CircleShape,
+        )
+    } else {
+        LogoAvatar(logoRes = website.logoRes, initials = website.initials, modifier = modifier, size = size)
+    }
 }
 
 /**
@@ -106,10 +119,18 @@ fun WebsiteCard(
                         }
                     }
                     Spacer(Modifier.width(Space.xxs))
+                    // A live site whose hosting is offline (billing) still opens and stays editable (Q3).
                     StatusBadge(
-                        text = stringResource(R.string.home_pill_live),
-                        tone = BadgeTone.Success,
+                        text = stringResource(if (website.isHostingOffline) R.string.home_pill_offline else R.string.home_pill_live),
+                        tone = if (website.isHostingOffline) BadgeTone.Warning else BadgeTone.Success,
                         icon = WebIcons.Globe,
+                    )
+                }
+                if (website.isHostingOffline) {
+                    Text(
+                        text = stringResource(R.string.home_offline_note),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = wb.muted,
                     )
                 }
                 HorizontalDivider(color = wb.border)

@@ -18,8 +18,11 @@ object ProductValidator {
         buildSet {
             if (draft.name.isBlank()) add(ProductFormError.NameEmpty)
             if (draft.category.isBlank()) add(ProductFormError.CategoryEmpty)
-            if (parsePrice(draft.priceText) == null) add(ProductFormError.PriceInvalid)
+            if (!keepsPriceHidden(draft) && parsePrice(draft.priceText) == null) add(ProductFormError.PriceInvalid)
         }
+
+    /** A hidden price (G7) stays hidden while the price field is left empty; typing a price shows it. */
+    fun keepsPriceHidden(draft: ProductDraft): Boolean = draft.wasPriceHidden && draft.priceText.isBlank()
 
     fun parsePrice(text: String): Double? =
         text
@@ -47,7 +50,8 @@ class SaveProductUseCase
             websiteId: String,
             draft: ProductDraft,
         ): Flow<DataState<Product>> {
-            val price = ProductValidator.parsePrice(draft.priceText)
+            val hidden = ProductValidator.keepsPriceHidden(draft)
+            val price = if (hidden) 0.0 else ProductValidator.parsePrice(draft.priceText)
             if (ProductValidator.validate(draft).isNotEmpty() || price == null) {
                 return flowOf(DataState.Error(message = "Please complete the form."))
             }
@@ -59,6 +63,8 @@ class SaveProductUseCase
                     price = price,
                     description = draft.description.trim(),
                     imageUrl = draft.imageUrl,
+                    version = draft.version,
+                    isPriceHidden = hidden,
                 )
             return repository.saveProduct(websiteId, product).asUseCaseFlow()
         }
@@ -80,7 +86,10 @@ class UploadProductPhotoUseCase
     constructor(
         private val repository: ProductRepository,
     ) {
-        operator fun invoke(sourceUri: String): Flow<DataState<String>> = repository.uploadPhoto(sourceUri).asUseCaseFlow()
+        operator fun invoke(
+            websiteId: String,
+            sourceUri: String,
+        ): Flow<DataState<String>> = repository.uploadPhoto(websiteId, sourceUri).asUseCaseFlow()
     }
 
 class AddCategoryUseCase

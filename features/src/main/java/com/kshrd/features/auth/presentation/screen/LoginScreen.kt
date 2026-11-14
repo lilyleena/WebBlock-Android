@@ -154,8 +154,10 @@ private fun SignInForm(
             )
             Text(stringResource(R.string.auth_login_subtitle), style = MaterialTheme.typography.bodyMedium, color = wb.muted)
         }
-        GoogleButton(text = stringResource(R.string.auth_login_google), onClick = { onEvent(LoginEvent.GoogleClicked) })
-        OrDivider(stringResource(R.string.auth_login_or))
+        if (state.googleEnabled) {
+            GoogleButton(text = stringResource(R.string.auth_login_google), onClick = { onEvent(LoginEvent.GoogleClicked) })
+            OrDivider(stringResource(R.string.auth_login_or))
+        }
         LabeledField(
             title = stringResource(R.string.auth_login_email),
             value = state.email,
