@@ -14,7 +14,7 @@ val localProps =
     Properties().apply {
         rootProject.file("local.properties").takeIf { it.exists() }?.inputStream()?.use { load(it) }
     }
-val apiBaseUrl = localProps.getProperty("api.base.url", "https://example.com/api/v1/")
+val apiBaseUrl = localProps.getProperty("api.base.url", "https://wb-api.roa-dev.digital/")
 
 android {
     namespace = "com.kshrd.core"
@@ -58,7 +58,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
 
-    // Network stack: Retrofit + Gson + OkHttp logging. Exposed as `api` so features can declare Retrofit interfaces.
+    // Network stack: Retrofit + OkHttp logging. The v2 API reads JSON with kotlinx.serialization (`KotlinxConverterFactory`);
+    // Gson stays for the starter's `RemoteDataSource`. Exposed as `api` so features can declare Retrofit interfaces.
     api(libs.retrofit)
     api(libs.retrofit.converter.gson)
     implementation(libs.okhttp.logging)

@@ -14,6 +14,8 @@ data class SessionOwner(
     val id: String,
     val name: String,
     val email: String,
+    /** Payment's plan code (`FREE_TRIAL`, `PLUS`, `PRO`, `ULTRA`); `null` while Payment is down or unknown. */
+    val plan: String? = null,
 )
 
 /** The slice of a website every management screen needs to know about. */

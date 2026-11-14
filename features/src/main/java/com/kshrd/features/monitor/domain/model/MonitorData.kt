@@ -33,6 +33,8 @@ data class UsageMeter(
     val kind: UsageKind,
     val used: Int,
     val limit: Int,
+    /** Payment's title for the meter; `null` keeps the app's own. */
+    val label: String? = null,
 ) {
     val left: Int get() = (limit - used).coerceAtLeast(0)
     val fraction: Float get() = if (limit == 0) 0f else (used.toFloat() / limit).coerceIn(0f, 1f)
@@ -74,6 +76,11 @@ data class MonitorData(
     /** Totals over the whole history, when more deploys exist than [deploys] lists. */
     val succeededTotal: Int? = null,
     val failedTotal: Int? = null,
+    /** When the uptime was last checked (G2); `null` without a check. */
+    val uptimeCheckedAtMillis: Long? = null,
+    /** Payment's titles for the redeploys and websites meters; `null` keeps the app's own. */
+    val redeploysLabel: String? = null,
+    val websitesLabel: String? = null,
 ) {
     val lastDeploy: Deploy? get() = deploys.firstOrNull()
     val succeededCount: Int get() = succeededTotal ?: deploys.count { it.succeeded }

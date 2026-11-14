@@ -5,5 +5,5 @@
 sdk.dir=/path/to/your/Android/Sdk
 
 # Base URL used by the Retrofit client in :core (must end with a slash).
-# The sample feature does not call the network, so the default is fine to start with.
-api.base.url=https://example.com/api/v1/
+# The WebBlock v2 API on AWS (the default when this line is missing).
+api.base.url=https://wb-api.roa-dev.digital/

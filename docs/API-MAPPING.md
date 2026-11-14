@@ -9,7 +9,8 @@ Android code, not a second one. Section 3 lists where the Android code differs t
 - **Base URL:** `https://wb-api.roa-dev.digital/` by default. `api.base.url` in `local.properties` (git-ignored) overrides it.
   All paths below are relative to it.
 - **Who uses it:** site owners only (realm role `user`). No admin routes and no sign-up.
-- **Status:** 14 Nov 2026, mapping only. No API code yet. Every gap G1–G8 is decided (section 4).
+- **Status:** 14 Nov 2026. Data layer drafted on `android-v2-data` (wire types, mappers, token store, auth). Every gap
+  G1–G8 is decided (section 4); the owner's decisions of 14 Nov are in section 4 too.
 
 ## 1. Rules shared by every call (the same as iOS)
 
@@ -33,7 +34,7 @@ Android code, not a second one. Section 3 lists where the Android code differs t
 | Android call | Route(s) | Notes (as iOS 2.1) |
 | --- | --- | --- |
 | `signIn(email, password)` | `POST /sessions {email, password, stayLoggedIn: true}` → `201 TokenSet`, then `GET /me` | `SessionOwner.name ← fullName`, `email ← email`, plus the plan (`FREE_TRIAL`, `PLUS`, `PRO`, `ULTRA`; `null` while Payment is down = trial limits, reloaded later). `401 invalid-credentials`; `403 account-suspended` has its own message. `ADMIN` without `USER` in `roles`: sign out and say the app is for site owners. |
-| `signInWithGoogle()` | **Off** (G1; the owner's account-creation decision is pending). When on: AppAuth with PKCE (S256), `client_id=webblock-ios`, `redirect_uri=com.webblock.app:/oauth2redirect`, `kc_idp_hint=google`, `scope=openid email profile offline_access`, then `POST /sessions/google {code, codeVerifier, redirectUri}` → `TokenSet` | Behind a build flag, off. While off, the Google button is hidden. A different redirect goes to the coordinator first. |
+| `signInWithGoogle()` | **Off** (G1; the owner's account-creation decision is pending). When on: AppAuth with PKCE (S256), `client_id=webblock-ios`, `redirect_uri=com.webblock.app:/oauth2redirect`, `kc_idp_hint=google`, `scope=openid email profile offline_access`, then `POST /sessions/google {code, codeVerifier, redirectUri}` → `TokenSet` | Behind a build flag, off. While off, the Google button is hidden. A different redirect goes to the coordinator first. **No new accounts (owner):** an unknown Google identity answers a problem (`404 account-not-found`): "Create your account on the WebBlock website first, then sign in here." |
 | `requestResetCode(email)` | `POST /password-resets {email}` → `202 {expiresInSeconds, resendAfterSeconds}` | Also the Resend button. Same answer whether or not the email has an account. |
 | `verifyResetCode(email, code)` | `POST /password-resets/verifications {email, code}` → `201 {verificationToken, expiresInSeconds}` | `verificationToken` is kept in memory only, keyed by email. `400 otp-invalid` / `otp-expired`, `429 otp-too-many-attempts`. |
 | `resetPassword(email, newPassword)` | `POST /password-resets/confirmations {verificationToken, password, confirmPassword}` → `204` | `confirmPassword = newPassword`. Every session ends. `400 verification-token-invalid` → start again; `422 password-too-weak` (8–128, upper, lower, digit). |
@@ -59,7 +60,7 @@ Android code, not a second one. Section 3 lists where the Android code differs t
 | Android call | Route(s) | Notes |
 | --- | --- | --- |
 | `observeCatalog(websiteId)` | `GET /projects/{id}/products?page=&size=200&sort=createdAt,desc` + `GET /projects/{id}/product-categories` (a `string[]`, owner's order) | `id`, `name`, `description`, `category`, `price` as a decimal string; **`null` = hidden price (G7)**, shown as "Price hidden"; `imageUrl`, `version`. Pages up to `totalItems` (Ultra allows 1000). |
-| `uploadPhoto(sourceUri)` | `POST /projects/{id}/media` (multipart `file`) → `201 MediaAsset {id, url, name}` | JPEG or PNG, **2 MiB at most**. The app reads the `content://` URI, re-encodes to JPEG at lower quality until it fits, refuses it otherwise. **`422 STORAGE_LIMIT_REACHED`** → "Photo storage is full. Remove photos on the web." (replaced photos stay in the library and count, Q1). The repository call gains a `websiteId`. |
+| `uploadPhoto(sourceUri)` | `POST /projects/{id}/media` (multipart `file`) → `201 MediaAsset {id, url, name}` | JPEG or PNG, **2 MiB at most**. The app reads the `content://` URI, re-encodes to JPEG at lower quality until it fits, refuses it otherwise. **`422 STORAGE_LIMIT_REACHED`** → "Photo storage is full. Remove photos on the web." **`422 PHOTO_LIMIT_REACHED`** (the plan's photos-per-website limit, owner) has its own message. The repository call gains a `websiteId`. **Unused photos (owner):** after a photo is replaced or removed, the app deletes the old media asset with Project's new DELETE media route (`409` while still in use is fine); the exact route is still to come. |
 | `addCategory(websiteId, name)` | `POST /projects/{id}/product-categories {name}` → `201` | Name rule: 2–40 letters, words joined by a space or `& ' ’ -`, no digits (`400 VALUE_INVALID`). `409 CATEGORY_NAME_TAKEN` is fine. |
 | `saveProduct` (new) | `POST /projects/{id}/products` `ProductBody {name, description, category, price: "6.00" \| null, imageUrl}` → `201 Product` | `422` = unknown category or the plan's product limit. `imageUrl` must be one of this website's media URLs (Q2). |
 | `saveProduct` (edit) | `PUT /projects/{id}/products/{productId}` with `version` → `200 Product` | `imageUrl` absent keeps the photo, `null` removes it. **`409` → "This product was changed elsewhere. Pull to refresh."** An empty price field keeps a hidden price hidden; typing a price shows it. |
@@ -85,7 +86,7 @@ Android code, not a second one. Section 3 lists where the Android code differs t
 | `lastDeployAgo`, `lastDeployDetail` | the newest release | relative `finishedAt`; "Deploy N · 18 Oct, 2:15 PM". |
 | `resetsOn` | Payment `GET /api/payment/v2/projects/{id}/usage` → `resetsAt` | `null` → "—". |
 | usage meters (products, redeploys, websites) | same → `metrics[]` by `key` | **Used, limits and labels all from Payment** (`used`, `limit`, `label`). On the trial there is no `redeploys`: use `deploys`. `null` `used` → 0. A missing metric or a `null` limit falls back to the plan's own number. A `null` label keeps the app's title. |
-| photos meter | same → a `photos` metric | **Hidden** unless Payment sends a `photos` metric (G3). |
+| photos meter | same → a `photos` metric | Shown **when Payment sends a `photos` metric** (owner: PLUS 30, PRO 200, ULTRA 1000, the trial 30 for now), with that metric's `used`, `limit` and `label`; never a number in the app. Hidden without the metric. |
 | `logs` | Project `GET /projects/{id}/activity?size=20` | `title`, `detail`, category from `type` (`DEPLOY`, `PRODUCT`, `BUSINESS_INFO`), `atMillis ← occurredAt`, `outcome ← FAILED` or success. Pro and Ultra only: **`403` = an empty log**, not an error. |
 
 Not used: access stats and logs (admin-only), deploy commands, `deploy-access`.
@@ -113,14 +114,17 @@ The mapping is the same. These are the Android model and code changes needed to 
 G1 Google: off. G2 uptime: built, "—" when `null`. G3 photos meter: hidden. G4 `Website.logoUrl`: done. G5 bell
 `detail` + `target`: done. G6 mark one read: done. G7 hidden price: done. G8 `stayLoggedIn`: done. Q1–Q8: answered as
 in the iOS mapping (replaced photos count; own media URLs only; Offline badge, editable; one token for every service;
-30 min / 10 h without G8; `Retry-After` on `otp-resend-too-soon` only; limits from Payment; "—" for a `null` business
-type).
+`Retry-After` on `otp-resend-too-soon` only; limits from Payment; "—" for a `null` business type).
+
+Owner's decisions, 14 Nov 2026: no new accounts through Google (`account-not-found`); unused photos are deleted
+(Project's DELETE media route, to come); a photos-per-website limit with Payment's `photos` metric and
+`422 PHOTO_LIMIT_REACHED`; the realm's online SSO idle goes from 30 to 60 min (`refreshExpiresIn` 3600), with the
+refresh rule unchanged; a LIVE site with OFFLINE hosting gets the Offline badge, stays editable, with a renew note.
 
 ## 5. Android-only open points
 
-1. **Application id:** today `com.kshrd.starter` (template). Proposed: `applicationId = "com.webblock.app"`, the same as
-   the iOS bundle id. Kotlin packages and `namespace` stay `com.kshrd.*` (no code move). The Google redirect
-   `com.webblock.app:/oauth2redirect` is set separately on Android (`appAuthRedirectScheme`), so it can match iOS
-   whatever the application id is. Owner or coordinator decides.
+1. **Application id (owner, 14 Nov):** stays `com.kshrd.starter`. The Google redirect stays
+   `com.webblock.app:/oauth2redirect`; AppAuth's scheme is set on its own (`appAuthRedirectScheme`), so the
+   `webblock-ios` Keycloak client needs nothing new.
 2. **Backup:** the manifest has `allowBackup="true"`. The token store is excluded from backup and device transfer
    (`dataExtractionRules`), so a restored phone signs in again.
