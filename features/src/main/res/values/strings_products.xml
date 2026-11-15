@@ -33,7 +33,7 @@
     <string name="pv_menu_delete">Delete product</string>
     <string name="pv_more_actions">More actions for %1$s</string>
     <string name="pv_delete_title">Delete “%1$s”?</string>
-    <string name="pv_delete_message">It will be removed from your website the next time you deploy. This can’t be undone.</string>
+    <string name="pv_delete_message">It’s removed from your website right away. This can’t be undone.</string>
     <string name="pv_delete_confirm">Delete product</string>
     <string name="pv_cancel">Cancel</string>
     <string name="pv_detail_back">Back</string>
@@ -67,11 +67,11 @@
     <string name="pv_error_description">Write 10 to 300 characters, or leave the description empty.</string>
 
     <string name="pv_toast_added_title">Product added</string>
-    <string name="pv_toast_added_message">It appears on your website after your next deploy.</string>
+    <string name="pv_toast_added_message">It’s on your website now.</string>
     <string name="pv_toast_saved_title">Changes saved</string>
-    <string name="pv_toast_saved_message">Your website shows them after your next deploy.</string>
+    <string name="pv_toast_saved_message">Your website shows the change now.</string>
     <string name="pv_toast_deleted_title">Product deleted</string>
-    <string name="pv_toast_deleted_message">“%1$s” is removed after your next deploy.</string>
+    <string name="pv_toast_deleted_message">“%1$s” is removed from your website.</string>
     <string name="pv_price_hidden">Price hidden</string>
     <string name="pv_price_hidden_hint">The price is hidden on your website. Leave this empty to keep it hidden.</string>
 </resources>
