@@ -5,10 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.OpenInFull
@@ -36,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -43,7 +41,6 @@ import androidx.compose.ui.window.DialogProperties
 import com.kshrd.coreui.components.button.PrimaryButton
 import com.kshrd.coreui.components.button.SecondaryButton
 import com.kshrd.coreui.components.card.glass
-import com.kshrd.coreui.components.card.wbCard
 import com.kshrd.coreui.components.menu.WbDropdownMenu
 import com.kshrd.coreui.components.menu.WbMenuItem
 import com.kshrd.coreui.format.formatPrice
@@ -176,44 +173,55 @@ fun ProductDetailBody(
     if (viewerOpen) PhotoViewer(product.imageUrl, onClose = { viewerOpen = false })
 }
 
-/** Two facts side by side, each in its own small card of equal height. */
+/**
+ * Read-only details as a plain list (label left, value right, hairline dividers), not cards, so they
+ * don't look like buttons next to Delete / Edit below.
+ */
 @Composable
 private fun FactsRow(
     category: String,
     websiteName: String?,
 ) {
-    val wb = MaterialTheme.wb
-    Row(modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(Space.s)) {
-        Fact(WebIcons.Tag, wb.purple, wb.purpleSoft, stringResource(R.string.pv_detail_category), category, Modifier.weight(1f))
+    Column(modifier = Modifier.fillMaxWidth()) {
+        FactDivider()
+        Fact(WebIcons.Tag, stringResource(R.string.pv_detail_category), category)
         if (websiteName != null) {
-            Fact(WebIcons.Globe, wb.green, wb.greenSoft, stringResource(R.string.pv_detail_shown_on), websiteName, Modifier.weight(1f))
+            FactDivider()
+            Fact(WebIcons.Globe, stringResource(R.string.pv_detail_shown_on), websiteName)
         }
+        FactDivider()
     }
 }
 
-/** One fact card: tinted icon tile, then a muted label over the value (two lines max, so long names still fit). */
+@Composable
+private fun FactDivider() {
+    Box(Modifier.fillMaxWidth().height(1.dp).background(MaterialTheme.wb.border))
+}
+
+/** One detail line: muted icon and label on the left, the value on the right (two lines max). */
 @Composable
 private fun Fact(
     icon: ImageVector,
-    tint: Color,
-    soft: Color,
     label: String,
     value: String,
-    modifier: Modifier = Modifier,
 ) {
     val wb = MaterialTheme.wb
     Row(
-        modifier = modifier.fillMaxHeight().wbCard(padding = Space.s),
+        modifier = Modifier.fillMaxWidth().padding(vertical = Space.s),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(Space.s),
+        horizontalArrangement = Arrangement.spacedBy(Space.xs),
     ) {
-        Box(Modifier.size(40.dp).background(soft, RoundedCornerShape(Radius.tile)), contentAlignment = Alignment.Center) {
-            Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(Sizes.icon))
-        }
-        Column(verticalArrangement = Arrangement.spacedBy(Space.xxxs), modifier = Modifier.weight(1f)) {
-            Text(label, style = MaterialTheme.typography.labelMedium, color = wb.muted, maxLines = 1)
-            Text(value, style = MaterialTheme.typography.titleSmall, color = wb.text, maxLines = 2, overflow = TextOverflow.Ellipsis)
-        }
+        Icon(icon, contentDescription = null, tint = wb.muted, modifier = Modifier.size(Sizes.iconSmall))
+        Text(label, style = MaterialTheme.typography.bodyMedium, color = wb.muted, maxLines = 1)
+        Text(
+            value,
+            style = MaterialTheme.typography.titleSmall,
+            color = wb.text,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.End,
+            modifier = Modifier.weight(1f),
+        )
     }
 }
 
