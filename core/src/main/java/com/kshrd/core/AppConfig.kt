@@ -5,7 +5,7 @@ object AppConfig {
     /** Every screen on the in-memory sample data instead of the v2 API. */
     val useMockData: Boolean = BuildConfig.USE_MOCK_DATA
 
-    /** The web app's sign-up page, or `null` to hide the link (until the coordinator gives the real URL). */
+    /** Reserved for the web app's sign-up page (`null` when unset). No screen reads it yet. */
     val signUpUrl: String? = BuildConfig.SIGN_UP_URL.ifBlank { null }
 
     /** Keycloak realm for "Continue with Google". */
