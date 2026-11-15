@@ -11,7 +11,7 @@ api.base.url=https://wb-api.roa-dev.digital/
 # true: every screen runs on the in-memory sample data, with no network (default false: the v2 API).
 use.mock.data=false
 
-# The web app's sign-up page. Empty (the default) hides the "Create your account on the website" link.
+# Reserved for the web app's sign-up page. Not used yet: no screen reads it, so the value has no effect today.
 sign.up.url=
 
 # Keycloak realm and the Google sign-in switch (the v2 API only; the sample data has its own chooser).

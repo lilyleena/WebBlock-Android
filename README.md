@@ -24,7 +24,7 @@ repository root) into `BuildConfig`. Start from [`local.properties.example`](loc
 | `use.mock.data` | `false` | `false`: every screen uses the v2 API. `true`: every screen uses the in-memory sample data, with no network (see [Mock mode](#mock-mode)). |
 | `auth.realm.url` | `https://wb-auth.roa-dev.digital/realms/webblock` | Keycloak realm for "Continue with Google". |
 | `google.sign.in` | `true` | Shows "Continue with Google" with the v2 API. In mock mode it has no effect: the button always opens a sample chooser. |
-| `sign.up.url` | empty | The web app's sign-up page. Empty hides the "Create your account on the website" link. |
+| `sign.up.url` | empty | Reserved for the web app's sign-up page. Not used yet: no screen reads it, so the value has no effect today. |
 
 The values are compiled into the app, so **a change needs a rebuild** (Build > Rebuild, or `./gradlew assembleDebug`)
 and a reinstall.
@@ -54,8 +54,9 @@ the default) and the in-memory sample data (`*RepositoryImpl` with `features/**/
 - Sign-in keeps the owner signed in (an offline session, about 30 days idle). The tokens are encrypted with a key in
   the Android Keystore, are excluded from backups, and are refreshed automatically. When the session ends, the app
   goes back to sign-in.
-- "Continue with Google" opens the WebBlock sign-in page in the browser and comes back through
-  `com.webblock.app:/oauth2redirect`. It only signs in to an existing WebBlock account.
+- "Continue with Google" opens Google's sign-in directly in the browser (through the WebBlock Keycloak realm, with
+  `kc_idp_hint=google`) and comes back through `com.webblock.app:/oauth2redirect`. It only signs in to an existing
+  WebBlock account.
 
 ## Mock mode
 
@@ -76,11 +77,15 @@ Set `use.mock.data=false` (or remove the line) and rebuild to go back to the v2 
 2. Run the app on an emulator (any recent Google APIs x86_64 image) or a device with internet access.
 3. Sign in with **your own** WebBlock owner account, created on the WebBlock website. Never put an account's password
    in the repository or in `local.properties`.
-4. Errors: debug builds log every failed call to logcat under the tag `WebBlockApi`, one line each: method, path,
-   status, the problem code, `requestId` (the answer's `X-Request-Id`) and, for a refused field, `fields=field:CODE`.
-   For example: `POST /api/project/v2/projects/{id}/products -> 400 validation-failed requestId=… fields=name:REQUIRED`.
-   Quote the `requestId` when you report a problem. No body, password or token is ever logged. Read them with
-   `adb logcat -s WebBlockApi`; the `okhttp.OkHttpClient` tag shows each call's method, URL and status.
+4. Errors: debug builds log every v2 call answered with a non-2xx status to logcat under the tag `WebBlockApi`, one
+   line each: method, path, status, the problem code, `requestId` (the answer's `X-Request-Id`) and, for a refused
+   field, `fields=field:CODE`. For example:
+   `POST /api/project/v2/projects/{id}/products -> 400 validation-failed requestId=… fields=name:REQUIRED`.
+   Quote the `requestId` when you report a problem. No body, password or token is ever logged.
+   That tag does not cover everything: a failed token refresh and calls that got no answer are not in it, and a session
+   that could not be restored on launch is logged under `ApiAuthRepository`. The `okhttp.OkHttpClient` tag shows every
+   call's method, URL and status. To see all three:
+   `adb logcat -s WebBlockApi ApiAuthRepository okhttp.OkHttpClient`.
 
 ## Commands
 
@@ -92,7 +97,11 @@ Set `use.mock.data=false` (or remove the line) and rebuild to go back to the v2 
 ./gradlew ktlintFormat         # fix formatting
 ```
 
-`checkCode` runs detekt 1.23, which cannot run on JDK 25: run it with a Gradle daemon on JDK 21 (or any JDK up to 24).
+`checkCode` runs detekt 1.23, which cannot run on JDK 25 (it fails while reading the Java version). The Gradle daemon
+is pinned to JDK 25 by `gradle/gradle-daemon-jvm.properties` (`toolchainVersion=25`, resolved through foojay), so
+setting `JAVA_HOME` or `org.gradle.java.home` does not change it. To run `checkCode`: have a JDK 21 installed,
+temporarily set `toolchainVersion=21` in that file, run `./gradlew checkCode`, then restore the file
+(`git checkout -- gradle/gradle-daemon-jvm.properties`). Never commit that change.
 
 ## Layout
 
