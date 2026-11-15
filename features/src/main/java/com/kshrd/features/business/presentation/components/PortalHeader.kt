@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
@@ -207,11 +208,8 @@ fun SiteHeaderCard(
             }
         }
         AnimatedVisibility(visible = expanded && multiple) {
-            Column(
-                modifier = Modifier.padding(horizontal = Space.s).padding(bottom = Space.s),
-                verticalArrangement = Arrangement.spacedBy(Space.xs),
-            ) {
-                Box(Modifier.fillMaxWidth().height(1.dp).background(wb.border))
+            Column(modifier = Modifier.padding(horizontal = Space.xs).padding(bottom = Space.xs)) {
+                Box(Modifier.padding(horizontal = Space.xs).padding(bottom = Space.xxs).fillMaxWidth().height(1.dp).background(wb.border))
                 websites.forEach { option ->
                     val current = option.id == website.id
                     SiteOptionRow(option, current) {
@@ -239,7 +237,7 @@ private fun SiteOptionRow(
             Modifier
                 .fillMaxWidth()
                 .clip(shape)
-                .background(if (current) wb.brand.copy(alpha = 0.10f) else wb.card.copy(alpha = 0.6f), shape)
+                .background(if (current) wb.brand.copy(alpha = 0.10f) else Color.Transparent, shape)
                 .clickable(onClick = onClick)
                 .padding(horizontal = Space.xs, vertical = Space.xs),
     ) {
