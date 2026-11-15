@@ -69,7 +69,7 @@
     <string name="pv_toast_added_title">Product added</string>
     <string name="pv_toast_added_message">It’s on your website now.</string>
     <string name="pv_toast_saved_title">Changes saved</string>
-    <string name="pv_toast_saved_message">Your website shows the change now.</string>
+    <string name="pv_toast_saved_message">Your website shows your changes now.</string>
     <string name="pv_toast_deleted_title">Product deleted</string>
     <string name="pv_toast_deleted_message">“%1$s” is removed from your website.</string>
     <string name="pv_price_hidden">Price hidden</string>
