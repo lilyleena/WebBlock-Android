@@ -249,6 +249,9 @@ class FakeNotificationApi : NotificationApi {
 
     /** When set, markRead waits for it (to test a call cancelled while on its way). */
     var markGate: kotlinx.coroutines.CompletableDeferred<Unit>? = null
+
+    /** When set, markAllRead waits for it. */
+    var markAllGate: kotlinx.coroutines.CompletableDeferred<Unit>? = null
     val marked = mutableListOf<String>()
 
     override suspend fun notifications(
@@ -257,6 +260,7 @@ class FakeNotificationApi : NotificationApi {
     ) = PageDto(items.toList(), 0, size, items.size.toLong())
 
     override suspend fun markAllRead(body: ReadUpdate) {
+        markAllGate?.await()
         if (markAllFails) throw httpError(503)
         marked += "all"
     }

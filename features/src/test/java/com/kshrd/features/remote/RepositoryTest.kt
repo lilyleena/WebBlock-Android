@@ -429,6 +429,69 @@ class RepositoryTest {
             assertTrue(reloaded.single().unread)
         }
 
+    private fun twoUnread(api: FakeNotificationApi) {
+        api.items += NotificationDto("k1", "Petal", "Live", websiteId = "w1", createdAt = "2026-11-14T03:00:00Z", read = false)
+        api.items += NotificationDto("k2", "Petal", "Old", websiteId = "w1", createdAt = "2026-11-13T03:00:00Z", read = false)
+    }
+
+    @Test
+    fun `a failed mark-all doesn't drop an item a single PATCH still covers`() =
+        runTest {
+            val gate = CompletableDeferred<Unit>()
+            val api = FakeNotificationApi().apply { markGate = gate; markAllFails = true }
+            twoUnread(api)
+            val repository = ApiNotificationsRepository(api, FixedFormat)
+            repository.observeNotifications().first()
+
+            val opening = launch { repository.markRead("k1") }
+            runCurrent()
+            repository.markAllRead()
+            val reloaded = (repository.observeNotifications().first() as DataState.Success).data
+            gate.complete(Unit)
+            opening.join()
+
+            assertEquals(listOf(false, true), reloaded.map { it.unread })
+        }
+
+    @Test
+    fun `a failed single PATCH doesn't drop an item a mark-all still covers`() =
+        runTest {
+            val markGate = CompletableDeferred<Unit>()
+            val allGate = CompletableDeferred<Unit>()
+            val api = FakeNotificationApi().apply { this.markGate = markGate; markAllGate = allGate; markFails = true }
+            twoUnread(api)
+            val repository = ApiNotificationsRepository(api, FixedFormat)
+            repository.observeNotifications().first()
+
+            val opening = launch { repository.markRead("k1") }
+            runCurrent()
+            val markingAll = launch { repository.markAllRead() }
+            runCurrent()
+            markGate.complete(Unit)
+            opening.join()
+            val reloaded = (repository.observeNotifications().first() as DataState.Success).data
+            allGate.complete(Unit)
+            markingAll.join()
+
+            assertEquals(listOf(false, false), reloaded.map { it.unread })
+        }
+
+    @Test
+    fun `a mark-all cancelled on its way keeps nothing, so a reload shows both unread`() =
+        runTest {
+            val api = FakeNotificationApi().apply { markAllGate = CompletableDeferred() }
+            twoUnread(api)
+            val repository = ApiNotificationsRepository(api, FixedFormat)
+            repository.observeNotifications().first()
+
+            val markingAll = launch { repository.markAllRead() }
+            runCurrent()
+            markingAll.cancelAndJoin()
+            val reloaded = (repository.observeNotifications().first() as DataState.Success).data
+
+            assertEquals(listOf(true, true), reloaded.map { it.unread })
+        }
+
     @Test
     fun `after a failed mark-all a reload shows the server's unread state`() =
         runTest {
