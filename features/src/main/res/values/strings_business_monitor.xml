@@ -55,7 +55,7 @@
 
     <!-- Business toasts -->
     <string name="bm_toast_saved_title">Business information saved</string>
-    <string name="bm_toast_saved_message">Your website shows the new details after your next deploy.</string>
+    <string name="bm_toast_saved_message">Your website shows the new details now.</string>
     <string name="bm_toast_save_failed_title">Couldn’t save</string>
     <string name="bm_toast_save_failed_message">Something went wrong. Please try again.</string>
     <string name="bm_issue_about_title">Add a description</string>

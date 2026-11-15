@@ -33,7 +33,7 @@ class InMemoryNotificationsDataSource
                     timeText = "2 mins ago",
                     unread = true,
                     logoRes = R.drawable.petal_stem_logo,
-                    detail = "Deploy 10 finished successfully and your latest changes are now live on petalandstem.webblock.com. Visitors see the updated products and opening hours.",
+                    detail = "Deploy 10 finished successfully and your latest changes are now live on petalandstem.webblock.com. Visitors see your latest page changes.",
                     websiteId = MockIds.PETAL_STEM,
                     target = PortalTarget.Monitor,
                     actionTitle = "Open Monitor",
