@@ -77,14 +77,16 @@ Set `use.mock.data=false` (or remove the line) and rebuild to go back to the v2 
 2. Run the app on an emulator (any recent Google APIs x86_64 image) or a device with internet access.
 3. Sign in with **your own** WebBlock owner account, created on the WebBlock website. Never put an account's password
    in the repository or in `local.properties`.
-4. Errors: debug builds log every v2 call answered with a non-2xx status to logcat under the tag `WebBlockApi`, one
-   line each: method, path, status, the problem code, `requestId` (the answer's `X-Request-Id`) and, for a refused
+4. Errors: debug builds log every failed v2 call that a screen reports as an error to logcat under the tag
+   `WebBlockApi`, one line each: method, path, status, the problem code, `requestId` (the answer's `X-Request-Id`) and, for a refused
    field, `fields=field:CODE`. For example:
    `POST /api/project/v2/projects/{id}/products -> 400 validation-failed requestId=… fields=name:REQUIRED`.
    Quote the `requestId` when you report a problem. No body, password or token is ever logged.
-   That tag does not cover everything: a failed token refresh and calls that got no answer are not in it, and a session
-   that could not be restored on launch is logged under `ApiAuthRepository`. The `okhttp.OkHttpClient` tag shows every
-   call's method, URL and status. To see all three:
+   That tag does not cover everything. Not in it: a failed token refresh, calls that got no answer, and the calls the
+   app lets fail quietly (mark read and mark all read, the bell's unread count, the Monitor tiles, the websites list's
+   hosting status and logo fallback, the cleanup of a replaced photo, and sign-out). A session that could not be
+   restored on launch is logged under `ApiAuthRepository`. The `okhttp.OkHttpClient` tag shows every call's method,
+   URL and status, including those quiet ones, but no `requestId`. To see all three:
    `adb logcat -s WebBlockApi ApiAuthRepository okhttp.OkHttpClient`.
 
 ## Commands
