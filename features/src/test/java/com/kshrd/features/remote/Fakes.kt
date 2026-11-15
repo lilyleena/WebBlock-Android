@@ -246,6 +246,9 @@ class FakeNotificationApi : NotificationApi {
     var markFails = false
     var markAllFails = false
     var markAttempts = 0
+
+    /** When set, markRead waits for it (to test a call cancelled while on its way). */
+    var markGate: kotlinx.coroutines.CompletableDeferred<Unit>? = null
     val marked = mutableListOf<String>()
 
     override suspend fun notifications(
@@ -263,6 +266,7 @@ class FakeNotificationApi : NotificationApi {
         body: ReadUpdate,
     ): NotificationDto {
         markAttempts++
+        markGate?.await()
         if (markFails) throw httpError(503)
         marked += notificationId
         return items.first { it.id == notificationId }.copy(read = true)
