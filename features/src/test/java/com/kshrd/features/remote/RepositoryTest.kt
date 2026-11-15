@@ -326,6 +326,37 @@ class RepositoryTest {
         }
 
     @Test
+    fun `an item marked read stays read when a list loaded before the PATCH landed comes back`() =
+        runTest {
+            val api = FakeNotificationApi()
+            api.items += NotificationDto("k1", "Petal", "Live", websiteId = "w1", createdAt = "2026-11-14T03:00:00Z", read = false)
+            val repository = ApiNotificationsRepository(api, FixedFormat)
+            repository.observeNotifications().first()
+
+            repository.markRead("k1")
+            // The server hasn't applied it yet (the fake keeps read=false): the detail screen's reload still sends it unread.
+            val reloaded = (repository.observeNotifications().first() as DataState.Success).data
+
+            assertFalse(reloaded.single().unread)
+            assertEquals(0, repository.unreadCount.first())
+        }
+
+    @Test
+    fun `mark all keeps every item read across a reload`() =
+        runTest {
+            val api = FakeNotificationApi()
+            api.items += NotificationDto("k1", "Petal", "Live", websiteId = "w1", createdAt = "2026-11-14T03:00:00Z", read = false)
+            api.items += NotificationDto("k2", "Petal", "Old", websiteId = "w1", createdAt = "2026-11-13T03:00:00Z", read = false)
+            val repository = ApiNotificationsRepository(api, FixedFormat)
+            repository.observeNotifications().first()
+
+            repository.markAllRead()
+            val reloaded = (repository.observeNotifications().first() as DataState.Success).data
+
+            assertEquals(listOf(false, false), reloaded.map { it.unread })
+        }
+
+    @Test
     fun `opening a notification marks it read on screen even when the PATCH fails`() =
         runTest {
             val api = FakeNotificationApi().apply { markFails = true }

@@ -54,8 +54,16 @@ class ApiNotificationsRepository
         /** Ids with a PATCH on its way: the list and the detail screen both mark the opened item. */
         private val marking = ConcurrentHashMap.newKeySet<String>()
 
+        /**
+         * Ids the owner marked read here that the server may not show as read yet: a list loaded before the PATCH lands
+         * (the detail screen reloads while it is on its way) would otherwise show them unread again. An id is dropped
+         * once the server sends it as read.
+         */
+        private val readLocally = ConcurrentHashMap.newKeySet<String>()
+
         /** Sends the PATCH only for an item that is unread (or not loaded yet), and only once at a time. */
         override suspend fun markRead(id: String) {
+            readLocally.add(id)
             val wasUnread = items.value?.firstOrNull { it.id == id }?.unread ?: true
             items.update { list -> list?.map { if (it.id == id) it.copy(unread = false) else it } }
             if (!wasUnread || !marking.add(id)) return
@@ -67,6 +75,7 @@ class ApiNotificationsRepository
         }
 
         override suspend fun markAllRead() {
+            items.value?.forEach { readLocally.add(it.id) }
             items.update { list -> list?.map { it.copy(unread = false) } }
             optional { notificationApi.markAllRead() }
         }
@@ -74,7 +83,9 @@ class ApiNotificationsRepository
         private suspend fun fetch(): List<AppNotification> =
             notificationApi.notifications().items.map { dto ->
                 val time = parseApiTime(dto.createdAt)?.let(format::relative).orEmpty()
+                if (dto.read) readLocally.remove(dto.id)
                 // The website's logo isn't part of the bell; the initials tile stands in.
-                dto.toAppNotification(timeText = time, logoUrl = null)
+                val item = dto.toAppNotification(timeText = time, logoUrl = null)
+                if (dto.id in readLocally) item.copy(unread = false) else item
             }
     }
