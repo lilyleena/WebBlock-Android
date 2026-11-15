@@ -244,6 +244,8 @@ class FakePaymentApi : PaymentApi {
 class FakeNotificationApi : NotificationApi {
     val items = mutableListOf<NotificationDto>()
     var markFails = false
+    var markAllFails = false
+    var markAttempts = 0
     val marked = mutableListOf<String>()
 
     override suspend fun notifications(
@@ -252,6 +254,7 @@ class FakeNotificationApi : NotificationApi {
     ) = PageDto(items.toList(), 0, size, items.size.toLong())
 
     override suspend fun markAllRead(body: ReadUpdate) {
+        if (markAllFails) throw httpError(503)
         marked += "all"
     }
 
@@ -259,6 +262,7 @@ class FakeNotificationApi : NotificationApi {
         notificationId: String,
         body: ReadUpdate,
     ): NotificationDto {
+        markAttempts++
         if (markFails) throw httpError(503)
         marked += notificationId
         return items.first { it.id == notificationId }.copy(read = true)

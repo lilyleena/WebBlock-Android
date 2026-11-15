@@ -357,6 +357,37 @@ class RepositoryTest {
         }
 
     @Test
+    fun `after a failed PATCH a reload shows the server's unread state and opening it sends the PATCH again`() =
+        runTest {
+            val api = FakeNotificationApi().apply { markFails = true }
+            api.items += NotificationDto("k1", "Petal", "Live", websiteId = "w1", createdAt = "2026-11-14T03:00:00Z", read = false)
+            val repository = ApiNotificationsRepository(api, FixedFormat)
+            repository.observeNotifications().first()
+
+            repository.markRead("k1")
+            val reloaded = (repository.observeNotifications().first() as DataState.Success).data
+            repository.markRead("k1")
+
+            assertTrue(reloaded.single().unread)
+            assertEquals(2, api.markAttempts)
+        }
+
+    @Test
+    fun `after a failed mark-all a reload shows the server's unread state`() =
+        runTest {
+            val api = FakeNotificationApi().apply { markAllFails = true }
+            api.items += NotificationDto("k1", "Petal", "Live", websiteId = "w1", createdAt = "2026-11-14T03:00:00Z", read = false)
+            api.items += NotificationDto("k2", "Petal", "Old", websiteId = "w1", createdAt = "2026-11-13T03:00:00Z", read = false)
+            val repository = ApiNotificationsRepository(api, FixedFormat)
+            repository.observeNotifications().first()
+
+            repository.markAllRead()
+            val reloaded = (repository.observeNotifications().first() as DataState.Success).data
+
+            assertEquals(listOf(true, true), reloaded.map { it.unread })
+        }
+
+    @Test
     fun `opening a notification marks it read on screen even when the PATCH fails`() =
         runTest {
             val api = FakeNotificationApi().apply { markFails = true }
