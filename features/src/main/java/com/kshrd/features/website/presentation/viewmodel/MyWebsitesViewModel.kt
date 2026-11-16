@@ -53,7 +53,6 @@ class MyWebsitesViewModel
                     _state.update { it.copy(isRefreshing = true) }
                     loadWebsites()
                 }
-                MyWebsitesEvent.ReplayIntroClicked -> _effects.tryEmit(MyWebsitesEffect.ReplayIntro)
                 is MyWebsitesEvent.WebsiteClicked -> {
                     val website = (_state.value.websites as? DataState.Success)?.data?.firstOrNull { it.id == event.websiteId }
                     if (website?.hasPortal == true) {

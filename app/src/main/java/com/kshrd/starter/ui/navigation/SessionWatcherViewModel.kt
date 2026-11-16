@@ -20,4 +20,10 @@ class SessionWatcherViewModel
         private val sessionStore: SessionStore,
     ) : ViewModel() {
         val expired: Flow<Unit> = sessionManager.expired.onEach { sessionStore.signOut() }
+
+        /**
+         * A session survived the last close (not a sign-out). The app then opens on sign-in, which restores it and
+         * goes straight to My Websites, instead of replaying the intro first.
+         */
+        val hasStoredSession: Boolean = sessionManager.hasSession()
     }

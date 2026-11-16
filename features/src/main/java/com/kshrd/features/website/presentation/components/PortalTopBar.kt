@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.PlayCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -71,7 +69,6 @@ fun PortalTopBar(
     ownerInitials: String,
     unreadCount: Int,
     onBellClick: () -> Unit,
-    onReplayIntro: () -> Unit,
     onLogout: () -> Unit,
     modifier: Modifier = Modifier,
     onBrand: Boolean = false,
@@ -88,7 +85,6 @@ fun PortalTopBar(
             ownerInitials = ownerInitials,
             unreadCount = unreadCount,
             onBellClick = onBellClick,
-            onReplayIntro = onReplayIntro,
             onLogout = onLogout,
             onBrand = onBrand,
         )
@@ -149,7 +145,6 @@ private fun ActionCapsule(
     ownerInitials: String,
     unreadCount: Int,
     onBellClick: () -> Unit,
-    onReplayIntro: () -> Unit,
     onLogout: () -> Unit,
     onBrand: Boolean,
 ) {
@@ -205,14 +200,6 @@ private fun ActionCapsule(
             }
             WbDropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
                 WbMenuItem(
-                    icon = Icons.Outlined.PlayCircle,
-                    label = stringResource(R.string.home_replay_intro),
-                    onClick = {
-                        menuOpen = false
-                        onReplayIntro()
-                    },
-                )
-                WbMenuItem(
                     icon = WebIcons.LogOut,
                     label = stringResource(R.string.home_log_out),
                     destructive = true,
@@ -240,7 +227,6 @@ private fun PortalTopBarPreview() {
                 ownerInitials = "SS",
                 unreadCount = 4,
                 onBellClick = {},
-                onReplayIntro = {},
                 onLogout = {},
                 onBrand = true,
             )

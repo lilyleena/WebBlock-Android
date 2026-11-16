@@ -79,7 +79,7 @@ fun MainGraph(navController: NavHostController) {
         Box(Modifier.fillMaxSize()) {
         NavHost(
             navController = navController,
-            startDestination = Onboarding,
+            startDestination = if (sessionWatcher.hasStoredSession) Login else Onboarding,
             // On the three portal tabs the content runs underneath the floating glass bar; their
             // lists leave room at the bottom so the last item can scroll clear of it.
             modifier = (if (barTab != null) Modifier.padding(top = padding.calculateTopPadding()) else Modifier.padding(padding)).then(insets),
@@ -98,14 +98,7 @@ fun MainGraph(navController: NavHostController) {
 private fun androidx.navigation.NavGraphBuilder.authDestinations(navController: NavHostController) {
     composable<Onboarding> {
         OnboardingScreen(
-            onFinished = {
-                // Replayed from My Websites: just go back. On app launch: continue to sign-in.
-                if (navController.previousBackStackEntry != null) {
-                    navController.popBackStack()
-                } else {
-                    navController.navigateTo(Login) { popUpTo<Onboarding> { inclusive = true } }
-                }
-            },
+            onFinished = { navController.navigateTo(Login) { popUpTo<Onboarding> { inclusive = true } } },
         )
     }
     composable<Login> { entry ->
@@ -132,7 +125,6 @@ private fun androidx.navigation.NavGraphBuilder.authDestinations(navController: 
             onOpenPortal = { navController.navigateTo(ProductsTab) },
             onOpenNotifications = { navController.navigateTo(Notifications) },
             onSignedOut = { navController.navigateTo(Login) { popUpTo(navController.graph.id) { inclusive = true } } },
-            onReplayIntro = { navController.navigateTo(Onboarding) },
         )
     }
 }

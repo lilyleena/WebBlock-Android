@@ -29,7 +29,6 @@
     <string name="home_refresh">Refresh</string>
     <string name="home_account_menu">Account: %1$s</string>
     <string name="home_header_tagline">Business portal</string>
-    <string name="home_replay_intro">Replay intro</string>
     <string name="home_log_out">Log out</string>
     <string name="home_notifications_cd">Notifications, %1$d unread</string>
     <string name="home_logout_title">Log out of WebBlock?</string>

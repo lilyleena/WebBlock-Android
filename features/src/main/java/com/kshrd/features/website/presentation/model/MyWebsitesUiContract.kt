@@ -38,8 +38,6 @@ sealed interface MyWebsitesEvent {
 
     data object BellClicked : MyWebsitesEvent
 
-    data object ReplayIntroClicked : MyWebsitesEvent
-
     data object LogoutClicked : MyWebsitesEvent
 
     data object LogoutConfirmed : MyWebsitesEvent
@@ -51,8 +49,6 @@ sealed interface MyWebsitesEffect {
     data object OpenPortal : MyWebsitesEffect
 
     data object OpenNotifications : MyWebsitesEffect
-
-    data object ReplayIntro : MyWebsitesEffect
 
     data object SignedOut : MyWebsitesEffect
 }

@@ -57,7 +57,6 @@ fun MyWebsitesScreen(
     onOpenPortal: () -> Unit,
     onOpenNotifications: () -> Unit,
     onSignedOut: () -> Unit,
-    onReplayIntro: () -> Unit = {},
     viewModel: MyWebsitesViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -65,7 +64,6 @@ fun MyWebsitesScreen(
         when (effect) {
             MyWebsitesEffect.OpenPortal -> onOpenPortal()
             MyWebsitesEffect.OpenNotifications -> onOpenNotifications()
-            MyWebsitesEffect.ReplayIntro -> onReplayIntro()
             MyWebsitesEffect.SignedOut -> onSignedOut()
         }
     }
@@ -145,7 +143,6 @@ private fun BoxScope.PageScaffold(
                 ownerInitials = state.ownerInitials,
                 unreadCount = state.unreadCount,
                 onBellClick = { onEvent(MyWebsitesEvent.BellClicked) },
-                onReplayIntro = { onEvent(MyWebsitesEvent.ReplayIntroClicked) },
                 onLogout = { onEvent(MyWebsitesEvent.LogoutClicked) },
             )
         }

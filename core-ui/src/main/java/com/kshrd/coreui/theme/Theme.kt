@@ -1,6 +1,7 @@
 package com.kshrd.coreui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.text.LocalAutofillHighlightColor
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -100,7 +101,8 @@ fun AppTheme(
     content: @Composable () -> Unit,
 ) {
     val wb = if (isDarkTheme) DarkWbColors else LightWbColors
-    CompositionLocalProvider(LocalWbColors provides wb) {
+    // Android tints autofilled fields yellow by default; that clashes with the design, so no tint.
+    CompositionLocalProvider(LocalWbColors provides wb, LocalAutofillHighlightColor provides Color.Transparent) {
         MaterialTheme(
             colorScheme = wb.toScheme(),
             typography = AppTypography,
